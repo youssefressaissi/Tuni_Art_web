@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User{% endblock %}
+
+{% block body %}
+    <h1>User</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Uid</th>
+                <td>{{ user.uid }}</td>
+            </tr>
+            <tr>
+                <th>Fname</th>
+                <td>{{ user.fname }}</td>
+            </tr>
+            <tr>
+                <th>Lname</th>
+                <td>{{ user.lname }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ user.email }}</td>
+            </tr>
+            <tr>
+                <th>Gender</th>
+                <td>{{ user.gender ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>PhoneNb</th>
+                <td>{{ user.phoneNb }}</td>
+            </tr>
+            <tr>
+                <th>ProfilePic</th>
+                <td>{{ user.profilePic }}</td>
+            </tr>
+            <tr>
+                <th>BirthDate</th>
+                <td>{{ user.birthDate ? user.birthDate|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Password</th>
+                <td>{{ user.password }}</td>
+            </tr>
+            <tr>
+                <th>VerificationCode</th>
+                <td>{{ user.verificationCode }}</td>
+            </tr>
+            <tr>
+                <th>Biography</th>
+                <td>{{ user.biography }}</td>
+            </tr>
+            <tr>
+                <th>Portfolio</th>
+                <td>{{ user.portfolio }}</td>
+            </tr>
+            <tr>
+                <th>Role</th>
+                <td>{{ user.role }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{ user.status ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Profileviews</th>
+                <td>{{ user.profileviews }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_user_index') }}">back to list</a>
+
+    <a href="{{ path('app_user_edit', {'uid': user.uid}) }}">edit</a>
+
+    {{ include('user/_delete_form.html.twig') }}
+{% endblock %}
