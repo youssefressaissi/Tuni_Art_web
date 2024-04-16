@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+{% block title %}Sign Up{% endblock %}
+
+{% block body %}
+<div class="container" style="max-width: 860px; margin: 0 auto; padding: 20px; display: flex; justify-content: center; align-items: center;">
+
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <h1 class="title">Log in to your account !</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 mb-3" style="padding-right: 15px; padding-left: 15px;">
+            <div class="form-group">
+                {{ form_label(form.email, "Email Address :", {'label_attr': {'class': 'form-element'}}) }}
+                {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Enter your first name'}}) }}
+                <div class="alert alert-danger">
+                    {{ form_errors(form.email) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 mb-3" style="padding-right: 15px; padding-left: 15px;">
+            <div class="form-group">
+                {{ form_label(form.password, "Password :", {'label_attr': {'class': 'form-element'}}) }}
+                {{ form_widget(form.password, {'attr': {'class': 'form-control', 'placeholder': 'Enter your first name'}}) }}
+                <div class="alert alert-danger">
+                    {{ form_errors(form.password) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-3" style="padding-right: 15px; padding-left: 15px;">
+        <div class="col-md-12 mb-3">
+            <button type="submit" class="btn btn-success">Log In</button>
+        </div>
+    </div>
+
+    <div class="row mb-3" style="padding-right: 15px; padding-left: 15px;">
+        <div class="col-md-12 mb-3">
+            <a href="{{ path('app_user_index') }}">Forgot your password ?</a>
+        </div>
+    </div>
+
+    <div class="row mb-3" style="padding-right: 15px; padding-left: 15px;">
+        <div class="col-md-12 mb-3">
+            <a href="{{ path('app_user_signup') }}">Sign Up</a>
+        </div>
+    </div>
+
+    {{ form_end(form) }}
+</div>
+
+{% endblock %}

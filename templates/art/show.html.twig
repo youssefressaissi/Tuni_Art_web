@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Art{% endblock %}
+
+{% block body %}
+    <h1>Art</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>ArtRef</th>
+                <td>{{ art.artRef }}</td>
+            </tr>
+            <tr>
+                <th>ArtTitle</th>
+                <td>{{ art.artTitle }}</td>
+            </tr>
+            <tr>
+                <th>ArtPrice</th>
+                <td>{{ art.artPrice }}</td>
+            </tr>
+            <tr>
+                <th>Type</th>
+                <td>{{ art.type }}</td>
+            </tr>
+            <tr>
+                <th>Creation</th>
+                <td>{{ art.creation ? art.creation|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ art.description }}</td>
+            </tr>
+            <tr>
+                <th>Style</th>
+                <td>{{ art.style }}</td>
+            </tr>
+            <tr>
+                <th>ImageId</th>
+                <td>{{ art.imageId }}</td>
+            </tr>
+            <tr>
+                <th>MusicPath</th>
+                <td>{{ art.musicPath }}</td>
+            </tr>
+            <tr>
+                <th>ArtViews</th>
+                <td>{{ art.artViews }}</td>
+            </tr>
+            <tr>
+                <th>Isavailable</th>
+                <td>{{ art.isavailable ? 'Yes' : 'No' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_art_index') }}">back to list</a>
+
+    <a href="{{ path('app_art_edit', {'artRef': art.artRef}) }}">edit</a>
+
+    {{ include('art/_delete_form.html.twig') }}
+{% endblock %}

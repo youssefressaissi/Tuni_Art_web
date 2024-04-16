@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Art index{% endblock %}
+
+{% block body %}
+    <h1>Art index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ArtRef</th>
+                <th>ArtTitle</th>
+                <th>ArtPrice</th>
+                <th>Type</th>
+                <th>Creation</th>
+                <th>Description</th>
+                <th>Style</th>
+                <th>ImageId</th>
+                <th>MusicPath</th>
+                <th>ArtViews</th>
+                <th>Isavailable</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for art in art %}
+            <tr>
+                <td>{{ art.artRef }}</td>
+                <td>{{ art.artTitle }}</td>
+                <td>{{ art.artPrice }}</td>
+                <td>{{ art.type }}</td>
+                <td>{{ art.creation ? art.creation|date('Y-m-d') : '' }}</td>
+                <td>{{ art.description }}</td>
+                <td>{{ art.style }}</td>
+                <td>{{ art.imageId }}</td>
+                <td>{{ art.musicPath }}</td>
+                <td>{{ art.artViews }}</td>
+                <td>{{ art.isavailable ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('app_art_show', {'artRef': art.artRef}) }}">show</a>
+                    <a href="{{ path('app_art_edit', {'artRef': art.artRef}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="12">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_art_new') }}">Create new</a>
+{% endblock %}

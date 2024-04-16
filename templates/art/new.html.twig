@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Art{% endblock %}
+
+{% block body %}
+    <h1>Create new Art</h1>
+
+    {{ include('art/_form.html.twig') }}
+
+    <a href="{{ path('app_art_index') }}">back to list</a>
+{% endblock %}

@@ -1,13 +1,232 @@
 {% extends 'base.html.twig' %}
-
-{% block title %}Edit User{% endblock %}
+{% block title %}Sign Up{% endblock %}
 
 {% block body %}
-    <h1>Edit User</h1>
+<div class="container" style="max-width: 860px; margin: 0 auto; padding: 20px; display: flex; justify-content: center; align-items: center;">
 
-    {{ include('user/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('app_user_index') }}">back to list</a>
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
 
-    {{ include('user/_delete_form.html.twig') }}
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <h1 class="title">Update your information</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 mb-3" style="padding-right: 15px; padding-left: 15px;">
+            <div class="form-group" style="width: 100%; height: 40px; padding: 5px 10px; font-size: 16px;">
+                {{ form_label(form.fname, "First Name :", {'label_attr': {'class': 'form-element'}}) }}
+                {{ form_widget(form.fname, {'attr': {'class': 'form-control', 'placeholder': 'Enter your first name'}}) }}
+                <div class="alert alert-danger">
+                    {{ form_errors(form.fname) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12 mb-3" style="padding-right: 15px; padding-left: 15px;">
+            <div class="form-group">
+                {{ form_label(form.lname, "Last Name :", {'label_attr': {'class': 'form-element'}}) }}
+                {{ form_widget(form.lname, {'attr': {'class': 'form-control', 'placeholder': 'Enter your last name'}}) }}
+                <div class="alert alert-danger">
+                    {{ form_errors(form.lname) }}
+                </div>
+            </div>
+        </div>
+
+    </div class="row">
+
+    <div class="row">
+        <div class="col-md-12 mb-3" style="padding-right: 20px; padding-left: 40px;">
+            <div class="form-group">
+                {{ form_label(form.birthDate, "Date of Birth", {'label_attr': {'class': 'form-element'}}) }}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 mb-3" style="padding-right: 20px; padding-left: 40px;">
+            <div class="form-group">
+                {{ form_label(form.birthDate.year, "", {'label_attr': {'class': 'form-element'}}) }}
+                {{ form_widget(form.birthDate.year, {'attr': {'class': 'form-control'}}) }}
+                <div class="alert alert-danger">
+                    {{ form_errors(form.birthDate.year) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12 mb-3" style="padding-right: 15px; padding-left: 15px;">
+            <div class="form-group">
+                {{ form_label(form.birthDate.month, "", {'label_attr': {'class': 'form-element'}}) }}
+                {{ form_widget(form.birthDate.month, {'attr': {'class': 'form-control'}}) }}
+                <div class="alert alert-danger">
+                    {{ form_errors(form.birthDate.month) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12 mb-3" style="padding-right: 15px; padding-left: 15px;">
+            <div class="form-group">
+                {{ form_label(form.birthDate.day, "", {'label_attr': {'class': 'form-element'}}) }}
+                {{ form_widget(form.birthDate.day, {'attr': {'class': 'form-control'}}) }}
+                <div class="alert alert-danger">
+                    {{ form_errors(form.birthDate.day) }}
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+
+    <div class="row">
+
+        <div class="col-md-12 mb-3" style="padding-right: 15px; padding-left: 15px;">
+            <div class="form-group">
+                {{ form_label(form.profilePic, "Profile Picture :", {'label_attr': {'class': 'form-element'}}) }}
+                <div class="input-group">
+                    {{ form_widget(form.profilePic, {'attr': {'class': 'form-control', 'readonly': 'readonly'}}) }}
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" id="chooseImageButton">Choose Image</button>
+                    </div>
+                </div>
+
+                <div class="alert alert-danger">
+                    {{ form_errors(form.profilePic) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12 mb-3" style="padding-right: 15px; padding-left: 15px;">
+            <div class="form-group">
+                {{ form_label(form.phoneNb, "Phone Number :", {'label_attr': {'class': 'form-element'}}) }}
+                {{ form_widget(form.phoneNb, {'attr': {'class': 'form-control', 'placeholder': 'Enter your phone number'}}) }}
+                <div class="alert alert-danger">
+                    {{ form_errors(form.phoneNb) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12 mb-3" style="padding-right: 15px; padding-left: 15px;">
+            <div class="form-group">
+                {{ form_label(form.gender, "Gender :", {'label_attr': {'class': 'form-element'}}) }}
+                {{ form_widget(form.gender, {'attr': {'class': 'form-control'}}) }}
+                <div class="alert alert-danger">
+                    {{ form_errors(form.gender) }}
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 mb-3" style="padding-right: 15px; padding-left: 15px;">
+            <div class="form-group">
+                {{ form_label(form.email, "Email Address :", {'label_attr': {'class': 'form-element'}}) }}
+                {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Enter your first name'}}) }}
+                <div class="alert alert-danger">
+                    {{ form_errors(form.email) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 mb-3" style="padding-right: 15px; padding-left: 15px;">
+            <div class="form-group">
+                {{ form_label(form.password, "Password :", {'label_attr': {'class': 'form-element'}}) }}
+                {{ form_widget(form.password, {'attr': {'class': 'form-control', 'placeholder': 'Enter your first name'}}) }}
+                <div class="alert alert-danger">
+                    {{ form_errors(form.password) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 mb-3" style="padding-right: 15px; padding-left: 15px;">
+            <div class="form-group" style="width: 100%; height: 40px; padding: 5px 10px; font-size: 16px;">
+                {{ form_label(form.portfolio, "Portfolio :", {'label_attr': {'class': 'form-element'}}) }}
+                <div class="input-group">
+                    {{ form_widget(form.portfolio, {'attr': {'class': 'form-control', 'readonly': 'readonly'}}) }}
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" id="choosePortfolioButton">Import File</button>
+                    </div>
+                </div>                <div class="alert alert-danger">
+                    {{ form_errors(form.portfolio) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12 mb-3" style="padding-right: 15px; padding-left: 15px;">
+            <div class="form-group">
+                {{ form_label(form.biography, "Biography :", {'label_attr': {'class': 'form-element'}}) }}
+                <div class="input-group">
+                    {{ form_widget(form.biography, {'attr': {'class': 'form-control', 'placeholder': 'Enter your biography'}}) }}
+                </div>
+                <div class="alert alert-danger">
+                    {{ form_errors(form.biography) }}
+                </div>
+            </div>
+        </div>
+
+    </div class="row">
+    
+    <div class="row mb-3" style="padding-right: 15px; padding-left: 15px;">
+        <div class="col-md-12 mb-3">
+            <button type="submit" class="btn btn-success">Update</button>
+        </div>
+    </div>
+
+    {{ form_end(form) }}
+</div>
+
+<script>
+    document.getElementById('chooseImageButton').addEventListener('click', function () {
+        var input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'image/*';
+        input.onchange = function (e) {
+            var file = e.target.files[0];
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function () {
+                    document.getElementById('form_profilePic').value = reader.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        };
+        input.click();
+    });
+</script>
+
+<script>
+    document.getElementById('choosePortfolioButton').addEventListener('click', function () {
+        var input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'pdf/*';
+        input.onchange = function (e) {
+            var file = e.target.files[0];
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function () {
+                    document.getElementById('form_portfolio').value = reader.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        };
+        input.click();
+    });
+</script>
+
+
+<script>
+  $(document).ready(function() {
+    $('#birthDate').datepicker({
+      // Existing configurations...
+      minDate: new Date(1900, 0, 1), // Set minimum date to 1900-01-01
+      maxDate: new Date() // Set maximum date to current year
+    });
+  });
+</script>
+
 {% endblock %}

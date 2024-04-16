@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -25,8 +26,9 @@ class UserType extends AbstractType
                 ],
             ])
             ->add('phoneNb')
-            ->add('birthDate')
+            ->add('birthDate') 
             ->add('password', PasswordType::class)
+            ->add('profilePic')
             // ->add('Submit', SubmitType::class);
         ;
     }
