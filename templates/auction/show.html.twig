@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Auction{% endblock %}
+
+{% block body %}
+    <h1>Auction</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>AuctionRef</th>
+                <td>{{ auction.auctionRef }}</td>
+            </tr>
+            <tr>
+                <th>AuctionName</th>
+                <td>{{ auction.auctionName }}</td>
+            </tr>
+            <tr>
+                <th>StartDate</th>
+                <td>{{ auction.startDate ? auction.startDate|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>EndDate</th>
+                <td>{{ auction.endDate ? auction.endDate|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Threshold</th>
+                <td>{{ auction.threshold }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{ auction.status }}</td>
+            </tr>
+            <tr>
+                <th>HighestBid</th>
+                <td>{{ auction.highestBid }}</td>
+            </tr>
+            <tr>
+                <th>CurrentwinnerId</th>
+                <td>{{ auction.currentwinnerId }}</td>
+            </tr>
+            <tr>
+                <th>Interactions</th>
+                <td>{{ auction.interactions }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_auction_index') }}">back to list</a>
+
+    <a href="{{ path('app_auction_edit', {'auctionRef': auction.auctionRef}) }}">edit</a>
+
+    {{ include('auction/_delete_form.html.twig') }}
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends 'admin/base-back.html.twig' %}
+{% block title %}Add{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row mb-3">
+        <div class="col-md-12">
+
+            <div class="title">Add a Gallery</div>
+        </div>
+    </div>
+
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+    <div class="row">
+        <div class="col-md-3 mb-3" style="padding-right: 15px; padding-left: 15px;">
+            <div class="form-group">
+                {{ form_label(form.galleryName, "Gallery Name:", {'label_attr': {'class': 'form-element'}}) }}
+                {{ form_widget(form.galleryName, {'attr': {'class': 'form-control', 'placeholder': 'Enter the gallery name'}}) }}
+                <div class="alert alert-danger">
+                    {{ form_errors(form.galleryName) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3" style="padding-right: 15px; padding-left: 15px;">
+            <div class="form-group">
+                {{ form_label(form.galleryDescription, "Gallery Description:", {'label_attr': {'class': 'form-element'}}) }}
+                {{ form_widget(form.galleryDescription, {'attr': {'class': 'form-control', 'placeholder': 'Enter the gallery description'}}) }}
+                <div class="alert alert-danger">
+                    {{ form_errors(form.galleryDescription) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3" style="padding-right: 15px; padding-left: 15px;">
+            <div class="form-group">
+                {{ form_label(form.galleryLocation, "Gallery Location:", {'label_attr': {'class': 'form-element'}}) }}
+                {{ form_widget(form.galleryLocation, {'attr': {'class': 'form-control', 'placeholder': 'Enter the gallery location'}}) }}
+                <div class="alert alert-danger">
+                    {{ form_errors(form.galleryLocation) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3" style="padding-right: 15px; padding-left: 15px;">
+            <div class="form-group">
+                {{ form_label(form.galleryTel, "Gallery Tel:", {'label_attr': {'class': 'form-element'}}) }}
+                {{ form_widget(form.galleryTel, {'attr': {'class': 'form-control', 'placeholder': 'Enter the gallery telephone'}}) }}
+                <div class="alert alert-danger">
+                    {{ form_errors(form.galleryTel) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3" style="padding-right: 15px; padding-left: 15px;">
+            <div class="form-group">
+                {{ form_label(form.operatingHours, "Operating Hours:", {'label_attr': {'class': 'form-element'}}) }}
+                {{ form_widget(form.operatingHours, {'attr': {'class': 'form-control', 'placeholder': 'Enter the operating hours'}}) }}
+                <div class="alert alert-danger">
+                    {{ form_errors(form.operatingHours) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-success">Add</button>
+        </div>
+    </div>
+
+    {{ form_end(form) }}
+</div>
+{% endblock %}

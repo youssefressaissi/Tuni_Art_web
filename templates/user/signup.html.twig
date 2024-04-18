@@ -1,0 +1,85 @@
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/signup.css') }}">
+{% endblock %}
+
+{% block body %}
+<img src="{{ asset('public//img//logo.png')|raw }}" alt="Image description">
+    <div class="container">
+        <h1 class="title">Sign Up</h1>
+
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+        <div class="form-group">
+            {{ form_label(form.fname, "First Name :", {'label_attr': {'class': 'form-element'}}) }}
+            {{ form_widget(form.fname, {'attr': {'class': 'form-control', 'placeholder': 'Enter your first name'}}) }}
+            <div class="alert alert-danger">
+                {{ form_errors(form.fname) }}
+            </div>
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.lname, "Last Name :", {'label_attr': {'class': 'form-element'}}) }}
+            {{ form_widget(form.lname, {'attr': {'class': 'form-control', 'placeholder': 'Enter your last name'}}) }}
+            <div class="alert alert-danger">
+                {{ form_errors(form.lname) }}
+            </div>
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.gender, "Gender :", {'label_attr': {'class': 'form-element'}}) }}
+            {{ form_widget(form.gender, {'attr': {'class': 'form-control'}}) }}
+            <div class="alert alert-danger">
+                {{ form_errors(form.gender) }}
+            </div>
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.phoneNb, "Phone Number :", {'label_attr': {'class': 'form-element'}}) }}
+            {{ form_widget(form.phoneNb, {'attr': {'class': 'form-control', 'placeholder': 'Enter your phone number'}}) }}
+            <div class="alert alert-danger">
+                {{ form_errors(form.phoneNb) }}
+            </div>
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.birthDate, "Date of Birth :", {'label_attr': {'class': 'form-element'}}) }}
+            {{ form_widget(form.birthDate, {'attr': {'class': 'form-control'}}) }}
+            <div class="alert alert-danger">
+                {{ form_errors(form.birthDate) }}
+            </div>
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.email, "Email :", {'label_attr': {'class': 'form-element'}}) }}
+            {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Enter your e-mail address'}}) }}
+            <div class="alert alert-danger">
+                {{ form_errors(form.email) }}
+            </div>
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.password, "Password :", {'label_attr': {'class': 'form-element'}}) }}
+            {{ form_widget(form.password, {'attr': {'class': 'form-control', 'placeholder': 'Enter your password'}}) }}
+            <div class="alert alert-danger">
+                {{ form_errors(form.password) }}
+            </div>
+        </div>
+
+        <div class="container" style="display: flex; flex-direction: column; align-items: center; border: none;">
+        <button type="submit" class="btn btn-success">Sign Up</button>
+        <table>
+            <tr>
+            <td>
+                <span>Already have an account? </span>
+                </hr>
+                <a href="{{ path('app_user_login') }}">Log in</a>
+            </td>
+            </tr>
+        </table>
+        </div>
+
+        
+        {{ form_end(form) }}
+
+    </div>
+{% endblock %}

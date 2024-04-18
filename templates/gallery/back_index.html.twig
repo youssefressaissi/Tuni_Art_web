@@ -1,0 +1,43 @@
+{% extends 'admin/base-back.html.twig' %}
+
+{% block title %}Gallery index{% endblock %}
+
+{% block body %}
+    <h1>Gallery index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>GalleryId</th>
+                <th>GalleryName</th>
+                <th>GalleryDescription</th>
+                <th>GalleryLocation</th>
+                <th>GalleryTel</th>
+                <th>OperatingHours</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for gallery in galleries %}
+            <tr>
+                <td>{{ gallery.galleryId }}</td>
+                <td>{{ gallery.galleryName }}</td>
+                <td>{{ gallery.galleryDescription }}</td>
+                <td>{{ gallery.galleryLocation }}</td>
+                <td>{{ gallery.galleryTel }}</td>
+                <td>{{ gallery.operatingHours }}</td>
+                <td>
+                    {{ include('gallery/_delete_form.html.twig') }}
+                    <a href="{{ path('app_gallery_edit', {'galleryId': gallery.galleryId}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+        <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_gallery_new') }}">Create new</a>
+{% endblock %}

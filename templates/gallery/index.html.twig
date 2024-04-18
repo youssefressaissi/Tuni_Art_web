@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gallery index{% endblock %}
+
+{% block body %}
+    <body>
+<div class="ag-format-container">
+  {% for gallery in galleries %}
+  <div class="ag-courses_box">
+    <div class="ag-courses_item">
+      <a href="{{ path('app_gallery_show', {'galleryId': gallery.galleryId}) }}" class="ag-courses-item_link">
+        <div class="ag-courses-item_bg"></div>
+
+        <div class="ag-courses-item_title">
+          {{ gallery.galleryName }}
+        </div>
+        <div class="ag-courses-item_label">Location</div>
+<div class="ag-courses-item_title">
+    {{ gallery.galleryLocation }}
+</div>
+<div class="ag-courses-item_label">Telephone</div>
+<div class="ag-courses-item_title">
+    {{ gallery.galleryTel }}
+</div>
+
+        <div class="ag-courses-item_date-box">
+          Start:
+          <span class="ag-courses-item_date">
+            {{ gallery.operatingHours }}
+          </span>
+        </div>
+      </a>
+    </div>
+  </div>
+  {% endfor %}  
+</body>
+
+    <a href="{{ path('app_gallery_new') }}">Create new</a>
+{% endblock %}

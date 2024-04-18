@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Auction index{% endblock %}
+
+{% block body %}
+    <h1>Auction index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>AuctionRef</th>
+                <th>AuctionName</th>
+                <th>StartDate</th>
+                <th>EndDate</th>
+                <th>Threshold</th>
+                <th>Status</th>
+                <th>HighestBid</th>
+                <th>CurrentwinnerId</th>
+                <th>Interactions</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for auction in auctions %}
+            <tr>
+                <td>{{ auction.auctionRef }}</td>
+                <td>{{ auction.auctionName }}</td>
+                <td>{{ auction.startDate ? auction.startDate|date('Y-m-d') : '' }}</td>
+                <td>{{ auction.endDate ? auction.endDate|date('Y-m-d') : '' }}</td>
+                <td>{{ auction.threshold }}</td>
+                <td>{{ auction.status }}</td>
+                <td>{{ auction.highestBid }}</td>
+                <td>{{ auction.currentwinnerId }}</td>
+                <td>{{ auction.interactions }}</td>
+                <td>
+                    <a href="{{ path('app_auction_show', {'auctionRef': auction.auctionRef}) }}">show</a>
+                    <a href="{{ path('app_auction_edit', {'auctionRef': auction.auctionRef}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="10">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    
+{% endblock %}

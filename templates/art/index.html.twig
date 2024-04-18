@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Art Index{% endblock %}
+
+
+{% block body %}
+    <h1>Art Index</h1>
+
+    <div class="container">
+        <div class="row">
+            {% for art in art %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        
+                        <div class="card-body">
+                            <h5 class="card-title">{{ art.artTitle }}</h5>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <p class="card-text">Art Price: {{ art.artPrice }}</p>
+                                            <p class="card-text">Art Views: {{ art.artViews }}</p>
+                                            
+                                        </div>
+                                        <div class="col-md-6">
+                                        <p class="card-text">Type: {{ art.type }}</p>
+                                        <p class="card-text">Style: {{ art.style }}</p> 
+                                        </div>
+                                        
+                                    </div>
+                                    
+                                    <div class="row">
+                                        
+                                        <div class="col-md-6">
+                                            <p class="card-text">Creation Date: {{ art.creation ? art.creation|date('Y-m-d') : '' }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <a href="{{ asset('uploads/' ~ art.musicPath) }}" class="btn btn-primary">Play</a>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p class="card-text">Is Available: {{ art.isavailable ? 'Yes' : 'No' }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <p class="card-text">Description: {{ art.description }}</p>
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="actions">
+                                <a href="{{ path('app_art_show', {'artRef': art.artRef}) }}" class="btn btn-primary">Show</a>
+                                <a href="{{ path('app_art_edit', {'artRef': art.artRef}) }}" class="btn btn-secondary">Edit</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <a href="{{ path('app_art_new') }}" class="btn btn-success">Create new</a>
+{% endblock %}
