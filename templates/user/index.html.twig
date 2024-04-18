@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User index{% endblock %}
+
+{% block body %}
+    <h1>User index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Uid</th>
+                <th>Fname</th>
+                <th>Lname</th>
+                <th>Email</th>
+                <th>Gender</th>
+                <th>PhoneNb</th>
+                <th>ProfilePic</th>
+                <th>BirthDate</th>
+                <th>Password</th>
+                <th>VerificationCode</th>
+                <th>Biography</th>
+                <th>Portfolio</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Profileviews</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.uid }}</td>
+                <td>{{ user.fname }}</td>
+                <td>{{ user.lname }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.gender ? 'Yes' : 'No' }}</td>
+                <td>{{ user.phoneNb }}</td>
+                <td>{{ user.profilePic }}</td>
+                <td>{{ user.birthDate ? user.birthDate|date('Y-m-d') : '' }}</td>
+                <td>{{ user.password }}</td>
+                <td>{{ user.verificationCode }}</td>
+                <td>{{ user.biography }}</td>
+                <td>{{ user.portfolio }}</td>
+                <td>{{ user.role }}</td>
+                <td>{{ user.status ? 'Yes' : 'No' }}</td>
+                <td>{{ user.profileviews }}</td>
+                <td>
+                    <a href="{{ path('app_user_show', {'uid': user.uid}) }}">show</a>
+                    <a href="{{ path('app_user_edit', {'uid': user.uid}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="16">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_user_signup') }}">Create new</a>
+{% endblock %}

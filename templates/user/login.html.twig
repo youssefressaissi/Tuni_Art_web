@@ -1,0 +1,50 @@
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/signup.css') }}">
+{% endblock %}
+
+{% block body %}
+<img src="{{ asset('public//img//logo.png')|raw }}" alt="Image description">
+    <div class="container">
+        <h1 class="title">Log in to your account!</h1>
+
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+        <div class="form-group">
+            {{ form_label(form.email, "Email :", {'label_attr': {'class': 'form-element'}}) }}
+            {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Enter your e-mail address'}}) }}
+            <div class="alert alert-danger">
+                {{ form_errors(form.email) }}
+            </div>
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.password, "Password :", {'label_attr': {'class': 'form-element'}}) }}
+            {{ form_widget(form.password, {'attr': {'class': 'form-control', 'placeholder': 'Enter your password'}}) }}
+            <div class="alert alert-danger">
+                {{ form_errors(form.password) }}
+            </div>
+        </div>
+
+        <div class="container" style="display: flex; flex-direction: column; align-items: center; border: none;">
+        <button type="submit" class="btn btn-success">Log In</button>
+        <table>
+            <tr>
+                <td>
+                    <a href="{{ path('app_user_index') }}">Forgot your password ?</a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>Don't have an account ? </span>
+                    </hr>
+                    <a href="{{ path('app_user_signup') }}">Sign Up</a>
+                </td>
+            </tr>
+        </table>
+        </div>
+
+        
+        {{ form_end(form) }}
+
+    </div>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gallery{% endblock %}
+
+{% block body %}
+    
+
+    <div class="wrapper">
+    <div class="outer">
+        <div class="content_page">
+            <h1>{{ gallery.galleryName }}</h1>
+            <div class="attributes">
+                <table>
+                    <tr>
+                        <th>Location</th>
+                        <td>{{ gallery.galleryLocation }}</td>
+                    </tr>
+                    <tr>
+                        <th>Telephone</th>
+                        <td>{{ gallery.galleryTel }}</td>
+                    </tr>
+                    <tr>
+                        <th>Operating Hours</th>
+                        <td>{{ gallery.operatingHours }}</td>
+                    </tr>
+                    <tr>
+                        <th>Description</th>
+                        <td>{{ gallery.galleryDescription }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <a href="{{ path('app_gallery_index') }}">back to list</a>
+{% endblock %}

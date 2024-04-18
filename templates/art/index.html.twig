@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Art{% endblock %}
+
+{% block body %}
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <h1 class="title">Art On Display </h1>
+        </div>
+    </div>
+    <div class="container">
+        {% for chunk in art|batch(3) %}
+            <div class="row">
+                {% for art in chunk %}
+                    <div class="col-md-4 mb-4">
+                    <a href="{{ path('app_art_show', {'artRef': art.artRef}) }}" style="text-decoration: none;">
+                        <div class="article-card" style="margin-bottom: 20px; margin-left: 10px; margin-right: 10px;">
+
+                            <div class="content">
+                                <h5 class="arttitle" >{{ art.artTitle }}</h5>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p class="arttext" style="margin-left: 40px;"> {{ art.artPrice }}dt</p>
+                                    </div>
+                                    
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <a href="{{ asset('uploads/' ~ art.musicPath) }}" class="btn btn-primary">Play</a>
+                                    </div>
+                                    
+                                </div>
+                                
+                            </div>
+                            {% set defaultImagePath = 'images/default.png' %}
+
+                                {% if art.imageId is not null %}
+                                    <img src="{{ asset('art.imageId') }}" alt="{{ art.imageId }}" />
+                                {% else %}
+                                    <img src="{{ asset(defaultImagePath) }}" alt="Default Image" />
+                                {% endif %}
+                        </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
