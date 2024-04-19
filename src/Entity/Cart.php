@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\CartRepository;
-use App\Entity\User;
-use App\Entity\Art;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -14,98 +12,41 @@ class Cart
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(name: "cart_ref", type: "integer")]
     private ?int $cartRef = null;
 
-    #[ORM\ManyToOne(inversedBy: 'carts')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
+    #[ORM\Column(name: "uid", type: "integer", nullable: true)]
+    private ?int $uid = null;
 
-    #[ORM\OneToMany(mappedBy: 'cart', targetEntity: Art::class)]
-    private Collection $art;
-
-    public function __construct()
-    {
-        $this->art = new ArrayCollection();
-    }
-
-    // #[ORM\ManyToOne(inversedBy: 'carts')]
-    // private ?Art $artRef = null;
- 
-    // #[ORM\ManyToOne(inversedBy: 'carts')]
-    // private ?User $uid = null;
+    #[ORM\Column(name: "art_ref", type: "integer", nullable: true)]
+    private ?int $artRef = null;
 
     public function getCartRef(): ?int
     {
         return $this->cartRef;
     }
 
-    // public function getArtRef(): ?Art
-    // {
-    //     return $this->artRef;
-    // }
-
-    // public function setArtRef(?Art $artRef): static
-    // {
-    //     $this->artRef = $artRef;
-
-    //     return $this;
-    // }
-
-    // public function getUid(): ?User
-    // {
-    //     return $this->uid;
-    // }
-
-    // public function setUid(?User $uid): static
-    // {
-    //     $this->uid = $uid;
-
-    //     return $this;
-    // }
-
-    public function getUser(): ?User
+    public function getUid(): ?int
     {
-        return $this->user;
+        return $this->uid;
     }
 
-    public function setUser(?User $user): static
+    public function setUid(?int $uid): self
     {
-        $this->user = $user;
+        $this->uid = $uid;
 
         return $this;
     }
 
-    /**
-     * @return Collection<int, Art>
-     */
-    public function getArt(): Collection
+    public function getArtRef(): ?int
     {
-        return $this->art;
+        return $this->artRef;
     }
 
-    public function addArt(Art $art): static
+    public function setArtRef(?int $artRef): self
     {
-        if (!$this->art->contains($art)) {
-            $this->art->add($art);
-            $art->setCart($this);
-        }
+        $this->artRef = $artRef;
 
         return $this;
     }
-
-    public function removeArt(Art $art): static
-    {
-        if ($this->art->removeElement($art)) {
-            // set the owning side to null (unless already changed)
-            if ($art->getCart() === $this) {
-                $art->setCart(null);
-            }
-        }
-
-        return $this;
-    }
-
-
-
 }

@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gallery index{% endblock %}
+
+{% block body %}
+    <body>
+<div class="ag-format-container">
+  {% for gallery in galleries %}
+  <div class="ag-courses_box">
+    <div class="ag-courses_item">
+      <a href="{{ path('app_gallery_show', {'galleryId': gallery.galleryId}) }}" class="ag-courses-item_link">
+        <div class="ag-courses-item_bg"></div>
+
+        <div class="ag-courses-item_title">
+          {{ gallery.galleryName }}
+        </div>
+        <div class="ag-courses-item_label">Location</div>
+<div class="ag-courses-item_title">
+    {{ gallery.galleryLocation }}
+</div>
+<div class="ag-courses-item_label">Telephone</div>
+<div class="ag-courses-item_title">
+    {{ gallery.galleryTel }}
+</div>
+
+        <div class="ag-courses-item_date-box">
+          Start:
+          <span class="ag-courses-item_date">
+            {{ gallery.operatingHours }}
+          </span>
+      
+  </div>
+  {% endfor %}  
+</body>
+
+    <a href="{{ path('app_gallery_new') }}">Create new</a>
+    <style>
+    .add-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff; /* Blue background color */
+    color: #fff; /* White text color */
+    text-decoration: none; /* Remove underline */
+    border-radius: 5px; /* Rounded corners */
+    transition: background-color 0.3s ease; /* Smooth hover transition */
+}
+
+.add-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+</style>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var addButton = document.querySelectorAll('.add-button');
+    var cartContent = document.querySelector('.cart_content');
+
+    addButton.forEach(function(button) {
+        button.addEventListener('click', function(event) {
+            event.preventDefault();
+
+            var galleryName = this.getAttribute('data-gallery-name');
+            var galleryLocation = this.getAttribute('data-gallery-location');
+            var galleryTel = this.getAttribute('data-gallery-tel');
+            var galleryOperatingHours = this.getAttribute('data-gallery-operating-hours');
+
+            // Create HTML for the gallery item
+            var galleryHtml = '<div><strong>Name:</strong> ' + galleryName + '</div>';
+            galleryHtml += '<div><strong>Location:</strong> ' + galleryLocation + '</div>';
+            galleryHtml += '<div><strong>Telephone:</strong> ' + galleryTel + '</div>';
+            galleryHtml += '<div><strong>Operating Hours:</strong> ' + galleryOperatingHours + '</div>';
+
+            // Append the gallery item to the shopping cart popup
+            cartContent.innerHTML = galleryHtml;
+
+            // Show the shopping cart popup
+            document.getElementById('cart-popup').style.display = 'block';
+        });
+    });
+});
+</script>
+
+
+
+
+{% endblock %}
