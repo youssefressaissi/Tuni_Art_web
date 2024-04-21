@@ -21,8 +21,7 @@ class UpdateType extends AbstractType
             ->add('birthDate')
             ->add('password')
             ->add('biography')
-            ->add('portfolio')
-        ;
+            ->add('portfolio');
     }
 
     public function configureOptions(OptionsResolver $resolver): void

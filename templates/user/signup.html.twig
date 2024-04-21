@@ -161,7 +161,7 @@
             if (file) {
                 var reader = new FileReader();
                 reader.onload = function () {
-                    document.getElementById('form_profilePic').value = reader.result;
+                    document.getElementById('user_profilePic').value = reader.result;
                 };
                 reader.readAsDataURL(file);
             }

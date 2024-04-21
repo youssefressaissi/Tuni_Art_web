@@ -13,6 +13,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Form\FormError;
+
 
 #[Route('/user')]
 class UserController extends AbstractController
@@ -67,26 +70,55 @@ class UserController extends AbstractController
     //   return $this->render('user/login.html.twig');
     // }
 
-    #[Route('/newthing', name: 'app_user_login', methods: ['GET', 'POST'])]
-    public function login(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $user = new User();
 
-        $form = $this->createForm(LoginType::class, $user);
+    // Assuming the necessary imports are included
+
+    #[Route('/newthing', name: 'app_user_login', methods: ['GET', 'POST'])]
+    public function login(Request $request, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder): Response
+    {
+        $form = $this->createForm(LoginType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($user);
-            $entityManager->flush();
+            $data = $form->getData();
+            
+            $email = $data['email'];
+            $password = $data['password'];
 
-            return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+            // Find user by email
+            $userRepository = $entityManager->getRepository(User::class);
+            $user = $userRepository->findOneBy(['email' => $email]);
+
+            if (!$user) {
+                // Add form error for invalid email
+                $form->get('email')->addError(new FormError('Invalid email address.'));
+                return $this->render('user/login.html.twig', [
+                    'form' => $form->createView(),
+                ]);
+            }
+
+            // Check if password is correct
+            if ($passwordEncoder->isPasswordValid($user, $password)) {
+                // Password is correct, perform login
+                // For example, you can set a session variable or use Symfony's built-in authentication mechanism
+                // Here, for simplicity, I'm just redirecting to another page
+                return $this->redirectToRoute('app_user_home');
+            } else {
+                // Add form error for invalid password
+                $form->get('password')->addError(new FormError('Invalid password.'));
+                return $this->render('user/login.html.twig', [
+                    'form' => $form->createView(),
+                ]);
+            }
         }
 
-        return $this->renderForm('user/login.html.twig', [
-            'user' => $user,
-            'form' => $form,
+        // Return the initial login form
+        return $this->render('user/login.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
+
+
 
     #[Route('/{uid}', name: 'app_user_show', methods: ['GET'])]
     public function show(User $user): Response
@@ -122,7 +154,7 @@ class UserController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_user_home', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
     }
     
     

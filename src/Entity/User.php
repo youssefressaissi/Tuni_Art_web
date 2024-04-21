@@ -7,13 +7,17 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
-class User implements UserInterface
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+#[UniqueEntity(fields: ['phoneNb'], message: 'There is already an account with this phone number')]
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -53,9 +57,9 @@ class User implements UserInterface
     private ?\DateTimeInterface $birthDate = null;
 
     #[ORM\Column(length: 512)]
-    #[Assert\NotBlank(message: 'Password is required')]
-    #[Assert\Length(min: 8, max: 255, exactMessage: 'Password must be between 8 and 255 characters long')]
-    #[Assert\Regex(pattern: "/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/", message: "Password must contain at least one uppercase letter, one lowercase letter, and one number")]
+    // #[Assert\NotBlank(message: 'Password is required')]
+    // #[Assert\Length(min: 8, max: 255, exactMessage: 'Password must be between 8 and 255 characters long')]
+    // #[Assert\Regex(pattern: "/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/", message: "Password must contain at least one uppercase letter, one lowercase letter, and one number")]
     private ?string $password = null;
 
     #[ORM\Column(length: 512, nullable: true)]
@@ -519,15 +523,16 @@ class User implements UserInterface
      */
     public function getRoles(): array
     {
-        return $this->roles;
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
 
+        return array_unique($roles);
     }
     public function setRoles(array $roles): void
     {
-        $this->roles = $roles;
+        $this->role = $roles;
     }
-    
-   
 
     /**
      * Returning a salt is only needed, if you are not using a modern
@@ -548,5 +553,4 @@ class User implements UserInterface
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
-
 }
