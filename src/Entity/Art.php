@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints\Date;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ArtRepository::class)]
 class Art
@@ -18,23 +19,45 @@ class Art
     private ?int $artRef = null;
 
     #[ORM\Column(length: 512)]
+    #[Assert\NotBlank(message: 'title is required')]
+    #[Assert\Regex(
+        pattern: '/^[a-zA-Z0-9\s]+$/',
+        message: 'The title can only contain letters, numbers, and spaces.'
+    )]
     private ?string $artTitle = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: 'price is required')]
+    #[Assert\GreaterThan(
+        value: 0,
+        message: 'The price must be greater than zero.'
+    )]
+    #[Assert\Regex(
+        pattern: '/^\d*\.?\d+$/',
+        message: 'The price can only contain digits and a decimal point.'
+    )]
     private ?float $artPrice = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: 'type is required')]
     private ?string $type = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+
     private ?\DateTimeInterface $creation = null;
 
     #[ORM\Column(length: 512)]
+    #[Assert\NotBlank(message: 'description is required')]
+    #[Assert\Regex(
+        pattern: '/^[a-zA-Z0-9\s]+$/',
+        message: 'The Description can only contain letters, numbers, and spaces.'
+    )]
     private ?string $description = null;
 
     #[ORM\Column(length: 512)]
+    #[Assert\NotBlank(message: 'style is required')]
     private ?string $style = null;
-
+    
     #[ORM\Column(length: 300, nullable: true)]
     private ?string $imageId;
 
@@ -47,23 +70,20 @@ class Art
     #[ORM\Column]
     private ?bool $isavailable = true;
 
-    #[ORM\ManyToOne(inversedBy: 'art')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $artist = null;
+    #[ORM\Column(nullable: false)]
+    private int $artist_id;
 
-    #[ORM\OneToMany(mappedBy: 'art', targetEntity: Auction::class)]
-    private Collection $auctions;
-
-    #[ORM\ManyToOne(inversedBy: 'art')]
-    private ?Cart $cart = null;
-
-    public function __construct()
+    public function getArtistId(): ?int
     {
-        $this->auctions = new ArrayCollection();
+        return $this->artist_id;
     }
 
-    // #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'arts')]
-    // private ?User $artist = null;
+    public function setArtistId(int $artist_id): static
+    {
+        $this->artist_id = $artist_id;
+        return $this;
+    }
+    
 
     public function getArtRef(): ?int
     {
@@ -189,72 +209,5 @@ class Art
 
         return $this;
     }
-
-    // public function getArtist(): ?User
-    // {
-    //     return $this->artist;
-    // }
-
-    // public function setArtist(?User $artist): static
-    // {
-    //     $this->artist = $artist;
-
-    //     return $this;
-    // }
-
-    public function getArtist(): ?User
-    {
-        return $this->artist;
-    }
-
-    public function setArtist(?User $artist): static
-    {
-        $this->artist = $artist;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Auction>
-     */
-    public function getAuctions(): Collection
-    {
-        return $this->auctions;
-    }
-
-    public function addAuction(Auction $auction): static
-    {
-        if (!$this->auctions->contains($auction)) {
-            $this->auctions->add($auction);
-            $auction->setArt($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAuction(Auction $auction): static
-    {
-        if ($this->auctions->removeElement($auction)) {
-            // set the owning side to null (unless already changed)
-            if ($auction->getArt() === $this) {
-                $auction->setArt(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function getCart(): ?Cart
-    {
-        return $this->cart;
-    }
-
-    public function setCart(?Cart $cart): static
-    {
-        $this->cart = $cart;
-
-        return $this;
-    }
-
 
 }

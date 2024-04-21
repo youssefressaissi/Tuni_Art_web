@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Art{% endblock %}
+
+{% block body %}
+<a href="{{ path('app_art_index') }}" class="btn btn-primary">Return to Art</a>
+
+   <div class="wrapper">
+    <div class="outer">
+        <div class="content_page">
+            <h1>{{ art.artTitle }}</h1>
+            <div class="attributes">
+                
+                <p>Views: {{ art.artViews }}</p>
+                <p>Type: {{ art.type }}</p>
+                <p>Style: {{ art.style }}</p>
+                <p>Creation Date: {{ art.creation ? art.creation|date('Y-m-d') : '' }}</p>
+                <p>Available: {{ art.isavailable ? 'Yes' : 'No' }}</p>
+                <p>Description: {{ art.description }}</p>
+            </div>
+            
+            <div class="button">
+                <a href="#">{{ art.artPrice }} dt</a>
+                <a class="cart-btn" href="#"><i class="cart-icon ion-bag"></i>ADD TO CART</a>
+            </div>
+            <a href="{{ path('app_art_edit', {'artRef': art.artRef}) }}" class="edit-btn">Edit</a>
+        </div>
+<img src="{{ asset('art.imageId') }}" width="300px" style="margin-left: auto;">
+
+	</div>
+	
+</div>
+{% endblock %}
