@@ -4,15 +4,18 @@
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="apple-touch-icon" sizes="180x180" href="{{ asset("assets/images/logo.png") }}">
-        <link rel="icon" type="image/png" sizes="32x32" href="{{ asset("assets/images/favicon-32x32.png") }}">
-        <link rel="icon" type="image/png" sizes="16x16" href="{{ asset("assets/images/favicon-16x16.png") }}">
+        <link rel="icon" sizes="180x180" href="{{ asset("assets/images/logo.png") }}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{{ asset("assets/images/logo.png") }}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{{ asset("assets/images/logo.png") }}">
         {% block stylesheets %}
             <!-- CSS
     ================================================== -->
+            <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
             <link rel="stylesheet" href="{{ asset("assets/css/styles.css") }}">
             <link rel="stylesheet" href="{{ asset("assets/css/vendor.css") }}">
-
+            <link rel="stylesheet" href="{{ asset("assets/css/artcard.css") }}">
+            <link rel="stylesheet" href="{{ asset("assets/css/profile.css") }}">
+            {# <link rel="stylesheet" href="{{ asset("assets/css/signup.css") }}"> #}
             <!-- script
             ================================================== -->
             <script src="{{ asset("assets/js/modernizr.js") }}"></script>

@@ -95,10 +95,10 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
     }
 
     private function isPasswordHashed($password)
-{
-    // Check if the password starts with the $ character
-    return substr($password, 0, 1) === '$';
-}
+    {
+        // Check if the password starts with the $ character
+        return substr($password, 0, 1) === '$';
+    }
 
 
     /**
@@ -135,7 +135,7 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
             }
         } else {
             // Compare the provided password directly for unhashed passwords
-            if ($user->getPassword() !== $credentials['password']) {
+            if ($user->getPassword() != $credentials['password']) {
                 throw new CustomUserMessageAuthenticationException('Invalid password.');
             }
         }

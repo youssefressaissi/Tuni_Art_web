@@ -13,7 +13,7 @@
             You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
         </div>
     {% endif %}
-<div class="container" style="max-width: 860px; margin: 0 auto; padding: 20px; display: flex; justify-content: center; align-items: center;">
+<div class="container" style="max-width: 860px;margin: 0 auto;padding: 20px;display: flex;justify-content: center;align-items: center;flex-direction: column;">
     <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
     <label for="inputEmail">Email</label>
     <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
@@ -23,10 +23,11 @@
     <input type="hidden" name="_csrf_token"
            value="{{ csrf_token('authenticate') }}"
     >
-
+    <a href="{{ path('reset_password_request') }}" style="margin-bottom:10px;">Forgot your password ?</a>
     <button class="btn btn-lg btn-primary" type="submit">
         Sign in
     </button>
 </div>
 </form>
 {% endblock %}
+

@@ -4180,6 +4180,7 @@ body.search-is-visible {
     .s-header__search-trigger svg {
         height: 3.2rem;
         width: 3.2rem;
+        margin-right: 10px;
     }
     body.nav-wrap-is-visible {
         overflow: hidden;

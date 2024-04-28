@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use phpDocumentor\Reflection\Types\Integer;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -85,8 +86,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'artist', targetEntity: Art::class)]
     private Collection $art;
 
-    #[ORM\ManyToMany(targetEntity: self::class, inversedBy: 'followers')]
-    private Collection $followers;
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="following")
+     * @ORM\JoinTable(
+     *     name="followers",
+     *     joinColumns={@ORM\JoinColumn(name="following_id", referencedColumnName="uid")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="follower_id", referencedColumnName="uid")}
+     * )
+     */
+    private $followers;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="followers")
+     * @ORM\JoinTable(
+     *     name="followers",
+     *     joinColumns={@ORM\JoinColumn(name="follower_id", referencedColumnName="uid")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="following_id", referencedColumnName="uid")}
+     * )
+     */
+    private $following;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Auction::class)]
     private Collection $auctions;
@@ -104,22 +122,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->art = new ArrayCollection();
         $this->followers = new ArrayCollection();
+        $this->following = new ArrayCollection();
         $this->auctions = new ArrayCollection();
         $this->carts = new ArrayCollection();
         $this->events = new ArrayCollection();
         $this->orders = new ArrayCollection();
     }
 
-    // #[ORM\ManyToMany(targetEntity: "User", mappedBy: "following")]
-    // private Collection $followers;
-
-    /**
-     * Constructor
-     */
-    // public function __construct()
-    // {
-    //     $this->followers = new ArrayCollection();
-    // }
 
     public function getToday(): \DateTimeInterface
     {
@@ -167,7 +176,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function isGender(): ?bool
+    public function getGender(): ?bool
     {
         return $this->gender;
     }
@@ -275,7 +284,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function isStatus(): ?bool
+    public function getStatus(): ?bool
     {
         return $this->status;
     }
@@ -298,33 +307,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-
-    // /**
-    //  * @return Collection<int, User>
-    //  */
-    // public function getFollowers(): Collection
-    // {
-    //     return $this->followers;
-    // }
-
-    // public function addFollower(User $follower): static
-    // {
-    //     if (!$this->followers->contains($follower)) {
-    //         $this->followers->add($follower);
-    //         #$follower->addFollowing($this);
-    //     }
-
-    //     return $this;
-    // }
-
-    // public function removeFollower(User $follower): static
-    // {
-    //     if ($this->followers->removeElement($follower)) {
-    //         #$follower->removeFollowing($this);
-    //     }
-
-    //     return $this;
-    // }
 
     /**
      * @return Collection<int, Art>
@@ -357,29 +339,58 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, self>
+     * @return int
      */
-    public function getFollowers(): Collection
+    public function getFollowers(): int
     {
-        return $this->followers;
+        return $this->followers ? $this->followers->count() : 0;    
     }
 
-    public function addFollower(self $follower): static
+    public function addFollower(User $follower): self
     {
         if (!$this->followers->contains($follower)) {
-            $this->followers->add($follower);
+            $this->followers[] = $follower;
+            $follower->addFollowing($this);
         }
 
         return $this;
     }
 
-    public function removeFollower(self $follower): static
+    public function removeFollower(User $follower): self
     {
-        $this->followers->removeElement($follower);
+        if ($this->followers->removeElement($follower)) {
+            $follower->removeFollowing($this);
+        }
 
         return $this;
     }
 
+    /**
+     * @return int
+     */
+    public function getFollowing(): int
+    {
+        return $this->following ? $this->following->count() : 0;    
+    }
+
+    public function addFollowing(User $following): self
+    {
+        if (!$this->following->contains($following)) {
+            $this->following[] = $following;
+            $following->addFollower($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFollowing(User $following): self
+    {
+        if ($this->following->removeElement($following)) {
+            $following->removeFollower($this);
+        }
+
+        return $this;
+    }
     /**
      * @return Collection<int, Auction>
      */
@@ -553,4 +564,5 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
+
 }

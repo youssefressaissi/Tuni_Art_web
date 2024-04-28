@@ -1,0 +1,212 @@
+.container-new {
+    width: 100%;
+    padding: 0;
+    display: flex;
+    flex-direction: row; /* Display columns side by side */
+    /* justify-content: center; Center the columns horizontally */
+}
+
+
+.row-new {
+    width: max-content;
+    max-width: var(--width-grid-max);
+    margin: 0 auto;
+    display: -ms-flexbox;
+    display: -webkit-box;
+    display: flex;
+    -ms-flex-flow: row wrap;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    flex-flow: row wrap;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+.col-300 {
+    width: 350px;
+}
+
+.col-800 {
+    width: 850px;
+}
+
+/* Profile card container */
+.profile-card {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    margin: 10px;
+    /* width: 340px; */
+}
+
+/* Profile header */
+.profile-header {
+    text-align: center;
+}
+
+.profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.profile-fullname {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.profile-occupation {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.profile-location {
+    font-size: 16px;
+    color: #666;
+}
+
+/* Profile details */
+.profile-subtitles {
+    color: #707070;
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.profile-details {
+    margin-top: 20px;
+}
+
+.profile-bio {
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.profile-website {
+    font-size: 16px;
+    color: #007bff;
+    text-decoration: none;
+}
+
+.profile-email {
+    font-size: 16px;
+    color: #333;
+    margin-top: 0;
+}
+
+/* Profile stats */
+.profile-stats {
+    margin-top: 20px;
+}
+
+/* Profile Side container */
+.profile-sidecontainer {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    margin: 10px;
+    /* width: 830px; */
+    height: 100%;
+}
+
+.stat {
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+/* Profile tools */
+.tools-header {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.tools-list {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.tool {
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.tool img {
+    width: 24px;
+    height: 24px;
+    margin-right: 5px;
+}
+
+.follow-button {
+    display: inline-block;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #fff;
+    background-color: #007bff;
+    border: 1px solid #007bff;
+    cursor: pointer; /* Add cursor style for better UX */
+    transition: background-color 0.3s, border-color 0.3s, color 0.3s; /* Add transition for smooth hover effect */
+    width: 100%;
+    font-family: var(--font-2);
+    font-weight: 600;
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: .4em;
+    height: var(--btn-height);
+    /* line-height: calc(var(--btn-height) - .4rem); */
+    padding: 0 3.2rem;
+    margin: 0 .4rem 1.6rem 0;
+    text-align: center;
+    white-space: nowrap;
+    -webkit-transition: all .3s;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.follow-button:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+    color: #fff; /* Change text color on hover */
+    text-decoration: none; /* Remove underline on hover */
+}
+
+.follow-button-secondary {
+    display: inline-block;
+    border-radius: 4px;
+    text-decoration: none;
+    cursor: pointer; /* Add cursor style for better UX */
+    transition: background-color 0.3s, border-color 0.3s, color 0.3s; /* Add transition for smooth hover effect */
+    width: 100%;
+    background-color: #dc3545; /* Red background */
+    color: #fff; /* White text */
+    border: 1px solid #dc3545; /* Red border */
+    font-family: var(--font-2);
+    font-weight: 600;
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: .4em;
+    height: var(--btn-height);
+    /* line-height: calc(var(--btn-height) - .4rem); */
+    padding: 0 3.2rem;
+    margin: 0 .4rem 1.6rem 0;
+    text-align: center;
+    white-space: nowrap;
+    cursor: pointer;
+    -webkit-transition: all .3s;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.follow-button-secondary:hover {
+    background-color: #c82333; /* Darker red on hover */
+    border-color: #c82333; /* Darker red border on hover */
+    color: #fff; /* Change text color on hover */
+    text-decoration: none; /* Remove underline on hover */
+}
+
