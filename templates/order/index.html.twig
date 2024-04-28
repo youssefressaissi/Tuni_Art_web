@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Order index{% endblock %}
+
+{% block body %}
+    <h1>Order index</h1>
+
+                      <div style="margin-top:50px;margin-left:250px">
+                     <a href="{{ path('app_trieasc') }}" class="btn btn-success"><i class="fas fa-sort-alpha-up"></i> Sort Ascending</a>
+<a href="{{ path('app_triedesc') }}" class="btn btn-success"><i class="fas fa-sort-alpha-down"></i> Sort Descending</a>
+
+      </div>   
+
+{# Search Bar #}
+ <input id="search-input" type="form-control" placeholder="Search...">
+<title>AJAX Search Example</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#search-input").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("table tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+
+</div>   
+    <table class="table" style="margin:50px">
+        <thead>
+            <tr>
+                <th>OrderId</th>
+                <th>OrderDate</th>
+                <th>Totalprice</th>
+                <th>Status</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for order in orders %}
+            <tr>
+                <td>{{ order.orderId }}</td>
+                <td>{{ order.orderDate ? order.orderDate|date('Y-m-d') : '' }}</td>
+                <td>{{ order.totalprice }}</td>
+                <td>{{ order.status ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('app_order_show', {'orderId': order.orderId}) }}" class="btn btn-primary">show</a>
+                    <a href="{{ path('app_order_edit', {'orderId': order.orderId}) }}" class="btn btn-outline-primary">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_order_new') }}" class="btn btn-success" style="margin-left:50px">Create new</a>
+{% endblock %}

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Addition</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #007bff;
+        }
+        p {
+            font-size: 18px;
+            line-height: 1.5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="color:#ed63ad;margin-left:200px">Addition</h1>
+
+        <!-- Display orders -->
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr class="text-white" style="background-color: #ff69b4;color:white;">
+                        <th>OrderId</th>
+                        <th>OrderDate</th>
+                        <th>Totalprice</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                        <tr>
+                            <td>{{ order.orderId }}</td>
+                            <td>{{ order.orderDate ? order.orderDate|date('Y-m-d') : '' }}</td>
+                            <td>{{ order.totalprice }}</td>
+                            <td>{{ order.status ? 'Yes' : 'No' }}</td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="4">No records found</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Display selected arts list -->
+        <h2>Selected Arts List:</h2>
+        <ul>
+            {% for art in selectedArts %}
+                <li>Title: {{ art.title }}, Price: {{ art.price }}</li>
+            {% endfor %}
+        </ul>
+
+        <!-- Display total amount -->
+        <h2>Total Amount: {{ totalAmount }}</h2>
+
+        <!-- Image ajoutée en dessous du tableau -->
+        <a>
+            <img src="{{asset('backOffice/assets/img/logo.jpg')}}" >
+            <span class="ms-1 font-weight-bold text-white">TuniArt</span>
+        </a>
+    </div>
+</body>
+</html>

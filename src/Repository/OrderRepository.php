@@ -21,6 +21,22 @@ class OrderRepository extends ServiceEntityRepository
         parent::__construct($registry, Order::class);
     }
 
+
+    public function findAllAscending(): array
+    {
+        return $this->createQueryBuilder('O')
+            ->orderBy('O.orderDate', 'ASC') // Replace 'fieldToSortBy' with the actual field name you want to sort by
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findAllDescending(): array
+    {
+        return $this->createQueryBuilder('o')
+            ->orderBy('o.orderDate', 'DESC') // Replace 'fieldToSortBy' with the actual field name you want to sort by
+            ->getQuery()
+            ->getResult();
+    }
 //    /**
 //     * @return Order[] Returns an array of Order objects
 //     */

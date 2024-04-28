@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Payment Details PDF</title>
+    <style>
+        /* Add your custom styles for the PDF here */
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .payment-details {
+            margin-top: 20px;
+        }
+        .payment-details p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Payment Details</h1>
+        <div class="payment-details">
+            <p><strong>Payment ID:</strong> {{ payment.order_id }}</p>
+            <p><strong>Amount:</strong> {{ payment.totalPrice }}</p>
+            <!-- Add more payment details here as needed -->
+        </div>
+    </div>
+</body>
+</html>

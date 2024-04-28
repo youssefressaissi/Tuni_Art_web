@@ -1,0 +1,94 @@
+    {% extends 'base.html.twig' %}
+
+    {% block title %}Cart index{% endblock %}
+
+    {% block body %}
+        <h1>Cart index</h1>
+ <a href="{{ path('app_generate_pdf') }}"class="btn btn-warning">-download PDF</a>
+                      <div style="margin-top:50px;margin-left:250px">
+                     <a href="{{ path('app_trieascc') }}" class="btn btn-success"><i class="fas fa-sort-alpha-up"></i> Sort Ascending</a>
+<a href="{{ path('app_triedescc') }}" class="btn btn-success"><i class="fas fa-sort-alpha-down"></i> Sort Descending</a>
+
+</div>   
+ {# Search Bar #}
+ <input id="search-input" type="form-control" placeholder="Search...">
+<title>AJAX Search Example</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#search-input").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("table tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+
+    <div id="cartContainer">
+        {# Display the specific cart's UID or a message if not found #}
+        <div id="specificCartUid"></div>
+        <div id="debugInfo"></div>
+    </div>
+
+    
+        <hr>
+        <table class="table" style="margin:50px">
+            <thead>
+                <tr>
+                    <th>CartRef</th>
+                    <th>UserID</th>
+                    <th>ArtRef</th>
+
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for cart in carts %}
+                <tr>
+                    <td>{{ cart.cartRef }}</td>
+                    <td>{{ cart.uid }}</td>
+                    <td>{{ cart.artRef }}</td>
+                    <td>
+                        <a href="{{ path('app_cart_show', {'cartRef': cart.cartRef}) }}" class="btn btn-primary">show</a>
+                        <a href="{{ path('app_cart_edit', {'cartRef': cart.cartRef}) }}" class="btn btn-outline-primary">edit</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="2">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <a href="{{ path('app_cart_new') }}" class="btn btn-success" style="margin-left:50px">Create new</a>
+        
+    {# <script>
+      document.getElementById('searchForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+        performSearch();
+      });
+
+      function performSearch() {
+        const searchInput = document.getElementById('searchInput').value;
+
+        fetch('{{ path('cart_search') }}?search=' + encodeURIComponent(searchInput))
+          .then(response => response.json())
+          .then(data => {
+            const specificCartUidContainer = document.getElementById('specificCartUid');
+            const debugInfoContainer = document.getElementById('debugInfo');
+
+            if (data.cart && data.cart.uid) {
+              specificCartUidContainer.textContent = 'Cart Found: ' + data.cart.uid;
+            } else {
+              specificCartUidContainer.textContent = 'Cart not found';
+            }
+
+            debugInfoContainer.textContent = 'Debug Info: ' + JSON.stringify(data);
+          })
+          .catch(error => console.error('Error searching cart:', error));
+      }
+    </script> #}
+    {% endblock %}
+    

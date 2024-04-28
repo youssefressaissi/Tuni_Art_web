@@ -20,7 +20,38 @@ class CartRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Cart::class);
     }
+    public function findAllSortedByUid(): array
+{
+    return $this->createQueryBuilder('c')
+        ->orderBy('c.uid', 'ASC')
+        ->getQuery()
+        ->getResult();
+}
+public function findByUid(int $uid): array
+{
+    return $this->createQueryBuilder('c')
+        ->andWhere('c.uid = :uid')
+        ->setParameter('uid', $uid)
+        ->getQuery()
+        ->getResult();
+}
 
+ public function findAllAscending(): array
+    {
+        return $this->createQueryBuilder('R')
+            ->orderBy('R.artRef', 'ASC') // Replace 'fieldToSortBy' with the actual field name you want to sort by
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findAllDescending(): array
+    {
+        return $this->createQueryBuilder('r')
+            ->orderBy('r.artRef', 'DESC') // Replace 'fieldToSortBy' with the actual field name you want to sort by
+            ->getQuery()
+            ->getResult();
+    }
+    
 //    /**
 //     * @return Cart[] Returns an array of Cart objects
 //     */

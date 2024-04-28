@@ -36,6 +36,7 @@ class Gallery
  
     #[ORM\Column(length:100)]
     private ?string $operatingHours;
+    
  
     public function getGalleryId(): ?int
     {

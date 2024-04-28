@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello PaymentController!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    <h1></h1>
+    <ul id="selected-arts-list"></ul>
+    <div id="total-price">100.00</div>
+   
+    <!-- Add a select dropdown for currency selection -->
+    <select id="currency-select">
+        <option value="dt">Tunisian Dinar (DT)</option>
+        <option value="euro">Euro (€)</option>
+        <option value="dollar">Dollar ($)</option>
+    </select>
+</div>
+ <div style="margin:20px">
+    <p>Joke of the day!</p>
+    <div id="random-joke" style="color: red;"> <strong> {{ randomJoke }}</strong></div> <!-- Display the random joke here -->
+  </div>
+<div>
+    <a href="{{ path('app_generate_pdf') }}" class="btn btn-warning">Download PDF</a>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    // Function to convert total price to selected currency
+    function convertCurrency(currency) {
+        var totalPriceStr = $('#total-price').text().trim(); // Remove leading/trailing whitespace
+
+        // Extract numerical value by removing non-numeric characters
+        var totalPrice = parseFloat(totalPriceStr.replace(/[^\d.-]/g, ''));
+
+        if (isNaN(totalPrice)) {
+            console.error('Invalid Total Price:', totalPriceStr);
+            return; // Return early if total price is not a valid number
+        }
+
+        var convertedPrice;
+
+        switch (currency) {
+            case 'dt':
+                convertedPrice = totalPrice; // DT to DT conversion, no change
+                break;
+            case 'euro':
+                convertedPrice = totalPrice * 0.31; // Assume 1 DT = 0.31 Euro
+                break;
+            case 'dollar':
+                convertedPrice = totalPrice * 0.36; // Assume 1 DT = 0.36 Dollar
+                break;
+            default:
+                console.error('Unsupported Currency:', currency);
+                convertedPrice = totalPrice;
+        }
+
+        return convertedPrice.toFixed(2); // Round to 2 decimal places
+    }
+
+    // Event listener for currency selection change
+    $('#currency-select').change(function() {
+        var selectedCurrency = $(this).val();
+        var convertedPrice = convertCurrency(selectedCurrency);
+
+        if (convertedPrice !== undefined) {
+            // Update the total price with the converted value
+            $('#total-price').text(convertedPrice);
+        }
+    });
+
+    // Sample code to retrieve and display selected arts from sessionStorage
+    var selectedArtsJson = sessionStorage.getItem('selectedArts');
+    if (selectedArtsJson) {
+        var selectedArts = JSON.parse(selectedArtsJson);
+        
+        var artsList = $('#selected-arts-list');
+        selectedArts.forEach(function(art) {
+            var listItem = $('<li>').text('Title: ' + art.title + ', Price: ' + art.price);
+            artsList.append(listItem);
+        });
+    }
+});
+</script>
+{% endblock %}

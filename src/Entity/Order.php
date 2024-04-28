@@ -7,6 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
+#[ORM\Table(name: "`order`")] // Specify a custom table name
 class Order
 {
     #[ORM\Id]
@@ -22,13 +23,28 @@ class Order
 
     #[ORM\Column]
 	private ?bool $status = null;
+    #[ORM\Column(name: "uid", type: "integer", nullable: true)]
+    private ?int $uid = null;
 
-    #[ORM\ManyToOne(inversedBy: 'orders')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
+
+    //#[ORM\ManyToOne(inversedBy: 'orders')]
+   // #[ORM\JoinColumn(nullable: false)]
+    //private ?User $user = null;
 
     // #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'orders')]
     // private ?User $uid;
+
+    public function getUid(): ?int
+    {
+        return $this->uid;
+    }
+
+    public function setUid(?int $uid): self
+    {
+        $this->uid = $uid;
+
+        return $this;
+    }
 
     public function getOrderId(): ?int
     {
@@ -83,17 +99,17 @@ class Order
     //     return $this;
     // }
 
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
+    // public function getUser(): ?User
+    // {
+    //     return $this->user;
+    // }
 
-    public function setUser(?User $user): static
-    {
-        $this->user = $user;
+    // public function setUser(?User $user): static
+    // {
+    //     $this->user = $user;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-
+ 
 }

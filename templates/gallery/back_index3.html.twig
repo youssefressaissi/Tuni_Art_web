@@ -1,0 +1,52 @@
+{% extends 'admin/base-back.html.twig' %}
+
+{% block title %}Gallery index{% endblock %}
+
+{% block body %}
+   
+     <h1>carts index</h1>
+     {# Search Bar #}
+ <input id="search-input" type="form-control" placeholder="Search...">
+<title>AJAX Search Example</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#search-input").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("table tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>cartref</th>
+                <th>uid</th>
+                <th>artref</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for cart in carts %}
+            <tr>
+                <td>{{ cart.cartRef }}</td>
+                <td>{{ cart.uid }}</td>
+                <td>{{ cart.artRef }}</td>
+                <td>
+                    {{ include('cart/_delete_form.html.twig') }}
+                    <a href="{{ path('app_cart_edit', {'cartRef': cart.cartRef}) }}" class="btn btn-primary" style="margin=30px">edit</a>
+                </td>
+            </tr>
+        {% else %}
+        <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_cart_admin_new') }}" class="btn btn-success" style="margin=30px">Create new</a>
+{% endblock %}

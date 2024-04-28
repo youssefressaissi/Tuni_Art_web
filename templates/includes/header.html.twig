@@ -1,0 +1,171 @@
+<!-- preloader
+  ================================================== -->
+<div id="preloader">
+    <div id="loader"></div>
+</div>
+
+<!-- header
+ ================================================== -->
+<header class="s-header">
+
+    <div class="row s-header__content">
+
+        <div class="s-header__logo">
+            <a class="logo" href="index.html">
+                <img src="{{ asset('assets/images/logo.png') }}" alt="Homepage">
+            </a>
+        </div>
+
+        <nav class="s-header__nav-wrap">
+
+            <h2 class="s-header__nav-heading h6">Site Navigation</h2>
+
+            <ul class="s-header__nav">
+                
+                <li class="has-children">
+                    <a href="#0" title="">Crud</a>
+                    <ul class="sub-menu">
+                        <li><a href="single-video.html">Video Post</a></li>
+                        <li><a href="single-audio.html">Audio Post</a></li>
+                        <li><a href="single-gallery.html">Gallery Post</a></li>
+                        <li><a href="single-standard.html">Standard Post</a></li>
+                    </ul>
+                </li>
+                <li><a href="{{ path('app_art_new') }}" title="">Add</a></li>
+                <li><a href="{{ path('app_art_index') }}" title="">All Arts</a></li>
+                <li><a href="{{ path('app_gallery_index') }}" title="">galleries</a></li>
+                
+                
+            </ul> <!-- end header__nav -->
+
+            <a href="#0" title="Close Menu" class="s-header__overlay-close close-mobile-menu">Close</a>
+
+        </nav> <!-- end header__nav-wrap -->
+
+        <a class="s-header__toggle-menu" href="#0" title="Menu"><span>Menu</span></a>
+
+        <div class="s-header__search">
+
+            <form role="search" method="get" class="s-header__search-form" action="#">
+                <label>
+                    <span class="hide-content">Search for:</span>
+                    <input type="search" class="s-header__search-field" placeholder="Type Your Keywords" value="" name="s" title="Search for:" autocomplete="off">
+                </label>
+                <input type="submit" class="s-header__search-submit" value="Search">
+            </form>
+
+            <a href="#0" title="Close Search" class="s-header__overlay-close">Close</a>
+           
+
+        </div> <!-- end search wrap -->
+         <div class="s-header__cart">
+            <a  class="nav-link" href="#">
+                <img src="{{asset('assets/images/panier.png')}}" alt="Shopping Cart">
+            </a>
+        </div>
+        <div id="cart-popup" class="cart-popup">
+    <div class="cart_content">
+        <!-- Content of your cart popup goes here -->
+        Your shopping cart content here...
+    </div>
+       <button id="confirm-order-button" class="btn btn-success">Confirm Order</button>
+</div>
+        <a class="s-header__search-trigger" href="#">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 18a7.952 7.952 0 004.897-1.688l4.396 4.396 1.414-1.414-4.396-4.396A7.952 7.952 0 0018 10c0-4.411-3.589-8-8-8s-8 3.589-8 8 3.589 8 8 8zm0-14c3.309 0 6 2.691 6 6s-2.691 6-6 6-6-2.691-6-6 2.691-6 6-6z"></path></svg>
+        </a>
+
+    </div> <!-- end s-header__content -->
+
+</header> <!-- end header -->
+<style>
+.s-header__cart {
+    margin-left: 10px; /* Adjust as needed */
+}
+
+.s-header__cart img {
+    width: 20px; /* Adjust size as needed */
+    height: auto;
+}
+/* CSS for the cart popup */
+.cart-popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0; /* Position on the right side */
+    width: 300px; /* Adjust width as needed */
+    height: 100%; /* Cover full height */
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+    overflow-y: auto; /* Allow vertical scrolling if content exceeds height */
+}
+
+.cart-popup__content {
+    padding: 20px;
+}
+
+.cart-popup--show {
+    display: block;
+}
+
+
+</style>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var cartIcon = document.querySelector('.s-header__cart');
+    var cartPopup = document.getElementById('cart-popup');
+    var confirmOrderButton = document.getElementById('confirm-order-button');
+    
+    confirmOrderButton.addEventListener('click', function() {
+        // Get the selected arts from the cart content
+        var selectedArts = [];
+        var cartItems = document.querySelectorAll('.cart_content > div');
+        cartItems.forEach(function(item) {
+            var title = item.getAttribute('data-art-title');
+            var price = item.getAttribute('data-art-price');
+            selectedArts.push({ title: title, price: price });
+        });
+
+        // Construct the URL for the payment page with the selected arts as parameters
+        sessionStorage.setItem('selectedArts', JSON.stringify(selectedArts));
+        // Redirect the user to the payment page
+          window.location.href = "{{ path('app_payment') }}";
+    });
+
+    cartIcon.addEventListener('click', function (event) {
+        event.preventDefault();
+        cartPopup.classList.toggle('cart-popup--show');
+    });
+
+    // Close the cart popup when clicking outside of it
+    document.addEventListener('click', function (event) {
+        if (!cartPopup.contains(event.target) && !cartIcon.contains(event.target)) {
+            cartPopup.classList.remove('cart-popup--show');
+        }
+    });
+      var selectedArtsJson = sessionStorage.getItem('selectedArts');
+    if (selectedArtsJson) {
+        var selectedArts = JSON.parse(selectedArtsJson);
+        
+        // Display the selected arts on the payment page
+        var artsList = document.getElementById('selected-arts-list');
+        var totalPrice = 0; // Initialize total price
+        
+        selectedArts.forEach(function(art) {
+
+            
+            // Calculate total price
+            totalPrice += parseFloat(art.price);
+        });
+        
+        // Display total price
+        var totalPriceElement = document.getElementById('total-price');
+        if (totalPriceElement) {
+            totalPriceElement.textContent = 'Total Price: ' + totalPrice.toFixed(2); // Display total price with 2 decimal places
+              // Send total amount to the server
+        
+        }
+    }
+});
+
+</script>

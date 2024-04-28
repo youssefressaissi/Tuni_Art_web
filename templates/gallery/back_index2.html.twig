@@ -1,0 +1,56 @@
+{% extends 'admin/base-back.html.twig' %}
+
+{% block title %}Gallery index{% endblock %}
+
+{% block body %}
+     <h1>orders index</h1>
+
+
+{# Search Bar #}
+ <input id="search-input" type="form-control" placeholder="Search...">
+<title>AJAX Search Example</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#search-input").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("table tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>orderId</th>
+                <th>orderDate</th>
+                <th>totalprice</th>
+                <th>status</th>
+                <th>uid</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for order in orders %}
+            <tr>
+                <td>{{ order.orderId }}</td>
+                <td>{{ order.orderDate|date('Y-m-d') }}</td>
+                <td>{{ order.totalprice }}</td>
+                <td>{{ order.status }}</td>
+                <td>{{ order.uid }}</td>
+                <td>
+                    {{ include('order/_delete_form.html.twig') }}
+                    <a href="{{ path('app_order_edit', {'orderId': order.orderId}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+        <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_order_admin_new') }}">Create new</a>
+{% endblock %}
