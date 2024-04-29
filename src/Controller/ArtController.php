@@ -45,25 +45,26 @@ class ArtController extends AbstractController
             'art' => $artRepository->findAll(),
         ]);
     }
-    #[Route('/new', name: 'app_art_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $art = new Art();
-        $form = $this->createForm(ArtType::class, $art);
-        $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($art);
-            $entityManager->flush();
+        #[Route('/new', name: 'app_art_new', methods: ['GET', 'POST'])]
+        public function new(Request $request, EntityManagerInterface $entityManager): Response
+        {
+            $art = new Art();
+            $form = $this->createForm(ArtType::class, $art);
+            $form->handleRequest($request);
 
-            return $this->redirectToRoute('app_art_index', [], Response::HTTP_SEE_OTHER);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $entityManager->persist($art);
+                $entityManager->flush();
+
+                return $this->redirectToRoute('app_art_index', [], Response::HTTP_SEE_OTHER);
+            }
+
+            return $this->renderForm('art/new.html.twig', [
+                'art' => $art,
+                'form' => $form,
+            ]);
         }
-
-        return $this->renderForm('art/new.html.twig', [
-            'art' => $art,
-            'form' => $form,
-        ]);
-    }
 
     #[Route('/{artRef}', name: 'app_art_show', methods: ['GET'])]
     public function show(Art $art): Response
@@ -72,6 +73,32 @@ class ArtController extends AbstractController
             'art' => $art,
         ]);
     }
+
+    #[Route('/confirm-order', name: 'confirm_order', methods: ['POST'])]
+    public function confirmOrder(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        // Assuming the order data is submitted via POST request
+        // You might need to adjust this depending on your form structure
+    
+        // Fetch the order data from the request
+        $orderData = $request->request->get('order_data');
+    
+        // Process the order data and store it in the database
+        // Example: You might create an Order entity and persist it
+        // Replace this with your actual order processing logic
+        $order = new Order();
+        $order->setOrderData($orderData);
+    
+        $entityManager->persist($order);
+        $entityManager->flush();
+    
+        // Optionally, you can add a flash message to indicate successful order confirmation
+        $this->addFlash('success', 'Order confirmed successfully!');
+    
+        // Redirect the user to a relevant page after order confirmation
+        return $this->redirectToRoute('app_art_index');
+    }
+    
 
     #[Route('/{artRef}/edit', name: 'app_art_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Art $art, EntityManagerInterface $entityManager): Response
@@ -94,24 +121,28 @@ class ArtController extends AbstractController
     #[Route('/update-isavailable', name: 'update_isavailable', methods: ['POST'])]
     public function updateIsAvailable(Request $request, EntityManagerInterface $entityManager): Response
     {
-        // Step 3: Debugging
         $artRef = $request->request->get('art_ref');
-        var_dump($artRef); // Debugging statement
-    
+        
         // Find the art entity by its reference
         $art = $entityManager->getRepository(Art::class)->findOneBy(['artRef' => $artRef]);
-        var_dump($art); 
-    
+        
         if ($art) {
-            $art->setIsavailable(false); 
+            $isAvailable = $art->getIsAvailable();
+            
+            // Toggle the availability status
+            $art->setIsAvailable(!$isAvailable); 
+            
             $entityManager->persist($art);
             $entityManager->flush();
-            $this->addFlash('success', 'Art item added successfully!');
+            
+            $this->addFlash('success', 'Art item availability updated successfully!');
         } else {
             $this->addFlash('error', 'Art item not found!');
         }
     
         return $this->redirectToRoute('app_art_index');
     }
+    
+
 
 }

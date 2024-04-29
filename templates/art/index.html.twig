@@ -2,7 +2,6 @@
 
 {% block title %}Art Index{% endblock %}
 
-
 {% block body %}
     <h1>Art Index</h1>
 
@@ -11,25 +10,20 @@
             {% for art in art %}
                 <div class="col-md-4 mb-4">
                     <div class="card">
-                        
                         <div class="card-body">
                             <h5 class="card-title">{{ art.artTitle }}</h5>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <p class="card-text">Art Price: {{ art.artPrice }}</p>
-                                        </div>
-                                       
-                                    
-                                 
-                                    
-                                   
-           <div class="actions">
-                                <form action="{{ path('update_isavailable') }}" method="post">
-                                    <input type="hidden" name="art_ref" value="{{ art.artRef }}">
-                                    <input type="hidden" name="art_title" value="{{ art.artTitle }}">
-                                    <input type="hidden" name="art_price" value="{{ art.artPrice }}">
-                                    <button type="submit" class="add-button">Add</button>
-                                </form>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p class="card-text">Art Price: {{ art.artPrice }}</p>
+                                </div>
+                                <div class="actions">
+                                   <form action="{{ path('update_isavailable') }}" method="post">
+                                        <input type="hidden" name="art_ref" value="{{ art.artRef }}">
+                                        <input type="hidden" name="art_title" value="{{ art.artTitle }}">
+                                        <input type="hidden" name="art_price" value="{{ art.artPrice }}">
+                                        <button type="submit" class="add-button">Add</button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -39,78 +33,107 @@
     </div>
 
     <a href="{{ path('app_art_new') }}" class="btn btn-success">Create new</a>
-      <style>
-    .add-button {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #007bff; 
-    color: #fff; /* White text color */
-    text-decoration: none; /* Remove underline */
-    border-radius: 5px; /* Rounded corners */
-    transition: background-color 0.3s ease; /* Smooth hover transition */
-}
 
-.add-button:hover {
-    background-color: #0056b3; /* Darker blue on hover */
-}
-.add-button.disabled {
-            pointer-events: none; /* Disable click events */
-            opacity: 0.5; /* Apply some opacity to indicate disabled state */
+    <div class="cart_content">
+        <!-- This is where the selected items will be displayed -->
+    </div>
+
+    <form action="{{ path('confirm_order') }}" method="post">
+        <button type="submit" class="btn btn-primary">Confirm Order</button>
+    </form>
+
+    <style>
+        .add-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
         }
-         .deselect-button {
-        background-color: #dc3545; /* Red background color */
-        color: #fff; /* White text color */
-        border: none;
-        border-radius: 1px; /* Rounded corners */
-        padding: 5px 8px; /* Adjust padding as needed */
-        font-size: 9px; /* Adjust font size as needed */
-        margin-left: 5px; /* Adjust as needed */
-    }
-</style>
- 
+
+        .add-button:hover {
+            background-color: #0056b3;
+        }
+
+        .add-button.disabled {
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        .deselect-button {
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+            border-radius: 1px;
+            padding: 5px 8px;
+            font-size: 9px;
+            margin-left: 5px;
+        }
+    </style>
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var addButton = document.querySelectorAll('.add-button');
             var cartContent = document.querySelector('.cart_content');
-     // Retrieve previously added items from local storage
-        var storedItems = localStorage.getItem('addedItems');
-        
-        if (storedItems) {
-            cartContent.innerHTML = storedItems;
-        }
+
+            // Retrieve previously added items from local storage
+            var storedItems = localStorage.getItem('addedItems');
+            
+            if (storedItems) {
+                cartContent.innerHTML = storedItems;
+
+                // Disable corresponding "Add" buttons for items already in the cart
+                var cartItems = cartContent.querySelectorAll('[data-art-title]');
+                cartItems.forEach(function(item) {
+                    var title = item.getAttribute('data-art-title');
+                    var price = item.getAttribute('data-art-price');
+                    addButton.forEach(function(button) {
+                        var addButtonTitle = button.parentNode.querySelector('input[name="art_title"]').value;
+                        var addButtonPrice = button.parentNode.querySelector('input[name="art_price"]').value;
+                        if (addButtonTitle === title && addButtonPrice === price) {
+                            button.classList.add('disabled');
+                        }
+                    });
+                });
+            }
+
             addButton.forEach(function(button) {
                 button.addEventListener('click', function(event) {
                     event.preventDefault();
 
-                var artTitle = this.parentNode.querySelector('input[name="art_title"]').value;
-                var artPrice = this.parentNode.querySelector('input[name="art_price"]').value;
-                   
-                    // Create HTML for the art item
-                    var artHtml = '<div data-art-title="' + artTitle + '" data-art-price="' + artPrice + '">';
-                    artHtml += '<strong>Title:</strong> ' + artTitle + '<br>';
-                    artHtml += '<strong>Price:</strong> ' + artPrice;
-                    artHtml += '<button class="deselect-button">Deselect</button></div>';
+                    var artTitle = this.parentNode.querySelector('input[name="art_title"]').value;
+                    var artPrice = this.parentNode.querySelector('input[name="art_price"]').value;
 
-                    // Append the art item to the existing content of the shopping cart popup
-                    cartContent.innerHTML += artHtml;
-localStorage.setItem('addedItems', cartContent.innerHTML);
-                    // Show the shopping cart popup
-                    document.getElementById('cart-popup').style.display = 'block';
+                    // Check if the art is already in the cart
+                    var inCart = false;
+                    var cartItems = cartContent.querySelectorAll('[data-art-title]');
+                    cartItems.forEach(function(item) {
+                        if (item.getAttribute('data-art-title') === artTitle) {
+                            inCart = true;
+                        }
+                    });
+
+                    if (!inCart) {
+                        // Create HTML for the art item
+                        var artHtml = '<div data-art-title="' + artTitle + '" data-art-price="' + artPrice + '">';
+                        artHtml += '<strong>Title:</strong> ' + artTitle + '<br>';
+                        artHtml += '<strong>Price:</strong> ' + artPrice;
+                        artHtml += '<button class="deselect-button">Deselect</button></div>';
+
+                        // Append the art item to the existing content of the shopping cart popup
+                        cartContent.innerHTML += artHtml;
+                        localStorage.setItem('addedItems', cartContent.innerHTML);
+
+                        // Show the shopping cart popup
+                        document.getElementById('cart-popup').style.display = 'block';
+                    }
 
                     // Disable the clicked button
                     this.classList.add('disabled');
                 });
             });
-               var addButton = document.querySelectorAll('.add-button');
-    
-    addButton.forEach(function(button) {
-        button.addEventListener('click', function(event) {
-            event.preventDefault(); // Prevent form submission
-            
-            var form = this.closest('form'); // Get the closest form element
-            form.submit(); // Submit the form
-        });
-    });
 
             // Add event listener to deselect arts
             cartContent.addEventListener('click', function(event) {
@@ -121,13 +144,16 @@ localStorage.setItem('addedItems', cartContent.innerHTML);
 
                     // Remove the clicked art item from the popup content
                     artItem.remove();
-                     // Save updated items to local storage
-                localStorage.setItem('addedItems', cartContent.innerHTML);
+
+                    // Save updated items to local storage
+                    localStorage.setItem('addedItems', cartContent.innerHTML);
 
                     // Reactivate the corresponding "Add" button
-                    document.querySelectorAll('.add-button').forEach(function(addButton) {
-                        if (addButton.getAttribute('data-art-title') === title && addButton.getAttribute('data-art-price') === price) {
-                            addButton.classList.remove('disabled');
+                    addButton.forEach(function(button) {
+                        var addButtonTitle = button.parentNode.querySelector('input[name="art_title"]').value;
+                        var addButtonPrice = button.parentNode.querySelector('input[name="art_price"]').value;
+                        if (addButtonTitle === title && addButtonPrice === price) {
+                            button.classList.remove('disabled');
                         }
                     });
                 }
@@ -135,6 +161,4 @@ localStorage.setItem('addedItems', cartContent.innerHTML);
         });
     </script>
 
-
 {% endblock %}
-
