@@ -28,13 +28,25 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, SluggerInterface $slugger, \ReCaptcha\ReCaptcha $reCaptcha): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            // Verify reCAPTCHA
+            $recaptchaResponse = $request->request->get('g-recaptcha-response');
+            $recaptchaResult = $reCaptcha->verify($recaptchaResponse, $request->getClientIp());
+
+            if (!$recaptchaResult->isSuccess()) {
+                // reCAPTCHA verification failed
+                $this->addFlash('error', 'reCAPTCHA verification failed. Please try again.');
+                return $this->redirectToRoute('registration');
+            }
+
+            // Proceed with registration process
             // encode the plain password
             $user->setRole('User');
             $user->setProfileviews(0);

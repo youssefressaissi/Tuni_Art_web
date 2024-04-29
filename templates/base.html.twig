@@ -1,42 +1,45 @@
 <!DOCTYPE html>
 <html class="no-js" lang="fr">
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="icon" sizes="180x180" href="{{ asset("assets/images/logo.png") }}">
-        <link rel="icon" type="image/png" sizes="32x32" href="{{ asset("assets/images/logo.png") }}">
-        <link rel="icon" type="image/png" sizes="16x16" href="{{ asset("assets/images/logo.png") }}">
-        {% block stylesheets %}
-            <!-- CSS
-    ================================================== -->
-            <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-            <link rel="stylesheet" href="{{ asset("assets/css/styles.css") }}">
-            <link rel="stylesheet" href="{{ asset("assets/css/vendor.css") }}">
-            <link rel="stylesheet" href="{{ asset("assets/css/artcard.css") }}">
-            <link rel="stylesheet" href="{{ asset("assets/css/profile.css") }}">
-            {# <link rel="stylesheet" href="{{ asset("assets/css/signup.css") }}"> #}
-            <!-- script
-            ================================================== -->
-            <script src="{{ asset("assets/js/modernizr.js") }}"></script>
-        {% endblock %}
-    </head>
-    <body id="top">
+	<head>
+		<meta charset="UTF-8">
+		<title>
+			{% block title %}Welcome!
+			{% endblock %}
+		</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="icon" sizes="180x180" href="{{ asset("assets/images/logo.png") }}">
+		<link rel="icon" type="image/png" sizes="32x32" href="{{ asset("assets/images/logo.png") }}">
+		<link rel="icon" type="image/png" sizes="16x16" href="{{ asset("assets/images/logo.png") }}">
+		{% block stylesheets %}
+			<!-- CSS
+			    ================================================== -->
+			<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+			<link rel="stylesheet" href="{{ asset("assets/css/styles.css") }}">
+			<link rel="stylesheet" href="{{ asset("assets/css/vendor.css") }}">
+			<link rel="stylesheet" href="{{ asset("assets/css/artcard.css") }}">
+			<link rel="stylesheet" href="{{ asset("assets/css/profile.css") }}">
+			<link rel="stylesheet" href="{{ asset("assets/css/toggle-menu.css") }}">
+			{# <link rel="stylesheet" href="{{ asset("assets/css/signup.css") }}"> #}
+			<!-- script
+			            ================================================== --><script src="{{ asset("assets/js/modernizr.js") }}"> </script>
+			<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
-    {{ include('includes/header.html.twig') }}
-    <section class="s-bricks">
-       {% block body %}
-       {% endblock %}
-    </section>
-    {{ include('includes/footer.html.twig') }}
+		{% endblock %}
+	</head>
+	<body id="top">
 
-    {% block javascripts %}
-        <!-- Java Script
- ================================================== -->
-        <script src="{{ asset("assets/js/jquery-3.2.1.min.js") }}"></script>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="{{ asset("assets/js/plugins.js") }}"></script>
-        <script src="{{ asset("assets/js/main.js") }}"></script>
-    {% endblock %}
-    </body>
-</html>
+		{{ include('includes/header.html.twig') }}
+		<section class="s-bricks"> {% block body %}{% endblock %}
+			</section>
+			{{ include('includes/footer.html.twig') }}
+
+			{% block javascripts %}
+				<!-- Java Script
+				 ================================================== -->
+				<script src="{{ asset("assets/js/jquery-3.2.1.min.js") }}"></script>
+				<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+				<script src="{{ asset("assets/js/plugins.js") }}"></script>
+				<script src="{{ asset("assets/js/main.js") }}"></script>
+			{% endblock %}
+		</body>
+	</html>

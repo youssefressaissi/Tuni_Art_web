@@ -34,7 +34,7 @@ class UserController extends AbstractController
 
     public function showImage($filename)
     {
-        $filePath = '/assets/images/profilepics' . $filename; // Path to your image file
+        $filePath = '/assets/images/profilepics/' . $filename; // Path to your image file
 
         // Check if the file exists
         if (!file_exists($filePath)) {
@@ -59,7 +59,7 @@ class UserController extends AbstractController
         $users = $userRepository->findAll();
 
         // Filter out users with the role 'Admin'
-        $usersWithoutAdmins = array_filter($users, function($user) {
+        $usersWithoutAdmins = array_filter($users, function ($user) {
             return $user->getRole() !== 'Admin';
         });
 
@@ -67,7 +67,6 @@ class UserController extends AbstractController
             'usersWithoutAdmins' => $usersWithoutAdmins,
             'user' => $user,
         ]);
-        
     }
 
     #[Route('/home', name: 'app_home', methods: ['GET'])]
@@ -78,7 +77,6 @@ class UserController extends AbstractController
         return $this->render('index.html.twig', [
             'user' => $user,
         ]);
-        
     }
 
     #[Route('/signup', name: 'app_user_signup', methods: ['GET', 'POST'])]
@@ -112,24 +110,34 @@ class UserController extends AbstractController
         // Increment profileViews count
         $profileViews = $user->getProfileViews() + 1;
         $user->setProfileViews($profileViews);
-        
+
+        $followersCount = $user->getFollowers()->count();
+        $followingCount = $user->getFollowing()->count();
+
         // Persist changes to the database
         $entityManager->persist($user);
         $entityManager->flush();
 
         return $this->render('user/show.html.twig', [
             'user' => $user,
+            'followersCount' => $followersCount,
+            'followingCount' => $followingCount,
         ]);
     }
 
     #[Route('profile/{uid}', name: 'app_profile', methods: ['GET'])]
     public function profile(User $user, Security $security): Response
     {
-        // Get the currently authenticated user
-        $user = $security->getUser();
+        // // Get the currently authenticated user
+        // $user = $security->getUser();
+
+        $followersCount = $user->getFollowers()->count();
+        $followingCount = $user->getFollowing()->count();
 
         return $this->render('user/profile.html.twig', [
             'user' => $user,
+            'followersCount' => $followersCount,
+            'followingCount' => $followingCount,
         ]);
     }
 
@@ -154,7 +162,7 @@ class UserController extends AbstractController
     #[Route('user/{uid}', name: 'app_user_delete', methods: ['POST'])]
     public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$user->getUid(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $user->getUid(), $request->request->get('_token'))) {
             $entityManager->remove($user);
             $entityManager->flush();
         }
@@ -175,27 +183,58 @@ class UserController extends AbstractController
         $qrCodeData .= 'E-mail Address: ' . $user->getEmail() . PHP_EOL;
         $qrCodeData .= 'Phone Number: ' . $user->getPhoneNb() . PHP_EOL;
         $qrCodeData .= 'Profile Views: ' . $user->getProfileviews() . PHP_EOL;
-        if ($user->getRole()=='Artist') {
+        if ($user->getRole() == 'Artist') {
             $qrCodeData .= 'Biography: ' . $user->getBiography() . PHP_EOL;
         }
-            // Create a new QR code for the specified art piece
-            $qrCode = QrCode::create($qrCodeData)
-                ->setEncoding(new Encoding('UTF-8'))
-                ->setMargin(10)
-                ->setForegroundColor(new Color(0, 0, 0))
-                ->setBackgroundColor(new Color(255, 255, 255));
+        // Create a new QR code for the specified art piece
+        $qrCode = QrCode::create($qrCodeData)
+            ->setEncoding(new Encoding('UTF-8'))
+            ->setMargin(10)
+            ->setForegroundColor(new Color(0, 0, 0))
+            ->setBackgroundColor(new Color(255, 255, 255));
 
-            // Generate the QR code image
-            $writer = new PngWriter();
-            $dataUri = $writer->write($qrCode)->getDataUri();
+        // Generate the QR code image
+        $writer = new PngWriter();
+        $dataUri = $writer->write($qrCode)->getDataUri();
 
-            // Render the QR code in a template
-            return $this->renderForm('user/qrcode.html.twig', [
-                'qrCode' => $dataUri,
-                'user' => $user,
-            ]);
+        // Render the QR code in a template
+        return $this->renderForm('user/qrcode.html.twig', [
+            'qrCode' => $dataUri,
+            'user' => $user,
+        ]);
     }
-    
-    
 
+    #[Route('/follow/{uid}', name: 'app_follow', methods: ['GET'])]
+    public function follow(User $userToFollow, Security $security, UserRepository $userRepository, EntityManagerInterface $entityManager): Response
+    {
+        // Get the currently authenticated user
+        $email = $security->getUser()->getUserIdentifier();
+        $currentUser = $userRepository->findOneBy(['email' => $email]);
+
+        // Follow the user
+        $currentUser->addFollowing($userToFollow);
+
+        // Persist changes to the database
+        $entityManager->flush();
+
+        // Redirect or render a response
+        return $this->redirectToRoute('user_profile', ['uid' => $userToFollow->getUid()]);
+    }
+
+    #[Route('/unfollow/{uid}', name: 'app_unfollow', methods: ['GET'])]
+    public function unfollow(User $userToUnfollow, Security $security,  UserRepository $userRepository, EntityManagerInterface $entityManager): Response
+    {
+        // Get the currently authenticated user
+        $email = $security->getUser()->getUserIdentifier();
+        $currentUser = $userRepository->findOneBy(['email' => $email]);
+
+        // Unfollow the user
+        $currentUser->removeFollowing($userToUnfollow);
+
+        // Persist changes to the database
+        $entityManager->flush();
+
+        // Redirect or render a response
+        return $this->redirectToRoute('user_profile', ['uid' => $userToUnfollow->getUid()]);
+    }
 }

@@ -44,6 +44,16 @@ class ChangePasswordFormType extends AbstractType
                 // this is read and encoded in the controller
                 'mapped' => false,
             ])
+            ->add('plainPasswordRepeat', PasswordType::class, [
+                'label' => 'Repeat Password',
+                'mapped' => false, // This field is not mapped to the object
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Please repeat the password',
+                    ]),
+                    // Add other constraints as needed, e.g., Length, etc.
+                ],
+            ]);
         ;
     }
 

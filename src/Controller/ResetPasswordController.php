@@ -20,9 +20,21 @@ use Symfony\Component\Mime\Email;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Form\FormError;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\Transport;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ResetPasswordController extends AbstractController
 {
+    private $logger;
+
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
+
     #[Route('/reset-password/request', name: 'reset_password_request', methods: ['GET', 'POST'])]
     public function request(UserRepository $userRepository, Request $request, VerificationCodeGenerator $verficationCodeGenerator, MailerInterface $mailer, SessionInterface $session, EntityManagerInterface $entityManager): Response
     {
@@ -76,7 +88,7 @@ class ResetPasswordController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $code = $form->get('code')->getData();
+            $code = $form->get('verificationCode')->getData();
 
             // Retrieve user's email from session
             $email = $session->get('user_email');
@@ -102,9 +114,10 @@ class ResetPasswordController extends AbstractController
     }
 
     #[Route('/reset-password/update-password', name: 'update_password', methods: ['GET', 'POST'])]
-    public function updatePassword(UserRepository $userRepository, EntityManagerInterface $entityManager, Request $request, UserPasswordHasherInterface $passwordHasher): Response
+    public function updatePassword(UserRepository $userRepository, EntityManagerInterface $entityManager, Request $request, UserPasswordHasherInterface $passwordHasher, SessionInterface $session): Response
     {
-        $email = $request->query->get('email');
+        // Retrieve user's email from session
+        $email = $session->get('user_email');
         $user = $userRepository->findOneBy(['email' => $email]);
 
         if (!$user) {
@@ -115,9 +128,19 @@ class ResetPasswordController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Check if passwords match
+            $plainPassword = $form->get('plainPassword')->getData();
+            $plainPasswordRepeat = $form->get('plainPasswordRepeat')->getData();
+
+            if ($plainPassword !== $plainPasswordRepeat) {
+                $form->addError(new FormError('Passwords do not match.'));
+                return $this->render('reset_password/update_password.html.twig', [
+                    'form' => $form->createView(),
+                ]);
+            }
+
             // Update user's password
-            $newPassword = $form->get('password')->getData();
-            $hashedPassword = $passwordHasher->hashPassword($user, $newPassword);
+            $hashedPassword = $passwordHasher->hashPassword($user, $plainPassword);
             $user->setPassword($hashedPassword);
 
             $entityManager->persist($user);
@@ -132,23 +155,47 @@ class ResetPasswordController extends AbstractController
         ]);
     }
 
-    private function sendResetCodeEmail(User $user, string $resetCode, MailerInterface $mailer): ?string
+
+    private function sendResetCodeEmail(User $user, string $resetCode, MailerInterface $mailer,)
     {
-        try {
-            $email = (new Email())
-                ->from('skander.kechaou.e@gmail.com')
-                ->to($user->getEmail())
-                ->subject('Password Reset Request')
-                ->html(sprintf(
-                    'Hello %s, <br><br> Here is your verification code: <strong>%s</strong>. <br><br> Best regards, <br> Tuni-Art',
-                    $user->getFname() . ' ' . $user->getLname(), // Adjust this according to your user entity
-                    $resetCode
-                ));
-    
-            $mailer->send($email);
-            return null; // No error
-        } catch (TransportExceptionInterface $e) {
-            $this->addFlash('reset_password_error', $e->getMessage()); // Return the error message
-        }
+
+        $transport = Transport::fromDsn('smtp://skander.kechaou.e@gmail.com:syqckzzljomspuzp@smtp.gmail.com:587');
+        $mailer = new Mailer($transport);
+        //  $resetPasswordUrl = $urlGenerator->generate('app_reset_mypass', ['token' => $token, 'timestamp' => time()], UrlGeneratorInterface::ABSOLUTE_URL);
+
+        $email = (new Email())
+            ->from('skander.kechaou.e@gmail.com')
+            ->to($user->getEmail())
+            ->subject('Password Reset Request')
+            ->html(sprintf(
+                'Hello %s, <br><br> Here is your verification code: <strong>%s</strong>. <br><br> Best regards, <br> Tuni-Art',
+                $user->getFname() . ' ' . $user->getLname(), // Adjust this according to your user entity
+                $resetCode
+            ));
+        $mailer->send($email);
+        // try {
+        //     $email = (new Email())
+        //         ->from('skander.kechaou.e@gmail.com')
+        //         ->to($user->getEmail())
+        //         ->subject('Password Reset Request')
+        //         ->html(sprintf(
+        //             'Hello %s, <br><br> Here is your verification code: <strong>%s</strong>. <br><br> Best regards, <br> Tuni-Art',
+        //             $user->getFname() . ' ' . $user->getLname(), // Adjust this according to your user entity
+        //             $resetCode
+        //         ));
+
+        //     $mailer->send($email);
+        //     return null; // No error
+        // } catch (TransportExceptionInterface $e) {
+        //     // Log the error message
+        //     $errorMessage = sprintf('Error sending email: %s', $e->getMessage());
+        //     $this->logger->error($errorMessage);
+
+        //     // Add flash message for user feedback
+        //     $this->addFlash('reset_password_error', 'An error occurred while sending the email. Please try again later.');
+
+        //     // Return the error message
+        //     return $errorMessage;
+        // }
     }
 }

@@ -338,12 +338,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getFollowers(): int
+    public function getFollowers(): Collection
     {
-        return $this->followers ? $this->followers->count() : 0;    
+        return $this->followers ?? new ArrayCollection();    
     }
 
     public function addFollower(User $follower): self
@@ -365,12 +362,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getFollowing(): int
+    public function getFollowing(): Collection
     {
-        return $this->following ? $this->following->count() : 0;    
+        return $this->following ?? new ArrayCollection();    
     }
 
     public function addFollowing(User $following): self

@@ -81,26 +81,61 @@
 		</a>
 
 		{% if app.user %}
-			<a href="{{ path('app_profile', {'uid': user.uid}) }}" class="" id="navbarDropdown" role="button" data-toggle="" aria-haspopup="" aria-expanded="false" style="margin-left: 10px;">
-				<svg xmlns="http://www.w3.org/2000/svg" width="21.5" height="21.5" fill="black" class="bi bi-person-circle" viewbox="0 0 16 16">
-					<path fill="black" d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
-					<path fill="black" fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
-				</svg>
-			</a>
+			{# <a href="{{ path('app_profile', {'uid': user.uid}) }}" class="" id="navbarDropdown" role="button" data-toggle="" aria-haspopup="" aria-expanded="false" style="margin-left: 10px;">
+																<svg xmlns="http://www.w3.org/2000/svg" width="21.5" height="21.5" fill="black" class="bi bi-person-circle" viewbox="0 0 16 16">
+																	<path fill="black" d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+																	<path fill="black" fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+																</svg>
+															</a> #}
 
-			{# <div class="dropdown-menu" id="dropdownMenu" aria-labelledby="navbarDropdown">
-				<a class="dropdown-item" href="{{ path('app_profile', {'uid': user.uid}) }}">Profile</a>
-				<div class="dropdown-divider"></div>
-				<a class="dropdown-item" href="{{ path('app_logout') }}">Logout</a>
-			</div> #}
+					{# <img src="images/user.png" class="user-pic"> #}
+
+					<img src="{{ asset('assets/images/person-circle.svg')}}" class="user-pic" onclick="toggleMenu()">
+
+					<div class="sub-menu-wrap" id="subMenu">
+						<div class="sub-menu">
+							<div class="user-info">
+								{% set defaultImagePath = 'assets/images/profilepics/default.jpg' %}
+								{% set ImagePath = 'assets/images/profilepics/' ~ app.user.profilePic %}
+
+								{% if app.user.profilePic is not null %}
+									<img src="{{ asset(ImagePath) }}" alt="{{ app.user.profilePic }}"/>
+								{% else %}
+									<img src="{{ asset(defaultImagePath) }}" alt="Default Image"/>
+								{% endif %}
+								<h3>{{ (app.user.fname ~ ' ' ~ app.user.lname)|title }}</h3>
+							</div>
+							<hr>
+							<a href="{{ path('app_profile', {'uid': user.uid}) }}" class="sub-menu-link">
+								<img src="{{ asset('assets/images/person-fill.svg') }}">
+								<p>Profile</p>
+								<span>></span>
+							</a>
+							<a href="{{ path('app_logout')}}" class="sub-menu-link">
+								<img src="{{ asset('assets/images/box-arrow-left.svg') }}">
+								<p>Logout</p>
+								<span>></span>
+							</a>
+						</div>
+					</div>
 		{% endif %}
+
+		<script>
+		let subMenu = document.getElementById("subMenu");
+
+		function toggleMenu(){
+		subMenu.classList.toggle("open-menu");
+
+		}
+
+		</script>
 
 
 	</div>
 	<!-- end s-header__content -->
 
-<!-- Include Bootstrap JavaScript -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+	<!-- Include Bootstrap JavaScript -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
 
 </header>

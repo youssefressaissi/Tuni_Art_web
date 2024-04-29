@@ -3,12 +3,16 @@
 namespace App\Form;
 
 use App\Entity\User;
+use PHPUnit\TextUI\XmlConfiguration\File;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File as ConstraintsFile;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -29,7 +33,11 @@ class RegistrationFormType extends AbstractType
                 ],
             ])
             ->add('phoneNb')
-            ->add('birthDate') 
+            ->add('birthDate', BirthdayType::class, [
+                'label' => 'Date of Birth',
+                'widget' => 'choice',
+                'years' => range(1900, date('Y') - 18), // Customize the year range
+            ])
             // ->add('password', PasswordType::class)
             ->add('plainPassword', PasswordType::class, [
                 // instead of being set onto the object directly,
@@ -52,7 +60,22 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('profilePic')
+            ->add('profilePic', FileType::class, [
+                'label' => 'Image  (Image file)',
+                'mapped' => false,
+                'required' => false,
+                'constraints' => [
+                    new ConstraintsFile([
+                        'maxSize' => '5M',
+                        'mimeTypes' => [
+                            'image/jpeg',
+                            'image/png',
+                            'image/gif',
+                        ],
+                        'mimeTypesMessage' => 'Please upload a valid image file',
+                    ])
+                ],
+            ])
         ;
     }
 

@@ -47,14 +47,16 @@
 		</div>
 
 
-		{{ form_label(registrationForm.profilePic, "Profile Picture", {'label_attr': {'class': 'form-element'}}) }}
-		<div class="input-group">
-			<div class="input-group-append">
-				{{ form_widget(registrationForm.profilePic, {'attr': {'class': 'form-control', 'readonly': 'readonly'}}) }}
+		<div class="col-md-3 mb-3" style="padding: 10px;">
+			<div class="form-group">
+				{{ form_label(registrationForm.profilePic, "Profile Picture") }}
+				<div class="input-group">
+					{{ form_widget(registrationForm.profilePic, {'attr': {'class': 'form-control', 'readonly': 'readonly'}}) }}
+				</div>
+				<div class="alert alert-danger" style="background-color: inherit;">
+					{{ form_errors(registrationForm.profilePic) }}
+				</div>
 			</div>
-		</div>
-		<div class="aler alert-danger" style="background-color: inherit;">
-			{{ form_errors(registrationForm.profilePic) }}
 		</div>
 
 
@@ -84,7 +86,9 @@
 			{{ form_errors(registrationForm.plainPassword) }}
 		</div>
 
-		<div class="row mb-3" style="padding-right: 15px; padding-left: 15px;">
+		<div class="g-recaptcha" data-sitekey="6LdmMoUpAAAAANoFGgxxf4rPYeIIgWr3qIcYh_mT"></div>
+
+		<div class="row mb-3" style="padding-right: 15px; padding-left: 15px; margin-top:30px;">
 			<div class="col-md-12 mb-3">
 				<button type="submit" class="btn btn-success">Sign Up</button>
 			</div>
@@ -92,25 +96,6 @@
 	</div>
 	{{ form_end(registrationForm) }}
 
-
-	<script>
-		document.getElementById('chooseImageButton').addEventListener('click', function () {
-var input = document.createElement('input');
-input.type = 'file';
-input.accept = 'image/*';
-input.onchange = function (e) {
-var file = e.target.files[0];
-if (file) {
-var reader = new FileReader();
-reader.onload = function () {
-document.getElementById('user_profilePic').value = reader.result;
-};
-reader.readAsDataURL(file);
-}
-};
-input.click();
-});
-	</script>
 
 	<script>
 		$(document).ready(function () {
