@@ -13,7 +13,10 @@
         "doctrine/doctrine-migrations-bundle": "^3.3",
         "doctrine/orm": "^2.15",
         "endroid/qr-code-bundle": "^5.0",
+<<<<<<< HEAD
         "hi-folks/statistics": "^1.0",
+=======
+>>>>>>> 4e44c719261ffd25376c4d8342c073fb53b499c8
         "phpdocumentor/reflection-docblock": "^5.3",
         "phpstan/phpdoc-parser": "^1.27",
         "sensio/framework-extra-bundle": "^6.2",

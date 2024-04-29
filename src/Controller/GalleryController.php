@@ -21,6 +21,7 @@ class GalleryController extends AbstractController
             'galleries' => $galleryRepository->findAll(),
         ]);
     }
+<<<<<<< HEAD
 
     #[Route('/all_back', name: 'app_gallery_all_index', methods: ['GET'])]
 public function index_back(GalleryRepository $galleryRepository): Response
@@ -61,6 +62,15 @@ public function index_back(GalleryRepository $galleryRepository): Response
 }
 
     
+=======
+    #[Route('/all_back', name: 'app_gallery_all_index', methods: ['GET'])]
+    public function index_back(GalleryRepository $galleryRepository): Response
+    {
+        return $this->render('gallery/back_index.html.twig', [
+            'galleries' => $galleryRepository->findAll(),
+        ]);
+    }
+>>>>>>> 4e44c719261ffd25376c4d8342c073fb53b499c8
 
     #[Route('/new', name: 'app_gallery_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
@@ -81,6 +91,7 @@ public function index_back(GalleryRepository $galleryRepository): Response
             'form' => $form,
         ]);
     }
+<<<<<<< HEAD
     #[Route('/gallery')]
 
     #[Route('/search', name: 'app_gallery_search', methods: ['GET'])]
@@ -104,6 +115,8 @@ public function index_back(GalleryRepository $galleryRepository): Response
     ]);
 }
 
+=======
+>>>>>>> 4e44c719261ffd25376c4d8342c073fb53b499c8
 
     #[Route('/{galleryId}', name: 'app_gallery_show', methods: ['GET'])]
     public function show(Gallery $gallery): Response
@@ -139,6 +152,10 @@ public function index_back(GalleryRepository $galleryRepository): Response
             $entityManager->flush();
         }
 
+<<<<<<< HEAD
         return $this->redirectToRoute('app_gallery_all_index', [], Response::HTTP_SEE_OTHER);
+=======
+        return $this->redirectToRoute('app_gallery_index', [], Response::HTTP_SEE_OTHER);
+>>>>>>> 4e44c719261ffd25376c4d8342c073fb53b499c8
     }
 }

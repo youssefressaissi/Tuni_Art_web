@@ -6,7 +6,10 @@ use App\Entity\Gallery;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+<<<<<<< HEAD
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+=======
+>>>>>>> 4e44c719261ffd25376c4d8342c073fb53b499c8
 
 class GalleryType extends AbstractType
 {
@@ -15,6 +18,7 @@ class GalleryType extends AbstractType
         $builder
             ->add('galleryName')
             ->add('galleryDescription')
+<<<<<<< HEAD
             ->add('galleryLocation', ChoiceType::class, [
                 'choices' => [
                     'Ariana' => 'Ariana',
@@ -44,6 +48,9 @@ class GalleryType extends AbstractType
                 ],
                 'placeholder' => 'Select a state', // Optional placeholder
             ])
+=======
+            ->add('galleryLocation')
+>>>>>>> 4e44c719261ffd25376c4d8342c073fb53b499c8
             ->add('galleryTel')
             ->add('operatingHours')
         ;

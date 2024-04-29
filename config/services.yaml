@@ -5,7 +5,11 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     images_directory: '%kernel.project_dir%/public/assets/images'
+<<<<<<< HEAD
     music_directory: '%kernel.project_dir%/public/assets/music'    
+=======
+
+>>>>>>> 4e44c719261ffd25376c4d8342c073fb53b499c8
 services:
     # default configuration for services in *this* file
     _defaults:

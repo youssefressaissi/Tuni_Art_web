@@ -4,7 +4,11 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
+<<<<<<< HEAD
     "content-hash": "8ad161bf8cb59ec7321ef9be783cfc53",
+=======
+    "content-hash": "7d876cb61c1f801ffaa16ce09050baca",
+>>>>>>> 4e44c719261ffd25376c4d8342c073fb53b499c8
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -1781,6 +1785,7 @@
             "time": "2023-11-07T09:05:08+00:00"
         },
         {
+<<<<<<< HEAD
             "name": "hi-folks/statistics",
             "version": "v1.0.0",
             "source": {
@@ -1833,6 +1838,8 @@
             "time": "2023-12-26T16:48:50+00:00"
         },
         {
+=======
+>>>>>>> 4e44c719261ffd25376c4d8342c073fb53b499c8
             "name": "monolog/monolog",
             "version": "2.9.2",
             "source": {

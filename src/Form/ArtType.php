@@ -9,8 +9,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Validator\Constraints\File;
+<<<<<<< HEAD
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+=======
+>>>>>>> 4e44c719261ffd25376c4d8342c073fb53b499c8
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -71,6 +74,7 @@ class ArtType extends AbstractType
                 ],
             ])
             
+<<<<<<< HEAD
             ->add('musicPath', FileType::class, [
                 'label' => 'Music (Audio file)',
                 'mapped' => false,
@@ -95,6 +99,12 @@ class ArtType extends AbstractType
                 'mapped' => false, // This field is not mapped to any property of the entity
             ]);
             
+=======
+            ->add('musicPath')
+            //->add('artViews')
+            ->add('artist_id')
+            //->add('isavailable')
+>>>>>>> 4e44c719261ffd25376c4d8342c073fb53b499c8
            
             ;
     }

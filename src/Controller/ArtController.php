@@ -16,8 +16,11 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Endroid\QrCode\Color\Color;
 use Endroid\QrCode\Encoding\Encoding;
+<<<<<<< HEAD
 use Symfony\Component\HttpFoundation\JsonResponse;
 
+=======
+>>>>>>> 4e44c719261ffd25376c4d8342c073fb53b499c8
 use Endroid\QrCode\ErrorCorrectionLevel;
 
 use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelLow;
@@ -50,6 +53,7 @@ class ArtController extends AbstractController
 
         return $response;
     }
+<<<<<<< HEAD
     private function calculateArtStatistics(array $artViews): array
 {
     // You can implement the logic to calculate statistics here
@@ -64,6 +68,8 @@ class ArtController extends AbstractController
         'min_views' => $minViews,
     ];
 }
+=======
+>>>>>>> 4e44c719261ffd25376c4d8342c073fb53b499c8
 
     #[Route('/all', name: 'app_art_index', methods: ['GET'])]
     public function index(ArtRepository $artRepository): Response
@@ -81,7 +87,10 @@ class ArtController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $imageFile = $form->get('imageId')->getData();
+<<<<<<< HEAD
             $drawingData = $form->get('drawing_data')->getData();
+=======
+>>>>>>> 4e44c719261ffd25376c4d8342c073fb53b499c8
             if ($imageFile) {
                 $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
                 $safeFilename = $slugger->slug($originalFilename);
@@ -99,6 +108,7 @@ class ArtController extends AbstractController
                 }
 
                 $art->setImageId($newFilename);
+<<<<<<< HEAD
             }elseif ($drawingData) {
                 $newFilename = 'drawing_' . date('YmdHis') . '.png'; 
                 $filePath = $this->getParameter('images_directory') . '/' . $newFilename; 
@@ -134,6 +144,10 @@ class ArtController extends AbstractController
         $art->setMusicPath($newMusicFilename);
     }
 
+=======
+            }
+
+>>>>>>> 4e44c719261ffd25376c4d8342c073fb53b499c8
             $entityManager->persist($art);
             $entityManager->flush();
 
@@ -146,6 +160,7 @@ class ArtController extends AbstractController
         ]);
     }
 
+<<<<<<< HEAD
 
     #[Route('/sort', name: 'app_art_sort', methods: ['GET'])]
     public function sortedList(Request $request, EntityManagerInterface $entityManager): Response
@@ -291,6 +306,16 @@ public function search(Request $request, ArtRepository $artRepository): Response
     }
 
 
+=======
+    #[Route('/{artRef}', name: 'app_art_show', methods: ['GET'])]
+    public function show(Art $art): Response
+    {
+        return $this->render('art/show.html.twig', [
+            'art' => $art,
+        ]);
+    }
+
+>>>>>>> 4e44c719261ffd25376c4d8342c073fb53b499c8
     #[Route('/{artRef}/edit', name: 'app_art_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Art $art, EntityManagerInterface $entityManager): Response
     {
@@ -320,6 +345,7 @@ public function search(Request $request, ArtRepository $artRepository): Response
         return $this->redirectToRoute('app_art_index', [], Response::HTTP_SEE_OTHER);
     }
     #[Route('/{artRef}/generate-qr-code', name: 'app_art_generate_qr_code')]
+<<<<<<< HEAD
 public function generateQRCode(Art $art,EntityManagerInterface $entityManager): Response
 {             
             $art->incrementArtViews();
@@ -335,6 +361,21 @@ public function generateQRCode(Art $art,EntityManagerInterface $entityManager): 
             $qrCodeData .= 'Artist ID: ' . $art->getArtistId() . PHP_EOL;
             $qrCodeData .= 'Views: ' . $art->getArtViews() . PHP_EOL;
             $qrCodeData .= 'Availability: ' . ($art->isIsAvailable() ? 'Available' : 'Not Available') . PHP_EOL;
+=======
+public function generateQRCode(Art $art): Response
+{
+$qrCodeData = 'Art Details:' . PHP_EOL;
+$qrCodeData .= 'Art Reference: ' . $art->getArtRef() . PHP_EOL;
+$qrCodeData .= 'Title: ' . $art->getArtTitle() . PHP_EOL;
+$qrCodeData .= 'Price: ' . $art->getArtPrice() . PHP_EOL;
+$qrCodeData .= 'Type: ' . $art->getType() . PHP_EOL;
+$qrCodeData .= 'Creation Date: ' . $art->getCreation()->format('Y-m-d') . PHP_EOL;
+$qrCodeData .= 'Description: ' . $art->getDescription() . PHP_EOL;
+$qrCodeData .= 'Style: ' . $art->getStyle() . PHP_EOL;
+$qrCodeData .= 'Artist ID: ' . $art->getArtistId() . PHP_EOL;
+$qrCodeData .= 'Views: ' . $art->getArtViews() . PHP_EOL;
+$qrCodeData .= 'Availability: ' . ($art->isIsAvailable() ? 'Available' : 'Not Available') . PHP_EOL;
+>>>>>>> 4e44c719261ffd25376c4d8342c073fb53b499c8
     // Create a new QR code for the specified art piece
     $qrCode = QrCode::create($qrCodeData)
         ->setEncoding(new Encoding('UTF-8'))
@@ -352,6 +393,9 @@ public function generateQRCode(Art $art,EntityManagerInterface $entityManager): 
         'art' => $art,
     ]);
 }
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 4e44c719261ffd25376c4d8342c073fb53b499c8
 }

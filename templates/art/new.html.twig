@@ -11,10 +11,17 @@
 
     {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
 
+<<<<<<< HEAD
     <div class="row">
         <div class="col-md-3 mb-3" style=" padding: 10px; ">
             <div class="form-group" style="background-color: white; padding: 5px; border-radius: 5px;">
                 {{ form_label(form.artTitle, "Title") }}
+=======
+    <div class="row" >
+        <div class="col-md-3 mb-3" style="padding-right: 30px; padding-left: 30px;">
+            <div class="form-group">
+                {{ form_label(form.artTitle, "Art Title:", {'label_attr': {'class': 'form-element' }}) }}
+>>>>>>> 4e44c719261ffd25376c4d8342c073fb53b499c8
                 {{ form_widget(form.artTitle, {'attr': {'class': 'form-control', 'placeholder': 'Enter the art title'}}) }}
                 <div class="alert alert-danger">
                     {{ form_errors(form.artTitle) }}
@@ -22,9 +29,15 @@
             </div>
         </div>
 
+<<<<<<< HEAD
         <div class="col-md-3 mb-3" style=" padding: 10px; " >
             <div class="form-group" style="background-color: white; padding: 5px; border-radius: 5px;">
                 {{ form_label(form.artPrice, "Art Price") }}
+=======
+        <div class="col-md-3 mb-3" style="padding-right: 30px; padding-left: 30px;">
+            <div class="form-group">
+                {{ form_label(form.artPrice, "Art Price:", {'label_attr': {'class': 'form-element'}}) }}
+>>>>>>> 4e44c719261ffd25376c4d8342c073fb53b499c8
                 {{ form_widget(form.artPrice, {'attr': {'class': 'form-control', 'placeholder': 'Enter the art price'}}) }}
                 <div class="alert alert-danger">
                     {{ form_errors(form.artPrice) }}
@@ -32,15 +45,22 @@
             </div>
         </div>
 
+<<<<<<< HEAD
         <div class="col-md-3 mb-3" style=" padding: 10px; ">
             <div class="form-group" style="background-color: white; padding: 5px; border-radius: 5px;">
                 {{ form_label(form.type, "Type") }}
+=======
+        <div class="col-md-3 mb-3" style="padding-right: 30px; padding-left: 30px;">
+            <div class="form-group">
+                {{ form_label(form.type, "Type:", {'label_attr': {'class': 'form-element'}}) }}
+>>>>>>> 4e44c719261ffd25376c4d8342c073fb53b499c8
                 {{ form_widget(form.type, {'attr': {'class': 'form-control', 'placeholder': 'Enter the art type'}}) }}
                 <div class="alert alert-danger">
                     {{ form_errors(form.type) }}
                 </div>
             </div>
         </div>
+<<<<<<< HEAD
     </div>
 
     <!-- Date fields -->
@@ -70,15 +90,58 @@
                 <div class="alert alert-danger">
                     {{ form_errors(form.creation.day) }}
                 </div>
+=======
+
+        <div class="row">
+    <div class="row">
+    <div class="col-md-3 mb-3" style="padding-right: 20px; padding-left: 40px;">
+        <div class="form-group">
+            {{ form_label(form.creation.year, "Year:", {'label_attr': {'class': 'form-element'}}) }}
+            {{ form_widget(form.creation.year, {'attr': {'class': 'form-control'}}) }}
+            <div class="alert alert-danger">
+                {{ form_errors(form.creation.year) }}
+>>>>>>> 4e44c719261ffd25376c4d8342c073fb53b499c8
             </div>
         </div>
     </div>
 
+<<<<<<< HEAD
     <!-- Description, Style, and Artist ID fields -->
     <div class="row">
         <div class="col-md-3 mb-3" style=" padding: 10px; ">
             <div class="form-group" style="background-color: white; padding: 5px ; border-radius: 5px;">
                 {{ form_label(form.description, "Description") }}
+=======
+    <div class="col-md-3 mb-3" style="padding-right: 30px; padding-left: 30px;">
+        <div class="form-group">
+            {{ form_label(form.creation.month, "Month:", {'label_attr': {'class': 'form-element'}}) }}
+            {{ form_widget(form.creation.month, {'attr': {'class': 'form-control'}}) }}
+            <div class="alert alert-danger">
+                {{ form_errors(form.creation.month) }}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3" style="padding-right: 30px; padding-left: 30px;">
+        <div class="form-group">
+            {{ form_label(form.creation.day, "Day:", {'label_attr': {'class': 'form-element'}}) }}
+            {{ form_widget(form.creation.day, {'attr': {'class': 'form-control'}}) }}
+            <div class="alert alert-danger">
+                {{ form_errors(form.creation.day) }}
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-md-3 mb-3" style="padding-right: 30px; padding-left: 30px;">
+            <div class="form-group"style="margin-right: 20px;>
+                {{ form_label(form.description, "Description:", {'label_attr': {'class': 'form-element'}}) }}
+>>>>>>> 4e44c719261ffd25376c4d8342c073fb53b499c8
                 {{ form_widget(form.description, {'attr': {'class': 'form-control', 'placeholder': 'Enter the description'}}) }}
                 <div class="alert alert-danger">
                     {{ form_errors(form.description) }}
@@ -86,9 +149,15 @@
             </div>
         </div>
 
+<<<<<<< HEAD
         <div class="col-md-3 mb-3" style=" padding: 10px; ">
             <div class="form-group" style="background-color: white; padding: 5px; border-radius: 5px;">
                 {{ form_label(form.style, "Style") }}
+=======
+        <div class="col-md-3 mb-3" style="padding-right: 30px; padding-left: 30px;">
+            <div class="form-group">
+                {{ form_label(form.style, "Style:", {'label_attr': {'class': 'form-element'}}) }}
+>>>>>>> 4e44c719261ffd25376c4d8342c073fb53b499c8
                 {{ form_widget(form.style, {'attr': {'class': 'form-control', 'placeholder': 'Enter the style'}}) }}
                 <div class="alert alert-danger">
                     {{ form_errors(form.style) }}
@@ -96,15 +165,22 @@
             </div>
         </div>
 
+<<<<<<< HEAD
         <div class="col-md-3 mb-3" style=" padding: 10px; ">
             <div class="form-group" style="background-color: white; padding: 5px; border-radius: 5px;">
                 {{ form_label(form.artist_id, "Artist ID") }}
+=======
+        <div class="col-md-3 mb-3" style="padding-right: 30px; padding-left: 30px;">
+            <div class="form-group">
+                {{ form_label(form.artist_id, "Artist ID:", {'label_attr': {'class': 'form-element'}}) }}
+>>>>>>> 4e44c719261ffd25376c4d8342c073fb53b499c8
                 {{ form_widget(form.artist_id, {'attr': {'class': 'form-control', 'placeholder': 'Enter the artist ID'}}) }}
                 <div class="alert alert-danger">
                     {{ form_errors(form.artist_id) }}
                 </div>
             </div>
         </div>
+<<<<<<< HEAD
     </div>
 
     <!-- Image and Music Path fields -->
@@ -115,22 +191,50 @@
                 <div class="input-group">
                     {{ form_widget(form.imageId, {'attr': {'class': 'form-control', 'readonly': 'readonly'}}) }}
                     {{ form_widget(form.drawing_data) }}
+=======
+
+        
+    </div>
+
+    <div class="row">
+    <div class="col-md-3 mb-3" style="padding-right: 30px; padding-left: 30px;">
+            <div class="form-group">
+                {{ form_label(form.imageId, "Image ID:", {'label_attr': {'class': 'form-element'}}) }}
+                <div class="input-group">
+                    
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" id="chooseImageButton">{{ form_widget(form.imageId, {'attr': {'class': 'form-control', 'readonly': 'readonly'}}) }}</button>
+                    </div>
+>>>>>>> 4e44c719261ffd25376c4d8342c073fb53b499c8
                 </div>
                 <div class="alert alert-danger">
                     {{ form_errors(form.imageId) }}
                 </div>
             </div>
         </div>
+<<<<<<< HEAD
 
         <div class="col-md-3 mb-3" style=" padding: 10px; ">
             <div class="form-group">
                 {{ form_label(form.musicPath, "Music Path") }}
                 {{ form_widget(form.musicPath, {'attr': {'class': 'form-control', 'readonly': 'readonly'}}) }}
+=======
+        <div class="col-md-3 mb-3">
+            <div class="form-group">
+                {{ form_label(form.musicPath, "Music Path:", {'label_attr': {'class': 'form-element'}}) }}
+                <div class="input-group">
+                    {{ form_widget(form.musicPath, {'attr': {'class': 'form-control', 'readonly': 'readonly'}}) }}
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" id="chooseMusicButton">Choose Music</button>
+                    </div>
+                </div>
+>>>>>>> 4e44c719261ffd25376c4d8342c073fb53b499c8
                 <div class="alert alert-danger">
                     {{ form_errors(form.musicPath) }}
                 </div>
             </div>
         </div>
+<<<<<<< HEAD
     </div>
 
     <!-- Canvas for drawing -->
@@ -146,12 +250,22 @@
         <div class="col-md-3">
             <button type="submit" class="btn btn-success">Add</button>
             <button type="button" id="captureButton">Capture Picture</button>
+=======
+
+       
+    </div>
+    
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-success">Add</button>
+>>>>>>> 4e44c719261ffd25376c4d8342c073fb53b499c8
         </div>
     </div>
 
     {{ form_end(form) }}
 </div>
 
+<<<<<<< HEAD
 <script>
 // JavaScript code for saving canvas image
 function saveCanvasImage(imageDataURL) {
@@ -260,5 +374,7 @@ document.getElementById('captureButton').addEventListener('click', function() {
     });
 });
 </script>
+=======
+>>>>>>> 4e44c719261ffd25376c4d8342c073fb53b499c8
 
 {% endblock %}
