@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gallery index{% endblock %}
+
+{% block body %}
+<body>
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <h1 class="title">Galleries</h1>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <form action="{{ path('app_gallery_search') }}" method="get">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search by location" name="search_query">
+                    <button class="btn btn-primary" type="submit">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="ag-format-container">
+        {% for gallery in galleries %}
+        <div class="ag-courses_box" style="padding-left: 160px;"> {# Adjust padding as needed #}
+            <div class="ag-courses_item">
+                <a href="{{ path('app_gallery_show', {'galleryId': gallery.galleryId}) }}" class="ag-courses-item_link">
+                    <div class="ag-courses-item_bg"></div>
+
+                    <div class="ag-courses-item_title">
+                        {{ gallery.galleryName }}
+                    </div>
+                    <div class="ag-courses-item_label">Location</div>
+                    <div class="ag-courses-item_title">
+                        {{ gallery.galleryLocation }}
+                    </div>
+                    <div class="ag-courses-item_label">Telephone</div>
+                    <div class="ag-courses-item_title">
+                        {{ gallery.galleryTel }}
+                    </div>
+
+                    <div class="ag-courses-item_date-box">
+                        Start:
+                        <span class="ag-courses-item_date">
+                            {{ gallery.operatingHours }}
+                        </span>
+                    </div>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+{% endblock %}

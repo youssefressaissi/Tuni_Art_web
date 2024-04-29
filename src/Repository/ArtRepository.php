@@ -21,28 +21,35 @@ class ArtRepository extends ServiceEntityRepository
         parent::__construct($registry, Art::class);
     }
 
-//    /**
-//     * @return Art[] Returns an array of Art objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('a.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findByCriteria($criteria,$sortBy = null)
+    {
+        $queryBuilder = $this->createQueryBuilder('a');
+    
+        // Add conditions based on criteria
+        if (isset($criteria['artTitle'])) {
+            $queryBuilder->andWhere('a.artTitle LIKE :artTitle')
+                ->setParameter('artTitle', '%' . $criteria['artTitle'] . '%');
+        }
+    
+        if (isset($criteria['type'])) {
+            $queryBuilder->andWhere('a.type LIKE :type')
+                ->setParameter('type', $criteria['type']);
+        }
+    
+        // Add more conditions if needed for other properties of the Art entity
+        if ($sortBy) {
+            foreach ($sortBy as $field => $direction) {
+                $queryBuilder->addOrderBy('a.' . $field, $direction);
+            }
+        }
+    
+        
+        // Execute the query
+        $query = $queryBuilder->getQuery();
+    
+        // Return the filtered results
+        return $query->getResult();
+    }
+    
 
-//    public function findOneBySomeField($value): ?Art
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
 }

@@ -1,0 +1,264 @@
+{% extends 'base.html.twig' %}
+{% block title %}Add{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <h1 class="title">Add an Art Piece</h1>
+        </div>
+    </div>
+
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+    <div class="row">
+        <div class="col-md-3 mb-3" style=" padding: 10px; ">
+            <div class="form-group" style="background-color: white; padding: 5px; border-radius: 5px;">
+                {{ form_label(form.artTitle, "Title") }}
+                {{ form_widget(form.artTitle, {'attr': {'class': 'form-control', 'placeholder': 'Enter the art title'}}) }}
+                <div class="alert alert-danger">
+                    {{ form_errors(form.artTitle) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3" style=" padding: 10px; " >
+            <div class="form-group" style="background-color: white; padding: 5px; border-radius: 5px;">
+                {{ form_label(form.artPrice, "Art Price") }}
+                {{ form_widget(form.artPrice, {'attr': {'class': 'form-control', 'placeholder': 'Enter the art price'}}) }}
+                <div class="alert alert-danger">
+                    {{ form_errors(form.artPrice) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3" style=" padding: 10px; ">
+            <div class="form-group" style="background-color: white; padding: 5px; border-radius: 5px;">
+                {{ form_label(form.type, "Type") }}
+                {{ form_widget(form.type, {'attr': {'class': 'form-control', 'placeholder': 'Enter the art type'}}) }}
+                <div class="alert alert-danger">
+                    {{ form_errors(form.type) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Date fields -->
+    <div class="row">
+        <div class="col-md-3 mb-3" style=" padding: 10px; ">
+            <div class="form-group" style="background-color: white; padding: 5px; border-radius: 5px;">
+                {{ form_label(form.creation.year, "Year") }}
+                {{ form_widget(form.creation.year, {'attr': {'class': 'form-control'}}) }}
+                <div class="alert alert-danger">
+                    {{ form_errors(form.creation.year) }}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3" style=" padding: 10px; ">
+            <div class="form-group" style="background-color: white; padding: 5px; border-radius: 5px;">
+                {{ form_label(form.creation.month, "Month") }}
+                {{ form_widget(form.creation.month, {'attr': {'class': 'form-control'}}) }}
+                <div class="alert alert-danger">
+                    {{ form_errors(form.creation.month) }}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3" style=" padding: 10px; ">
+            <div class="form-group" style="background-color: white; padding: 5px; border-radius: 5px;">
+                {{ form_label(form.creation.day, "Day") }}
+                {{ form_widget(form.creation.day, {'attr': {'class': 'form-control'}}) }}
+                <div class="alert alert-danger">
+                    {{ form_errors(form.creation.day) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Description, Style, and Artist ID fields -->
+    <div class="row">
+        <div class="col-md-3 mb-3" style=" padding: 10px; ">
+            <div class="form-group" style="background-color: white; padding: 5px ; border-radius: 5px;">
+                {{ form_label(form.description, "Description") }}
+                {{ form_widget(form.description, {'attr': {'class': 'form-control', 'placeholder': 'Enter the description'}}) }}
+                <div class="alert alert-danger">
+                    {{ form_errors(form.description) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3" style=" padding: 10px; ">
+            <div class="form-group" style="background-color: white; padding: 5px; border-radius: 5px;">
+                {{ form_label(form.style, "Style") }}
+                {{ form_widget(form.style, {'attr': {'class': 'form-control', 'placeholder': 'Enter the style'}}) }}
+                <div class="alert alert-danger">
+                    {{ form_errors(form.style) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3" style=" padding: 10px; ">
+            <div class="form-group" style="background-color: white; padding: 5px; border-radius: 5px;">
+                {{ form_label(form.artist_id, "Artist ID") }}
+                {{ form_widget(form.artist_id, {'attr': {'class': 'form-control', 'placeholder': 'Enter the artist ID'}}) }}
+                <div class="alert alert-danger">
+                    {{ form_errors(form.artist_id) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image and Music Path fields -->
+    <div class="row">
+        <div class="col-md-3 mb-3" style=" padding: 10px; ">
+            <div class="form-group">
+                {{ form_label(form.imageId, "Image") }}
+                <div class="input-group">
+                    {{ form_widget(form.imageId, {'attr': {'class': 'form-control', 'readonly': 'readonly'}}) }}
+                    {{ form_widget(form.drawing_data) }}
+                </div>
+                <div class="alert alert-danger">
+                    {{ form_errors(form.imageId) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3" style=" padding: 10px; ">
+            <div class="form-group">
+                {{ form_label(form.musicPath, "Music Path") }}
+                {{ form_widget(form.musicPath, {'attr': {'class': 'form-control', 'readonly': 'readonly'}}) }}
+                <div class="alert alert-danger">
+                    {{ form_errors(form.musicPath) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Canvas for drawing -->
+    <div class="row mb-3" style=" padding: 10px; ">
+        <div class="col-md-6">
+            <canvas id="drawingCanvas" width="600" height="400" style="background-color: white; border: 1px solid black;"></canvas>
+            <button type="button" id="saveButton" class="btn btn-success">Save Drawing</button>
+        </div>
+    </div>
+
+    <!-- Submit button -->
+    <div class="row mb-3" style=" padding: 10px; ">
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-success">Add</button>
+            <button type="button" id="captureButton">Capture Picture</button>
+        </div>
+    </div>
+
+    {{ form_end(form) }}
+</div>
+
+<script>
+// JavaScript code for saving canvas image
+function saveCanvasImage(imageDataURL) {
+    fetch('{{ path('save_canvas_image') }}', {
+        method: 'POST',
+        body: JSON.stringify({ image: imageDataURL }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log('Image saved successfully:', data.path);
+            document.getElementById('imageId').value = data.path; // Update the hidden field value
+        } else {
+            console.error('Failed to save image.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+// JavaScript code for drawing functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const canvas = document.getElementById('drawingCanvas');
+    const context = canvas.getContext('2d');
+    let isDrawing = false;
+    let lastX = 0;
+    let lastY = 0;
+
+    // Add event listeners to handle drawing
+    canvas.addEventListener('mousedown', startDrawing);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', stopDrawing);
+    canvas.addEventListener('mouseout', stopDrawing);
+
+    // Function to handle starting drawing
+    function startDrawing(e) {
+        isDrawing = true;
+        [lastX, lastY] = [e.offsetX, e.offsetY];
+    }
+
+    // Function to handle drawing
+    function draw(e) {
+        if (!isDrawing) return;
+
+        context.beginPath();
+        context.moveTo(lastX, lastY);
+        context.lineTo(e.offsetX, e.offsetY);
+        context.strokeStyle = '#000'; // Set stroke color
+        context.lineWidth = 2; // Set line width
+        context.lineCap = 'round';
+        context.stroke();
+        [lastX, lastY] = [e.offsetX, e.offsetY];
+    }
+
+    // Function to handle stopping drawing
+    function stopDrawing() {
+        isDrawing = false;
+    }
+
+    // Function to capture drawing data and update the hidden field value
+    document.getElementById('saveButton').addEventListener('click', function() {
+        const drawingData = canvas.toDataURL(); // Get the base64 encoded drawing data
+        saveCanvasImage(drawingData); // Call function to save image
+    });
+});
+
+// JavaScript code for capturing image
+document.getElementById('captureButton').addEventListener('click', function() {
+    // Access the device's camera
+    navigator.mediaDevices.getUserMedia({ video: true })
+    .then(function(stream) {
+        const video = document.createElement('video');
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        
+        // Display the camera stream in a video element
+        video.srcObject = stream;
+        document.body.appendChild(video);
+        
+        // Play the video
+        video.play();
+        
+        // Capture a picture when the user clicks the button again
+        document.getElementById('captureButton').addEventListener('click', function() {
+            // Pause the video
+            video.pause();
+            
+            // Draw the current frame from the video onto the canvas
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            
+            // Convert the canvas image to a data URL
+            const imageDataURL = canvas.toDataURL('image/png');
+            
+            // Send the image data to the server
+            saveCanvasImage(imageDataURL);
+        });
+    })
+    .catch(function(error) {
+        console.error('Error accessing camera:', error);
+    });
+});
+</script>
+
+{% endblock %}

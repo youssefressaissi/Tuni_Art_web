@@ -3,7 +3,7 @@
 {% endblock %}
 
 {% block body %}
-<img src="{{ asset('public\img\logo.png') }}" alt="myLogo" class="logo">
+<img src="{{ asset('public//img//logo.png')|raw }}" alt="Image description">
     <div class="container">
         <h1 class="title">Sign Up</h1>
 
@@ -65,8 +65,20 @@
             </div>
         </div>
 
+        <div class="container" style="display: flex; flex-direction: column; align-items: center; border: none;">
         <button type="submit" class="btn btn-success">Sign Up</button>
+        <table>
+            <tr>
+            <td>
+                <span>Already have an account? </span>
+                </hr>
+                <a href="{{ path('app_user_login') }}">Log in</a>
+            </td>
+            </tr>
+        </table>
+        </div>
 
+        
         {{ form_end(form) }}
 
     </div>

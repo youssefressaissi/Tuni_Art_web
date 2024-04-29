@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Art{% endblock %}
+
+{% block body %}
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <h1 class="title">Art On Display</h1>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <form action="{{ path('app_art_sort') }}" method="GET" >
+                    <select name="sort_by" onchange="this.form.submit()" style="background-color: white; color: black; border-radius: 5px; padding: 15px 20px">
+                        <option value="" selected>Sort by</option> 
+                        <option value="name_desc">Sort by Art Title </option>
+                        <option value="price_desc">Sort by Price </option>
+                        <option value="views_desc">Sort by Views </option>
+                    </select>
+                </form>
+            </div>
+            <div class="col-md-6" style="display: flex; align-items: center; padding: 8px 15px">
+    <form action="{{ path('art_search') }}" method="GET" style="display: flex;">
+        <input type="text" name="search_query" placeholder="Enter search query..." style="background-color: white; color: black; border-radius: 5px; margin-right: 5px;">
+        <select name="criterias" style="background-color: white; color: black; border-radius: 5px; margin-right: 5px;">
+            <option value="artTitle">Title</option>
+            <option value="type">Type</option>
+        </select>
+        <button type="submit" style="background-color: #007bff; color: white; border: none; border-radius: 5px; padding: 8px 15px;">Search</button>
+    </form>
+</div>
+
+        </div>
+        
+        {% for chunk in art|batch(3) %}
+            <div class="row">
+                {% for artItem in chunk %}
+                    <div class="col-md-4 mb-4">
+                        <a href="{{ path('app_art_show', {'artRef': artItem.artRef}) }}" style="text-decoration: none;">
+                            <div class="article-card" style="margin-bottom: 20px; margin-left: 10px; margin-right: 10px;">
+                                <div class="content">
+                                    <h5 class="arttitle" data-artref="{{ artItem.artRef }}">{{ artItem.artTitle }}</h5>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <p class="arttext" style="margin-left: 40px;">{{ artItem.artPrice }}dt</p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p class="arttext" style="margin-left: 40px;">{{ artItem.artViews }} views</p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        {% if artItem.musicPath %}
+                                            <div class="col-md-6">
+                                                <a href="{{ asset('assets/music/' ~ artItem.musicPath) }}" class="btn btn-primary">Play</a>
+                                            </div>
+                                        {% endif %}
+                                        <div class="col-md-6">
+                                            <a href="{{ path('app_art_generate_qr_code', {'artRef': artItem.artRef}) }}" class="btn btn-success generate-qr" data-artref="{{ artItem.artRef }}">Generate QR Code</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% set defaultImagePath = 'assets/images/default.png' %}
+                                {% set imagePath = artItem.imageId ? 'assets/images/' ~ artItem.imageId : defaultImagePath %}
+                                <img src="{{ asset(imagePath) }}" alt="{{ artItem.imageId ? artItem.imageId : 'Default Image' }}">
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+    <script>
+        // JavaScript code for real-time search and sorting
+        // Add your JavaScript code here
+    </script>
+{% endblock %}

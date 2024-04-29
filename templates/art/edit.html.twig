@@ -1,0 +1,162 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Art{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <h1 class="title">Edit an Art Piece</h1>
+        </div>
+    </div>
+
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+    <div class="row">
+        <div class="col-md-3 mb-3" style="padding-right: 15px; padding-left: 15px;">
+            <div class="form-group">
+                {{ form_label(form.artTitle, "Art Title:", {'label_attr': {'class': 'form-element'}}) }}
+                {{ form_widget(form.artTitle, {'attr': {'class': 'form-control', 'placeholder': 'Enter the art title'}}) }}
+                <div class="alert alert-danger">
+                    {{ form_errors(form.artTitle) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3" style="padding-right: 15px; padding-left: 15px;">
+            <div class="form-group">
+                {{ form_label(form.artPrice, "Art Price:", {'label_attr': {'class': 'form-element'}}) }}
+                {{ form_widget(form.artPrice, {'attr': {'class': 'form-control', 'placeholder': 'Enter the art price'}}) }}
+                <div class="alert alert-danger">
+                    {{ form_errors(form.artPrice) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3" style="padding-right: 15px; padding-left: 15px;">
+            <div class="form-group">
+                {{ form_label(form.type, "Type:", {'label_attr': {'class': 'form-element'}}) }}
+                {{ form_widget(form.type, {'attr': {'class': 'form-control', 'placeholder': 'Enter the art type'}}) }}
+                <div class="alert alert-danger">
+                    {{ form_errors(form.type) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+    <div class="row">
+    <div class="col-md-3 mb-3" style="padding-right: 20px; padding-left: 40px;">
+        <div class="form-group">
+            {{ form_label(form.creation.year, "Year:", {'label_attr': {'class': 'form-element'}}) }}
+            {{ form_widget(form.creation.year, {'attr': {'class': 'form-control'}}) }}
+            <div class="alert alert-danger">
+                {{ form_errors(form.creation.year) }}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3" style="padding-right: 15px; padding-left: 15px;">
+        <div class="form-group">
+            {{ form_label(form.creation.month, "Month:", {'label_attr': {'class': 'form-element'}}) }}
+            {{ form_widget(form.creation.month, {'attr': {'class': 'form-control'}}) }}
+            <div class="alert alert-danger">
+                {{ form_errors(form.creation.month) }}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3" style="padding-right: 15px; padding-left: 15px;">
+        <div class="form-group">
+            {{ form_label(form.creation.day, "Day:", {'label_attr': {'class': 'form-element'}}) }}
+            {{ form_widget(form.creation.day, {'attr': {'class': 'form-control'}}) }}
+            <div class="alert alert-danger">
+                {{ form_errors(form.creation.day) }}
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-md-3 mb-3" style="padding-right: 15px; padding-left: 15px;">
+            <div class="form-group"style="margin-right: 20px;>
+                {{ form_label(form.description, "Description:", {'label_attr': {'class': 'form-element'}}) }}
+                {{ form_widget(form.description, {'attr': {'class': 'form-control', 'placeholder': 'Enter the description'}}) }}
+                <div class="alert alert-danger">
+                    {{ form_errors(form.description) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3" style="padding-right: 15px; padding-left: 15px;">
+            <div class="form-group">
+                {{ form_label(form.style, "Style:", {'label_attr': {'class': 'form-element'}}) }}
+                {{ form_widget(form.style, {'attr': {'class': 'form-control', 'placeholder': 'Enter the style'}}) }}
+                <div class="alert alert-danger">
+                    {{ form_errors(form.style) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3" style="padding-right: 15px; padding-left: 15px;">
+            <div class="form-group">
+                {{ form_label(form.artist_id, "Artist ID:", {'label_attr': {'class': 'form-element'}}) }}
+                {{ form_widget(form.artist_id, {'attr': {'class': 'form-control', 'placeholder': 'Enter the artist ID'}}) }}
+                <div class="alert alert-danger">
+                    {{ form_errors(form.artist_id) }}
+                </div>
+            </div>
+        </div>
+
+        
+    </div>
+
+    <div class="row">
+    <div class="col-md-3 mb-3" style="padding-right: 15px; padding-left: 15px;">
+            <div class="form-group">
+                {{ form_label(form.imageId, "Image ID:", {'label_attr': {'class': 'form-element'}}) }}
+                <div class="input-group">
+                    {{ form_widget(form.imageId, {'attr': {'class': 'form-control', 'readonly': 'readonly'}}) }}
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" id="chooseImageButton">Choose Image</button>
+                    </div>
+                </div>
+                <div class="alert alert-danger">
+                    {{ form_errors(form.imageId) }}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="form-group">
+                {{ form_label(form.musicPath, "Music Path:", {'label_attr': {'class': 'form-element'}}) }}
+                <div class="input-group">
+                    {{ form_widget(form.musicPath, {'attr': {'class': 'form-control', 'readonly': 'readonly'}}) }}
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" id="chooseMusicButton">Choose Music</button>
+                    </div>
+                </div>
+                <div class="alert alert-danger">
+                    {{ form_errors(form.musicPath) }}
+                </div>
+            </div>
+        </div>
+
+       
+    </div>
+    
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-success">Update</button>
+        </div>
+    </div>
+
+    {{ form_end(form) }}
+</div>
+
+
+
+
+{% endblock %}

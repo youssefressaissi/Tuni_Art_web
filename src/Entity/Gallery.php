@@ -19,10 +19,18 @@ class Gallery
  
  
     #[ORM\Column(length:100)]
+    #[Assert\Regex(
+        pattern: '/^[a-zA-Z0-9\s]+$/',
+        message: 'The name can only contain letters, numbers, and spaces.'
+    )]
     #[Assert\NotBlank(message: 'Name is required')]
     private ?string $galleryName = null;
  
     #[ORM\Column(length:100)]
+    #[Assert\Regex(
+        pattern: '/^[a-zA-Z0-9\s]+$/',
+        message: 'The Description can only contain letters, numbers, and spaces.'
+    )]
     #[Assert\NotBlank(message: 'Description is required')]
     private ?string $galleryDescription= null ;
  
@@ -32,6 +40,13 @@ class Gallery
  
     #[ORM\Column]
     #[Assert\NotBlank(message: 'Number is required')]
+    #[Assert\Regex(
+        pattern: '/^\d{8}$/',
+        message: 'Please enter a valid Tunisian phone number in the format XXXX-XXXX.'
+    )]
+    
+    
+    
     private ?int $galleryTel= null;
  
     #[ORM\Column(length:100)]
