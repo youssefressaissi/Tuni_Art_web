@@ -72,7 +72,7 @@ class RegistrationController extends AbstractController
                 } catch (FileException $e) {
                     // Handle file upload error
                     $this->addFlash('error', 'An error occurred while uploading the image.');
-                    return $this->redirectToRoute('app_art_new');
+                    return $this->redirectToRoute('app_register');
                 }
 
                 $user->setProfilePic($newFilename);
@@ -80,16 +80,6 @@ class RegistrationController extends AbstractController
 
             $entityManager->persist($user);
             $entityManager->flush();
-
-            // generate a signed url and email it to the user
-            // $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
-            //     (new TemplatedEmail())
-            //         ->from(new Address('skander.kechaou.e@gmail.com', 'Tuni\'Art'))
-            //         ->to($user->getEmail())
-            //         ->subject('Please Confirm your Email')
-            //         ->htmlTemplate('registration/confirmation_email.html.twig')
-            // );
-            // do anything else you need here, like send an email
 
             return $this->redirectToRoute('app_login');
         }

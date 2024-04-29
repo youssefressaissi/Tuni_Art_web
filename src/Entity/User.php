@@ -81,6 +81,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $profileviews = 0;
 
+    #[ORM\Column(length: 512, nullable: true)]
+    private ?string $deactivate = null;
+
     private $roles = [];
 
     #[ORM\OneToMany(mappedBy: 'artist', targetEntity: Art::class)]
@@ -557,6 +560,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function getDeactivate(): ?string
+    {
+        return $this->deactivate;
+    }
+
+    public function setDeactivate(?string $deactivate): static
+    {
+        $this->deactivate = $deactivate;
+
+        return $this;
     }
 
 }

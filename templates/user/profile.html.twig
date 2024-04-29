@@ -27,7 +27,6 @@
 						<p class="profile-subtitles">ME</p>
 						<p class="stat">Profile Views :
 							{{ user.getProfileViews }}</p>
-						<p class="stat">Appreciations: 93,570</p>
 						<p class="stat">Followers:
 							{{ followersCount }}</p>
 						<p class="stat">Following:
@@ -35,7 +34,8 @@
 					</div>
 					<div class="profile-details">
 						<p class="profile-subtitles">CONTACT</p>
-						<p class="profile-email">{{ user.email }}</p>
+						<p class="profile-email" style="margin-bottom:0">{{ user.email }}</p>
+						<p class="profile-email">Number: {{ user.phoneNb }}</p>
 						{% if user.role == 'Artist' %}
 							<p class="profile-subtitles">ARTIST DETAILS</p>
 							<p class="profile-bio">{{ user.getBiography }}</p>

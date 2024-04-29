@@ -101,7 +101,7 @@ class ResetPasswordController extends AbstractController
 
             if ($code === $resetCode) {
                 // Redirect to password update page
-                return $this->redirectToRoute('update_password', ['email' => $email]);
+                return $this->redirectToRoute('update_password', ['uid' => $user->getUid()]);
             } else {
                 // Display an error message for invalid code
                 $this->addFlash('error', 'Invalid reset code.');
@@ -113,7 +113,7 @@ class ResetPasswordController extends AbstractController
         ]);
     }
 
-    #[Route('/reset-password/update-password', name: 'update_password', methods: ['GET', 'POST'])]
+    #[Route('/reset-password/update-password/{uid}', name: 'update_password', methods: ['GET', 'POST'])]
     public function updatePassword(UserRepository $userRepository, EntityManagerInterface $entityManager, Request $request, UserPasswordHasherInterface $passwordHasher, SessionInterface $session): Response
     {
         // Retrieve user's email from session
@@ -124,7 +124,7 @@ class ResetPasswordController extends AbstractController
             throw $this->createNotFoundException('User not found.');
         }
 
-        $form = $this->createForm(ChangePasswordFormType::class, null, ['email' => $email]);
+        $form = $this->createForm(ChangePasswordFormType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -147,7 +147,7 @@ class ResetPasswordController extends AbstractController
             $entityManager->flush();
 
             // Redirect to success page
-            return $this->redirectToRoute('password_update_success');
+            return $this->redirectToRoute('app_login');
         }
 
         return $this->render('reset_password/update_password.html.twig', [
@@ -173,29 +173,5 @@ class ResetPasswordController extends AbstractController
                 $resetCode
             ));
         $mailer->send($email);
-        // try {
-        //     $email = (new Email())
-        //         ->from('skander.kechaou.e@gmail.com')
-        //         ->to($user->getEmail())
-        //         ->subject('Password Reset Request')
-        //         ->html(sprintf(
-        //             'Hello %s, <br><br> Here is your verification code: <strong>%s</strong>. <br><br> Best regards, <br> Tuni-Art',
-        //             $user->getFname() . ' ' . $user->getLname(), // Adjust this according to your user entity
-        //             $resetCode
-        //         ));
-
-        //     $mailer->send($email);
-        //     return null; // No error
-        // } catch (TransportExceptionInterface $e) {
-        //     // Log the error message
-        //     $errorMessage = sprintf('Error sending email: %s', $e->getMessage());
-        //     $this->logger->error($errorMessage);
-
-        //     // Add flash message for user feedback
-        //     $this->addFlash('reset_password_error', 'An error occurred while sending the email. Please try again later.');
-
-        //     // Return the error message
-        //     return $errorMessage;
-        // }
     }
 }

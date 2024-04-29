@@ -27,7 +27,14 @@ use Endroid\QrCode\Label\Label;
 use Endroid\QrCode\Logo\Logo;
 use Endroid\QrCode\Writer\PngWriter;
 use Endroid\QrCode\Label\Font\NotoSans;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mailer\Transport;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class UserController extends AbstractController
 {
@@ -142,14 +149,83 @@ class UserController extends AbstractController
     }
 
     #[Route('user/{uid}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, User $user, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, User $user, EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher, SluggerInterface $slugger, MailerInterface $mailer): Response
     {
         $form = $this->createForm(UpdateType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
 
+            $plainPassword = $form->get('plainPassword')->getData();
+            if ($plainPassword !== null) {
+                $user->setPassword(
+                    $userPasswordHasher->hashPassword(
+                        $user,
+                        $plainPassword
+                    )
+                );
+            }
+
+            $newPhoneNb = $form->get('phoneNb')->getData();
+            if ($newPhoneNb !== $user->getPhoneNb()) {
+                // Update the phone number only if it has changed
+                $user->setPhoneNb($newPhoneNb);
+            }
+
+            $newEmail = $form->get('email')->getData();
+            if ($newEmail !== $user->getEmail()) {
+                // Update the phone number only if it has changed
+                $user->setEmail($newEmail);
+            }
+
+            $imageFile = $form->get('profilePic')->getData();
+            if ($imageFile) {
+                $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $imageFile->guessExtension();
+
+                try {
+                    $imageFile->move(
+                        $this->getParameter('images_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // Handle file upload error
+                    $this->addFlash('error', 'An error occurred while uploading the image.');
+                    return $this->redirectToRoute('app_user_edit');
+                }
+
+                $user->setProfilePic($newFilename);
+            }
+
+            $portfolioFile = $form->get('portfolio')->getData();
+            if ($portfolioFile) {
+                $originalFilename1 = pathinfo($portfolioFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename1 = $slugger->slug($originalFilename1);
+                $newFilename1 = $safeFilename1 . '-' . uniqid() . '.' . $portfolioFile->guessExtension();
+
+                try {
+                    $portfolioFile->move(
+                        $this->getParameter('portfolios_directory'), // Assuming you have configured this parameter
+                        $newFilename1
+                    );
+                } catch (FileException $e) {
+                    // Handle file upload error
+                    $this->addFlash('error', 'An error occurred while uploading the portfolio document.');
+                    return $this->redirectToRoute('app_user_edit'); // Replace with your actual route name
+                }
+
+                $user->setPortfolio($newFilename1);
+
+                // Check if biography is not null and portfolio is uploaded, then set role to Artist
+                if ($form->get('biography')->getData() !== null && $portfolioFile) {
+                    $user->setRole('Artist');
+                    $this->sendUpdateRoleEmail($user, $mailer);
+                }
+            }
+
+
+            $entityManager->flush();
             return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -166,6 +242,17 @@ class UserController extends AbstractController
             $entityManager->remove($user);
             $entityManager->flush();
         }
+
+        return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('deactivate/{uid}', name: 'app_user_deactivate', methods: ['POST'])]
+    public function deactivate(Request $request, User $user, EntityManagerInterface $entityManager): Response
+    {
+
+        $user->setStatus(0);
+        $user->setDeactivate('TEMP');
+        $entityManager->flush();
 
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
     }
@@ -236,5 +323,22 @@ class UserController extends AbstractController
 
         // Redirect or render a response
         return $this->redirectToRoute('user_profile', ['uid' => $userToUnfollow->getUid()]);
+    }
+
+    private function sendUpdateRoleEmail(User $user, MailerInterface $mailer,)
+    {
+
+        $transport = Transport::fromDsn('smtp://skander.kechaou.e@gmail.com:syqckzzljomspuzp@smtp.gmail.com:587');
+        $mailer = new Mailer($transport);
+
+        $email = (new Email())
+            ->from('skander.kechaou.e@gmail.com')
+            ->to($user->getEmail())
+            ->subject('Artist Status')
+            ->html(sprintf(
+                'Hello %s, <br><br> We are glad to have you now as an <strong>Artist</strong>. <br><br> Best regards, <br> Tuni-Art',
+                $user->getFname() . ' ' . $user->getLname(), // Adjust this according to your user entity
+            ));
+        $mailer->send($email);
     }
 }
