@@ -2,110 +2,73 @@
 
 namespace App\Entity;
 
-use App\Repository\CartRepository;
-use App\Entity\User;
 use App\Entity\Art;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: CartRepository::class)]
+/**
+ * Cart
+ *
+ * @ORM\Table(name="cart", indexes={@ORM\Index(name="fk_art_cart", columns={"art_ref"}), @ORM\Index(name="fk_user_cart", columns={"uid"})})
+ * @ORM\Entity
+ */
 class Cart
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $cartRef = null;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="cart_ref", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $cartRef;
 
-    #[ORM\ManyToOne(inversedBy: 'carts')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
+    /**
+     * @var \User|null
+     *
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="uid", referencedColumnName="uid")
+     * })
+     */
+    private $uid;
 
-    #[ORM\OneToMany(mappedBy: 'cart', targetEntity: Art::class)]
-    private Collection $art;
-
-    public function __construct()
-    {
-        $this->art = new ArrayCollection();
-    }
-
-    // #[ORM\ManyToOne(inversedBy: 'carts')]
-    // private ?Art $artRef = null;
- 
-    // #[ORM\ManyToOne(inversedBy: 'carts')]
-    // private ?User $uid = null;
+    /**
+     * @var \Art|null
+     *
+     * @ORM\ManyToOne(targetEntity="Art")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="art_ref", referencedColumnName="art_ref")
+     * })
+     */
+    private $artRef;
 
     public function getCartRef(): ?int
     {
         return $this->cartRef;
     }
 
-    // public function getArtRef(): ?Art
-    // {
-    //     return $this->artRef;
-    // }
-
-    // public function setArtRef(?Art $artRef): static
-    // {
-    //     $this->artRef = $artRef;
-
-    //     return $this;
-    // }
-
-    // public function getUid(): ?User
-    // {
-    //     return $this->uid;
-    // }
-
-    // public function setUid(?User $uid): static
-    // {
-    //     $this->uid = $uid;
-
-    //     return $this;
-    // }
-
-    public function getUser(): ?User
+    public function getUid(): ?User
     {
-        return $this->user;
+        return $this->uid;
     }
 
-    public function setUser(?User $user): static
+    public function setUid(?User $uid): static
     {
-        $this->user = $user;
+        $this->uid = $uid;
 
         return $this;
     }
 
-    /**
-     * @return Collection<int, Art>
-     */
-    public function getArt(): Collection
+    public function getArtRef(): ?Art
     {
-        return $this->art;
+        return $this->artRef;
     }
 
-    public function addArt(Art $art): static
+    public function setArtRef(?Art $artRef): static
     {
-        if (!$this->art->contains($art)) {
-            $this->art->add($art);
-            $art->setCart($this);
-        }
+        $this->artRef = $artRef;
 
         return $this;
     }
-
-    public function removeArt(Art $art): static
-    {
-        if ($this->art->removeElement($art)) {
-            // set the owning side to null (unless already changed)
-            if ($art->getCart() === $this) {
-                $art->setCart(null);
-            }
-        }
-
-        return $this;
-    }
-
-
-
 }

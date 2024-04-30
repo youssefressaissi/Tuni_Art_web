@@ -2,68 +2,105 @@
 
 namespace App\Entity;
 
-use App\Repository\ArtRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints\Date;
 
-#[ORM\Entity(repositoryClass: ArtRepository::class)]
+/**
+ * Art
+ *
+ * @ORM\Table(name="art", indexes={@ORM\Index(name="fk_user_art", columns={"artist_id"})})
+ * @ORM\Entity
+ */
 class Art
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $artRef = null;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="art_ref", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $artRef;
 
-    #[ORM\Column(length: 512)]
-    private ?string $artTitle = null;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="art_title", type="string", length=512, nullable=false)
+     */
+    private $artTitle;
 
-    #[ORM\Column]
-    private ?float $artPrice = null;
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="art_price", type="float", precision=10, scale=0, nullable=false)
+     */
+    private $artPrice;
 
-    #[ORM\Column]
-    private ?string $type = null;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="type", type="string", length=512, nullable=false)
+     */
+    private $type;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $creation = null;
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="creation", type="date", nullable=false)
+     */
+    private $creation;
 
-    #[ORM\Column(length: 512)]
-    private ?string $description = null;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="string", length=512, nullable=false)
+     */
+    private $description;
 
-    #[ORM\Column(length: 512)]
-    private ?string $style = null;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="style", type="string", length=512, nullable=false)
+     */
+    private $style;
 
-    #[ORM\Column(length: 300, nullable: true)]
-    private ?string $imageId;
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="image_id", type="string", length=300, nullable=true)
+     */
+    private $imageId;
 
-    #[ORM\Column(length: 250, nullable: true)]
-    private ?string $musicPath;
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="music_path", type="string", length=250, nullable=true)
+     */
+    private $musicPath;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $artViews;
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="art_views", type="integer", nullable=true)
+     */
+    private $artViews;
 
-    #[ORM\Column]
-    private ?bool $isavailable = true;
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="isAvailable", type="boolean", nullable=false, options={"default"="1"})
+     */
+    private $isavailable = true;
 
-    #[ORM\ManyToOne(inversedBy: 'art')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $artist = null;
-
-    #[ORM\OneToMany(mappedBy: 'art', targetEntity: Auction::class)]
-    private Collection $auctions;
-
-    #[ORM\ManyToOne(inversedBy: 'art')]
-    private ?Cart $cart = null;
-
-    public function __construct()
-    {
-        $this->auctions = new ArrayCollection();
-    }
-
-    // #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'arts')]
-    // private ?User $artist = null;
+    /**
+     * @var \User
+     *
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="artist_id", referencedColumnName="uid")
+     * })
+     */
+    private $artist;
 
     public function getArtRef(): ?int
     {
@@ -190,18 +227,6 @@ class Art
         return $this;
     }
 
-    // public function getArtist(): ?User
-    // {
-    //     return $this->artist;
-    // }
-
-    // public function setArtist(?User $artist): static
-    // {
-    //     $this->artist = $artist;
-
-    //     return $this;
-    // }
-
     public function getArtist(): ?User
     {
         return $this->artist;
@@ -210,48 +235,6 @@ class Art
     public function setArtist(?User $artist): static
     {
         $this->artist = $artist;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Auction>
-     */
-    public function getAuctions(): Collection
-    {
-        return $this->auctions;
-    }
-
-    public function addAuction(Auction $auction): static
-    {
-        if (!$this->auctions->contains($auction)) {
-            $this->auctions->add($auction);
-            $auction->setArt($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAuction(Auction $auction): static
-    {
-        if ($this->auctions->removeElement($auction)) {
-            // set the owning side to null (unless already changed)
-            if ($auction->getArt() === $this) {
-                $auction->setArt(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function getCart(): ?Cart
-    {
-        return $this->cart;
-    }
-
-    public function setCart(?Cart $cart): static
-    {
-        $this->cart = $cart;
 
         return $this;
     }

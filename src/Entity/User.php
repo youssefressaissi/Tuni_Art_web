@@ -2,110 +2,140 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
-
-#[ORM\Entity(repositoryClass: UserRepository::class)]
+/**
+ * User
+ *
+ * @ORM\Table(name="user")
+ * @ORM\Entity
+ */
 class User
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $uid = null;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="uid", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $uid;
 
-    #[ORM\Column(length: 128)]
-    #[Assert\NotBlank(message: 'First Name is required')]
-    private ?string $fname = null;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="fname", type="string", length=128, nullable=false)
+     */
+    private $fname;
 
-    #[ORM\Column(length: 128)]
-    #[Assert\NotBlank(message: 'Last Name is required')]
-    private ?string $lname = null;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="lname", type="string", length=128, nullable=false)
+     */
+    private $lname;
 
-    #[ORM\Column(length: 512)]
-    #[Assert\NotBlank(message: 'Email is required')]
-    #[Assert\Email(message: 'Email {{ value }} must be valid')]
-    private ?string $email = null;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="email", type="string", length=512, nullable=false)
+     */
+    private $email;
 
-    #[ORM\Column]
-    #[Assert\NotBlank(message: 'Gender is required')]
-    private ?bool $gender = null;
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="gender", type="boolean", nullable=false)
+     */
+    private $gender;
 
-    #[ORM\Column]
-    #[Assert\NotBlank(message: 'Phone Number is required')]
-    private ?int $phoneNb = null;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="phone_nb", type="integer", nullable=false)
+     */
+    private $phoneNb;
 
-    #[ORM\Column(length: 512, nullable: true)]
-    private ?string $profilePic;
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="profile_pic", type="string", length=512, nullable=true)
+     */
+    private $profilePic;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    #[Assert\NotBlank(message: 'Date of Birth is required')]
-    private ?\DateTimeInterface $birthDate = null;
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="birth_date", type="date", nullable=false)
+     */
+    private $birthDate;
 
-    #[ORM\Column(length: 512)]
-    #[Assert\NotBlank(message: 'Password is required')]
-    private ?string $password = null;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="password", type="string", length=512, nullable=false)
+     */
+    private $password;
 
-    #[ORM\Column(length: 512, nullable: true)]
-    private ?string $verificationCode;
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="verification_code", type="string", length=512, nullable=true)
+     */
+    private $verificationCode;
 
-    #[ORM\Column(length: 512, nullable: true)]
-    private ?string $biography;
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="biography", type="string", length=512, nullable=true)
+     */
+    private $biography;
 
-    #[ORM\Column(length: 512, nullable: true)]
-    private ?string $portfolio;
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="portfolio", type="string", length=512, nullable=true)
+     */
+    private $portfolio;
 
-    #[ORM\Column(length: 512)]
-    private ?string $role = null;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="role", type="string", length=512, nullable=false)
+     */
+    private $role;
 
-    #[ORM\Column(nullable: true)]
-    private ?bool $status;
+    /**
+     * @var bool|null
+     *
+     * @ORM\Column(name="status", type="boolean", nullable=true)
+     */
+    private $status;
 
-    #[ORM\Column]
-    private ?int $profileviews = 0;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="profileViews", type="integer", nullable=false)
+     */
+    private $profileviews = '0';
 
-    #[ORM\OneToMany(mappedBy: 'artist', targetEntity: Art::class)]
-    private Collection $art;
-
-    #[ORM\ManyToMany(targetEntity: self::class, inversedBy: 'followers')]
-    private Collection $followers;
-
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Auction::class)]
-    private Collection $auctions;
-
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Cart::class)]
-    private Collection $carts;
-
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Event::class)]
-    private Collection $events;
-
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Order::class)]
-    private Collection $orders;
-
-    public function __construct()
-    {
-        $this->art = new ArrayCollection();
-        $this->followers = new ArrayCollection();
-        $this->auctions = new ArrayCollection();
-        $this->carts = new ArrayCollection();
-        $this->events = new ArrayCollection();
-        $this->orders = new ArrayCollection();
-    }
-
-    // #[ORM\ManyToMany(targetEntity: "User", mappedBy: "following")]
-    // private Collection $followers;
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="User", mappedBy="following")
+     */
+    private $follower = array();
 
     /**
      * Constructor
      */
-    // public function __construct()
-    // {
-    //     $this->followers = new ArrayCollection();
-    // }
+    public function __construct()
+    {
+        $this->follower = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     public function getUid(): ?int
     {
@@ -280,202 +310,28 @@ class User
         return $this;
     }
 
-    // /**
-    //  * @return Collection<int, User>
-    //  */
-    // public function getFollowers(): Collection
-    // {
-    //     return $this->followers;
-    // }
-
-    // public function addFollower(User $follower): static
-    // {
-    //     if (!$this->followers->contains($follower)) {
-    //         $this->followers->add($follower);
-    //         #$follower->addFollowing($this);
-    //     }
-
-    //     return $this;
-    // }
-
-    // public function removeFollower(User $follower): static
-    // {
-    //     if ($this->followers->removeElement($follower)) {
-    //         #$follower->removeFollowing($this);
-    //     }
-
-    //     return $this;
-    // }
-
     /**
-     * @return Collection<int, Art>
+     * @return Collection<int, User>
      */
-    public function getArt(): Collection
+    public function getFollower(): Collection
     {
-        return $this->art;
+        return $this->follower;
     }
 
-    public function addArt(Art $art): static
+    public function addFollower(User $follower): static
     {
-        if (!$this->art->contains($art)) {
-            $this->art->add($art);
-            $art->setArtist($this);
+        if (!$this->follower->contains($follower)) {
+            $this->follower->add($follower);
+            $follower->addFollowing($this);
         }
 
         return $this;
     }
 
-    public function removeArt(Art $art): static
+    public function removeFollower(User $follower): static
     {
-        if ($this->art->removeElement($art)) {
-            // set the owning side to null (unless already changed)
-            if ($art->getArtist() === $this) {
-                $art->setArtist(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, self>
-     */
-    public function getFollowers(): Collection
-    {
-        return $this->followers;
-    }
-
-    public function addFollower(self $follower): static
-    {
-        if (!$this->followers->contains($follower)) {
-            $this->followers->add($follower);
-        }
-
-        return $this;
-    }
-
-    public function removeFollower(self $follower): static
-    {
-        $this->followers->removeElement($follower);
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Auction>
-     */
-    public function getAuctions(): Collection
-    {
-        return $this->auctions;
-    }
-
-    public function addAuction(Auction $auction): static
-    {
-        if (!$this->auctions->contains($auction)) {
-            $this->auctions->add($auction);
-            $auction->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAuction(Auction $auction): static
-    {
-        if ($this->auctions->removeElement($auction)) {
-            // set the owning side to null (unless already changed)
-            if ($auction->getUser() === $this) {
-                $auction->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Cart>
-     */
-    public function getCartss(): Collection
-    {
-        return $this->carts;
-    }
-
-    public function addCartss(Cart $cartss): static
-    {
-        if (!$this->carts->contains($cartss)) {
-            $this->carts->add($cartss);
-            $cartss->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCartss(Cart $cartss): static
-    {
-        if ($this->carts->removeElement($cartss)) {
-            // set the owning side to null (unless already changed)
-            if ($cartss->getUser() === $this) {
-                $cartss->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Event>
-     */
-    public function getEvents(): Collection
-    {
-        return $this->events;
-    }
-
-    public function addEvent(Event $event): static
-    {
-        if (!$this->events->contains($event)) {
-            $this->events->add($event);
-            $event->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeEvent(Event $event): static
-    {
-        if ($this->events->removeElement($event)) {
-            // set the owning side to null (unless already changed)
-            if ($event->getUser() === $this) {
-                $event->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Order>
-     */
-    public function getOrders(): Collection
-    {
-        return $this->orders;
-    }
-
-    public function addOrder(Order $order): static
-    {
-        if (!$this->orders->contains($order)) {
-            $this->orders->add($order);
-            $order->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeOrder(Order $order): static
-    {
-        if ($this->orders->removeElement($order)) {
-            // set the owning side to null (unless already changed)
-            if ($order->getUser() === $this) {
-                $order->setUser(null);
-            }
+        if ($this->follower->removeElement($follower)) {
+            $follower->removeFollowing($this);
         }
 
         return $this;

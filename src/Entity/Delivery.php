@@ -2,43 +2,73 @@
 
 namespace App\Entity;
 
-use App\Repository\DeliveryRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: DeliveryRepository::class)]
+/**
+ * Delivery
+ *
+ * @ORM\Table(name="delivery", indexes={@ORM\Index(name="fk_order_delivery", columns={"order_id"}), @ORM\Index(name="fk_agency_delivery", columns={"agency_id"})})
+ * @ORM\Entity(repositoryClass=App\Repository\DeliveryRepository::class)
+ */
 class Delivery
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $deliveryId = null;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="delivery_id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $deliveryId;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $estimatedDate = null;
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="estimated_date", type="date", nullable=false)
+     */
+    private $estimatedDate;
 
-    #[ORM\Column]
-    private ?float $deliveryFees = null;
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="delivery_fees", type="float", precision=10, scale=0, nullable=false)
+     */
+    private $deliveryFees;
 
-    #[ORM\Column(length: 512)]
-    private ?string $destination = null;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="destination", type="string", length=512, nullable=false)
+     */
+    private $destination;
 
-    #[ORM\Column]
-    private ?bool $state = null;
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="state", type="boolean", nullable=false)
+     */
+    private $state;
 
-    #[ORM\ManyToOne(inversedBy: 'deliveries')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?DeliveryAgency $agency = null;
+    /**
+     * @var \DeliveryAgency|null
+     *
+     * @ORM\ManyToOne(targetEntity="DeliveryAgency")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="agency_id", referencedColumnName="agency_id")
+     * })
+     */
+    private $agency;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Order $order = null;
-
-    // #[ORM\ManyToOne(inversedBy: 'deliveries')]
-    // private ?Order $order;
-
-    // #[ORM\ManyToOne(inversedBy: 'deliveries')]
-    // private ?DeliveryAgency $agency;
+    /**
+     * @var \Orders|null
+     *
+     * @ORM\ManyToOne(targetEntity="Orders")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="order_id", referencedColumnName="order_id")
+     * })
+     */
+    private $order;
 
     public function getDeliveryId(): ?int
     {
@@ -93,30 +123,6 @@ class Delivery
         return $this;
     }
 
-    // public function getOrder(): ?Order
-    // {
-    //     return $this->order;
-    // }
-
-    // public function setOrder(?Order $order): static
-    // {
-    //     $this->order = $order;
-
-    //     return $this;
-    // }
-
-    // public function getAgency(): ?DeliveryAgency
-    // {
-    //     return $this->agency;
-    // }
-
-    // public function setAgency(?DeliveryAgency $agency): static
-    // {
-    //     $this->agency = $agency;
-
-    //     return $this;
-    // }
-
     public function getAgency(): ?DeliveryAgency
     {
         return $this->agency;
@@ -129,17 +135,15 @@ class Delivery
         return $this;
     }
 
-    public function getOrder(): ?Order
+    public function getOrder(): ?Orders
     {
         return $this->order;
     }
 
-    public function setOrder(Order $order): static
+    public function setOrder(?Orders $order): static
     {
         $this->order = $order;
 
         return $this;
     }
-
-
 }

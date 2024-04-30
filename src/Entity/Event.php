@@ -2,36 +2,63 @@
 
 namespace App\Entity;
 
-use App\Repository\EventRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: EventRepository::class)]
+/**
+ * Event
+ *
+ * @ORM\Table(name="event", indexes={@ORM\Index(name="fk_artist_event", columns={"uid"})})
+ * @ORM\Entity
+ */
 class Event
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $eventId = null;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="event_id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $eventId;
 
-    #[ORM\Column(length: 512)]
-    private ?string $eventTitle = null;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="event_title", type="string", length=512, nullable=false)
+     */
+    private $eventTitle;
 
-    #[ORM\Column(length: 512)]
-    private ?string $category = null;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="category", type="string", length=512, nullable=false)
+     */
+    private $category;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $eventDate = null;
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="event_date", type="date", nullable=false)
+     */
+    private $eventDate;
 
-    #[ORM\Column]
-    private ?int $duration = null;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="duration", type="integer", nullable=false)
+     */
+    private $duration;
 
-    #[ORM\ManyToOne(inversedBy: 'events')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
-
-    // #[ORM\ManyToOne(inversedBy: 'events')]
-    // private ?User $uid;
+    /**
+     * @var \User|null
+     *
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="uid", referencedColumnName="uid")
+     * })
+     */
+    private $uid;
 
     public function getEventId(): ?int
     {
@@ -86,29 +113,15 @@ class Event
         return $this;
     }
 
-    // public function getUid(): ?User
-    // {
-    //     return $this->uid;
-    // }
-
-    // public function setUid(?User $uid): static
-    // {
-    //     $this->uid = $uid;
-
-    //     return $this;
-    // }
-
-    public function getUser(): ?User
+    public function getUid(): ?User
     {
-        return $this->user;
+        return $this->uid;
     }
 
-    public function setUser(?User $user): static
+    public function setUid(?User $uid): static
     {
-        $this->user = $user;
+        $this->uid = $uid;
 
         return $this;
     }
-
-
 }

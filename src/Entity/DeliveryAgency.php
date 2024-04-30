@@ -2,35 +2,45 @@
 
 namespace App\Entity;
 
-use App\Repository\DeliveryAgencyRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: DeliveryAgencyRepository::class)]
+/**
+ * DeliveryAgency
+ *
+ * @ORM\Table(name="delivery_agency")
+ * @ORM\Entity(repositoryClass=App\Repository\DeliveryAgencyRepository::class)
+ */
 class DeliveryAgency
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $agencyId = null;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="agency_id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $agencyId;
 
-    #[ORM\Column(length: 512)]
-    private ?string $agencyName = null;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="agency_name", type="string", length=512, nullable=false)
+     */
+    private $agencyName;
 
-    #[ORM\Column(length: 512)]
-    private ?string $agencyAddress = null;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="agency_address", type="string", length=512, nullable=false)
+     */
+    private $agencyAddress;
 
-    #[ORM\Column]
-    private ?int $nbDeliveries;
-
-    #[ORM\OneToMany(mappedBy: 'agency', targetEntity: Delivery::class)]
-    private Collection $deliveries;
-
-    public function __construct()
-    {
-        $this->deliveries = new ArrayCollection();
-    }
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="nb_deliveries", type="integer", nullable=true)
+     */
+    private $nbDeliveries;
 
     public function getAgencyId(): ?int
     {
@@ -73,35 +83,8 @@ class DeliveryAgency
         return $this;
     }
 
-    /**
-     * @return Collection<int, Delivery>
-     */
-    public function getDeliveries(): Collection
+    public function __toString(): string
     {
-        return $this->deliveries;
+        return $this->agencyName;
     }
-
-    public function addDelivery(Delivery $delivery): static
-    {
-        if (!$this->deliveries->contains($delivery)) {
-            $this->deliveries->add($delivery);
-            $delivery->setAgency($this);
-        }
-
-        return $this;
-    }
-
-    public function removeDelivery(Delivery $delivery): static
-    {
-        if ($this->deliveries->removeElement($delivery)) {
-            // set the owning side to null (unless already changed)
-            if ($delivery->getAgency() === $this) {
-                $delivery->setAgency(null);
-            }
-        }
-
-        return $this;
-    }
-
-
 }

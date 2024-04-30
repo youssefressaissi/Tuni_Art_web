@@ -2,55 +2,103 @@
 
 namespace App\Entity;
 
-use App\Repository\AuctionRepository;
+use App\Entity\Art;
+use App\Entity\User;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: AuctionRepository::class)]
+/**
+ * Auction
+ *
+ * @ORM\Table(name="auction", indexes={@ORM\Index(name="fk_art_auction", columns={"art_ref"}), @ORM\Index(name="fk_artist_auction", columns={"uid"})})
+ * @ORM\Entity
+ */
 class Auction
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $auctionRef = null;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="auction_ref", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $auctionRef;
 
-    #[ORM\Column(length: 512)]
-    private ?string $auctionName = null;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="auction_name", type="string", length=512, nullable=false)
+     */
+    private $auctionName;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $startDate = null;
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="start_date", type="date", nullable=false)
+     */
+    private $startDate;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $endDate = null;
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="end_date", type="date", nullable=false)
+     */
+    private $endDate;
 
-    #[ORM\Column]
-    private ?float $threshold = null;
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="threshold", type="float", precision=10, scale=0, nullable=false)
+     */
+    private $threshold;
 
-    #[ORM\Column(length: 1570)]
-    private ?string $status = 'Pending';
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="status", type="string", length=1570, nullable=false, options={"default"="Pending"})
+     */
+    private $status = 'Pending';
 
-    #[ORM\Column]
-    private ?float $highestBid;
+    /**
+     * @var float|null
+     *
+     * @ORM\Column(name="Highest_bid", type="float", precision=10, scale=0, nullable=true)
+     */
+    private $highestBid;
 
-    #[ORM\Column]
-    private ?int $currentwinnerId;
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="currentWinner_id", type="integer", nullable=true)
+     */
+    private $currentwinnerId;
 
-    #[ORM\Column]
-    private ?int $interactions = 0;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="interactions", type="integer", nullable=false)
+     */
+    private $interactions = '0';
 
-    #[ORM\ManyToOne(inversedBy: 'auctions')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Art $art = null;
+    /**
+     * @var \Art|null
+     *
+     * @ORM\ManyToOne(targetEntity="Art")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="art_ref", referencedColumnName="art_ref")
+     * })
+     */
+    private $artRef;
 
-    #[ORM\ManyToOne(inversedBy: 'auctions')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
-
-    // #[ORM\ManyToOne(inversedBy: 'auctions')]
-    // private ?Art $artRef;
-
-    // #[ORM\ManyToOne(inversedBy: 'auctions')]
-    // private ?User $uid;
+    /**
+     * @var \User|null
+     *
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="uid", referencedColumnName="uid")
+     * })
+     */
+    private $uid;
 
     public function getAuctionRef(): ?int
     {
@@ -153,53 +201,27 @@ class Auction
         return $this;
     }
 
-    // public function getArtRef(): ?Art
-    // {
-    //     return $this->artRef;
-    // }
-
-    // public function setArtRef(?Art $artRef): static
-    // {
-    //     $this->artRef = $artRef;
-
-    //     return $this;
-    // }
-
-    // public function getUid(): ?User
-    // {
-    //     return $this->uid;
-    // }
-
-    // public function setUid(?User $uid): static
-    // {
-    //     $this->uid = $uid;
-
-    //     return $this;
-    // }
-
-    public function getArt(): ?Art
+    public function getArtRef(): ?Art
     {
-        return $this->art;
+        return $this->artRef;
     }
 
-    public function setArt(?Art $art): static
+    public function setArtRef(?Art $artRef): static
     {
-        $this->art = $art;
+        $this->artRef = $artRef;
 
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getUid(): ?User
     {
-        return $this->user;
+        return $this->uid;
     }
 
-    public function setUser(?User $user): static
+    public function setUid(?User $uid): static
     {
-        $this->user = $user;
+        $this->uid = $uid;
 
         return $this;
     }
-
-
 }
