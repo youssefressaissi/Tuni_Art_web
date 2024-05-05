@@ -21,11 +21,9 @@ class PdfGeneratiionController extends AbstractController
     #[Route('/pdf', name: 'app_generate_pdf', methods: ['GET'])]
     public function generatePdfAction(Request $request, EntityManagerInterface $entityManager): Response
     {
-        // Retrieve the selected arts list and total amount from the session
         $selectedArts = json_decode($request->getSession()->get('selectedArts'), true);
         $totalAmount = $request->getSession()->get('totalAmount');
 
-        // Fetch orders from the database
         $orders = $entityManager
             ->getRepository(Order::class)
             ->findAll();

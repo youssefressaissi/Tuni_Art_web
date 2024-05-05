@@ -5,6 +5,12 @@
 {% block body %}
    
      <h1>carts index</h1>
+     
+                    <div style="margin-top:50px;margin-left:250px">
+                        <a href="{{ path('app_trieascc') }}" class="btn btn-success"><i class="fas fa-sort-alpha-up"></i> Sort Ascending</a>
+                        <a href="{{ path('app_triedescc') }}" class="btn btn-success"><i class="fas fa-sort-alpha-down"></i> Sort Descending</a>
+
+                    </div> 
      {# Search Bar #}
  <input id="search-input" type="form-control" placeholder="Search...">
 <title>AJAX Search Example</title>

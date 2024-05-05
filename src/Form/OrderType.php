@@ -12,6 +12,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Validator\Constraints\GreaterThan;
 use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+
 
 class OrderType extends AbstractType
 {
@@ -33,8 +35,15 @@ class OrderType extends AbstractType
                     // Add more constraints as needed
                 ],
             ]) 
-            ->add('status')
-            ->add('uid', TextType::class, [
+            ->add('status', ChoiceType::class, [
+                'choices' => [
+                    'Not Sold' => false,
+                    'Sold' => true, 
+                ],
+                'placeholder' => 'Choose an option', // Optional placeholder
+            ])
+
+                        ->add('uid', TextType::class, [
                 'constraints' => [
                     new NotBlank(), // Ensure the UID is not blank
                     new Length(['min' => 1, 'max' => 255]), // Validate the length of the UID

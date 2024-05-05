@@ -34,7 +34,7 @@ class GalleryController extends AbstractController
     #[Route('/all_back2', name: 'app_Orders_all_index2', methods: ['GET'])]
     public function index_back2(GalleryRepository $galleryRepository, OrderRepository $orderRepository, CartRepository $cartRepository): Response
     {
-        return $this->render('gallery/back_index2.html.twig', [
+        return $this->render('order/index.html.twig', [
             'orders'    => $orderRepository->findAll(),
          ]);
     }

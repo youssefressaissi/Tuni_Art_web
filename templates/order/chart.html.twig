@@ -1,0 +1,49 @@
+{% extends 'admin/base-back.html.twig' %}
+
+{% block javascripts %}{% endblock %}
+
+{% block body %}
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<div style="width: 100%; margin: auto;">
+		<canvas id="adresseChart" width="450" height="200"></canvas>
+	</div>
+
+	<center>
+		<a class="btn btn-primary" style="width:20%; margin : 50px" href="{{ path('app_order_index') }}">Back to List</a>
+	</center>
+
+	<script>
+		const data = {{ data | json_encode|raw }};
+console.log(data);
+
+const labels = data.map(item => item.status);
+const values = data.map(item => parseInt(item.totalstatus)); // Convert to integers
+
+
+const ctx = document.getElementById('adresseChart').getContext('2d');
+console.log("Chart.js loaded");
+new Chart(ctx, {
+type: 'bar',
+data: {
+labels: labels,
+datasets: [
+{
+label: 'Statistic of orders status',
+data: values,
+backgroundColor: [
+'purple', 'orange'
+
+], // Customize colors as needed
+}
+]
+},
+options: {
+scales: {
+y: {
+beginAtZero: true
+}
+}
+}
+});
+	</script>
+{% endblock %}

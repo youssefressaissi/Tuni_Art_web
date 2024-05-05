@@ -74,30 +74,27 @@ class ArtController extends AbstractController
         ]);
     }
 
-    #[Route('/confirm-order', name: 'confirm_order', methods: ['POST'])]
-    public function confirmOrder(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        // Assuming the order data is submitted via POST request
-        // You might need to adjust this depending on your form structure
-    
-        // Fetch the order data from the request
-        $orderData = $request->request->get('order_data');
-    
-        // Process the order data and store it in the database
-        // Example: You might create an Order entity and persist it
-        // Replace this with your actual order processing logic
-        $order = new Order();
-        $order->setOrderData($orderData);
-    
-        $entityManager->persist($order);
-        $entityManager->flush();
-    
-        // Optionally, you can add a flash message to indicate successful order confirmation
-        $this->addFlash('success', 'Order confirmed successfully!');
-    
-        // Redirect the user to a relevant page after order confirmation
-        return $this->redirectToRoute('app_art_index');
-    }
+ #[Route('/confirm-order', name: 'confirm_order', methods: ['POST'])]
+public function confirmOrder(Request $request, EntityManagerInterface $entityManager): Response
+{
+    // Retrieve the order data from the request
+    $orderData = $request->request->get('order_data');
+
+    // Create a new Order entity
+    $order = new Order();
+    $order->setOrderData($orderData);
+
+    // Persist the order entity to the database
+    $entityManager->persist($order);
+    $entityManager->flush();
+
+    // Add a flash message to indicate successful confirmation
+    $this->addFlash('success', 'Order confirmed successfully!');
+
+    // Redirect the user to the art index page
+    return $this->redirectToRoute('app_art_index');
+}
+
     
 
     #[Route('/{artRef}/edit', name: 'app_art_edit', methods: ['GET', 'POST'])]

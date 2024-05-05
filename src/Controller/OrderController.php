@@ -42,25 +42,57 @@ class OrderController extends AbstractController
     
     }
 
-    #[Route('/new', name: 'app_order_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+
+
+  #[Route('/new', name: 'app_order_new', methods: ['GET', 'POST'])]
+public function new(Request $request, EntityManagerInterface $entityManager): Response
+{
+    $order = new Order();
+    $order->setStatus(false); // Set initial status to false
+    $form = $this->createForm(OrderType::class, $order);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $order->setStatus(true); // Update status to true when form is submitted and valid
+        $entityManager->persist($order);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_order_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    return $this->renderForm('order/new.html.twig', [
+        'order' => $order,
+        'form' => $form,
+    ]);
+}
+
+
+
+#[Route('/stats', name: 'app_stat', methods: ['GET'])]
+    public function statistics(OrderRepository $orderRepository): Response
     {
-        $order = new Order();
-        $form = $this->createForm(OrderType::class, $order);
-        $form->handleRequest($request);
+        $repository = $this->getDoctrine()->getRepository(Order::class);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($order);
-            $entityManager->flush();
+        $data = $repository->createQueryBuilder('v')
+            ->select('v.status')
+            ->addSelect('COUNT(v.orderId) as totalstatus')
+            ->addSelect('SUM(CASE WHEN v.status = :BMinus THEN 1 ELSE 0 END) as bCount')
+            ->addSelect('SUM(CASE WHEN v.status = :BPlus THEN 1 ELSE 0 END) as bbCount')
 
-            return $this->redirectToRoute('app_order_index', [], Response::HTTP_SEE_OTHER);
-        }
+            ->setParameter('BMinus', 'Sold')
+            ->setParameter('BPlus', 'Not Sold')
 
-        return $this->renderForm('order/new.html.twig', [
-            'order' => $order,
-            'form' => $form,
+            ->groupBy('v.status')
+            ->getQuery()
+            ->getResult();
+
+
+
+        return $this->render('order/chart.html.twig', [
+            'data' => $data,
         ]);
     }
+
     
     #[Route('/neww', name: 'app_order_admin_new', methods: ['GET', 'POST'])]
     public function neww(Request $request, EntityManagerInterface $entityManager): Response

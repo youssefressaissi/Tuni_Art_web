@@ -1,17 +1,21 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/base-back.html.twig' %}
 
 {% block title %}Order index{% endblock %}
 
 {% block body %}
     <h1>Order index</h1>
 
+<div>
+    <a href="{{ path('app_generate_pdf') }}" class="btn btn-warning">Download PDF</a>
+        <a href="{{ path('app_stat') }}" class="btn btn-outline-warning">Statistic</a>
+
+</div>
                       <div style="margin-top:50px;margin-left:250px">
                      <a href="{{ path('app_trieasc') }}" class="btn btn-success"><i class="fas fa-sort-alpha-up"></i> Sort Ascending</a>
-<a href="{{ path('app_triedesc') }}" class="btn btn-success"><i class="fas fa-sort-alpha-down"></i> Sort Descending</a>
+                        <a href="{{ path('app_triedesc') }}" class="btn btn-success"><i class="fas fa-sort-alpha-down"></i> Sort Descending</a>
 
       </div>   
 
-{# Search Bar #}
  <input id="search-input" type="form-control" placeholder="Search...">
 <title>AJAX Search Example</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -43,7 +47,7 @@
                 <td>{{ order.orderId }}</td>
                 <td>{{ order.orderDate ? order.orderDate|date('Y-m-d') : '' }}</td>
                 <td>{{ order.totalprice }}</td>
-                <td>{{ order.status ? 'Yes' : 'No' }}</td>
+                <td>{{ order.status ? 'Sold' : 'Not Sold' }}</td>
                 <td>
                     <a href="{{ path('app_order_show', {'orderId': order.orderId}) }}" class="btn btn-primary">show</a>
                     <a href="{{ path('app_order_edit', {'orderId': order.orderId}) }}" class="btn btn-outline-primary">edit</a>

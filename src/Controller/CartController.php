@@ -23,7 +23,7 @@ namespace App\Controller;
         #[Route('/trieasc', name: 'app_trieascc', methods: ['GET'])]
     public function ascendingAction(CartRepository $CartRepository)
     {
-        return $this->render('cart/index.html.twig', [
+        return $this->render('gallery/back_index3.html.twig', [
             'carts' => $CartRepository->findAllAscending(),
         ]);
     }
@@ -33,7 +33,7 @@ namespace App\Controller;
     public function descendingAction(CartRepository $CartRepository)
     {
     
-        return $this->render('cart/index.html.twig', [
+        return $this->render('gallery/back_index3.html.twig', [
             'carts' => $CartRepository->findAllDescending(),
         ]);
     
@@ -41,7 +41,7 @@ namespace App\Controller;
         #[Route('/list', name: 'app_cart_index', methods: ['GET'])]
         public function index(CartRepository $cartRepository): Response
         {
-            return $this->render('cart/index.html.twig', [
+            return $this->render('gallery/back_index3.html.twig', [
                 'carts' => $cartRepository->findAll(),
             ]);
         }
@@ -65,17 +65,17 @@ namespace App\Controller;
             // If the form is not valid, collect the validation errors
             $errors = $validator->validate($cart);
 
-            // Create an array to store error messages
+            
             $errorMessages = [];
             foreach ($errors as $error) {
                 $errorMessages[] = $error->getMessage();
             }
 
-            // Render the form with error messages
+            
             return $this->renderForm('cart/new.html.twig', [
                 'cart' => $cart,
                 'form' => $form,
-                'errors' => $errorMessages, // Pass error messages to the template
+                'errors' => $errorMessages, 
             ]);
         }
 
@@ -87,24 +87,19 @@ namespace App\Controller;
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                // If the form is submitted and valid, proceed to persist the cart
                 $entityManager->persist($cart);
                 $entityManager->flush();
 
-                // Redirect to the index page or any other page as needed
                 return $this->redirectToRoute('app_cart_index', [], Response::HTTP_SEE_OTHER);
             }
 
-            // If the form is not valid, collect the validation errors
             $errors = $validator->validate($cart);
 
-            // Create an array to store error messages
             $errorMessages = [];
             foreach ($errors as $error) {
                 $errorMessages[] = $error->getMessage();
             }
 
-            // Render the form with error messages
             return $this->renderForm('cart/new_admin.html.twig', [
                 'cart' => $cart,
                 'form' => $form,
@@ -154,7 +149,6 @@ namespace App\Controller;
             #[Route('/check-art', name: 'check_art', methods: ['POST'])]
             public function checkArt(Request $request): Response
             {
-                // Retrieve the data from the request body
                 $data = json_decode($request->getContent(), true);
                 $uid = $data['uid'];
                 $artRef = $data['art_ref'];
@@ -167,15 +161,12 @@ namespace App\Controller;
         
                 // Check if both uid and artRef exist
                 if ($userExists && $cartExists) {
-                    // Both uid and artRef exist
                     return new Response('UID and artRef exist', Response::HTTP_OK);
                 } else {
-                    // Either uid or artRef (or both) do not exist
                     return new Response('Invalid UID or artRef', Response::HTTP_BAD_REQUEST);
                 }
             }
         
-            // **New function to sort carts by UID**
             #[Route('/list', name: 'app_cart_index_sorted', methods: ['GET'])]
             public function indexSorted(CartRepository $cartRepository): HttpResponse
             {
@@ -187,17 +178,17 @@ namespace App\Controller;
             }
 
           
-    #[Route('/search', name: 'cart_search', methods: ['GET'])]
-    public function search(Request $request, CartRepository $cartRepository): JsonResponse
-    {
-        $searchTerm = $request->query->get('search', '');
+            #[Route('/search', name: 'cart_search', methods: ['GET'])]
+            public function search(Request $request, CartRepository $cartRepository): JsonResponse
+            {
+                $searchTerm = $request->query->get('search', '');
 
-        $cart = $cartRepository->findOneBy(['uid' => $searchTerm]);
+                $cart = $cartRepository->findOneBy(['uid' => $searchTerm]);
 
-        return new JsonResponse([
-            'cart' => $cart ? ['uid' => $cart->getUid()] : [], // Return empty array if no cart found
-        ]);
-    }
+                return new JsonResponse([
+                    'cart' => $cart ? ['uid' => $cart->getUid()] : [], 
+                ]);
+            }
             
             
         }

@@ -22,7 +22,8 @@ class Order
 	private ?float $totalprice = null;
 
     #[ORM\Column]
-	private ?bool $status = null;
+    private bool $status = false;    
+
     #[ORM\Column(name: "uid", type: "integer", nullable: true)]
     private ?int $uid = null;
 

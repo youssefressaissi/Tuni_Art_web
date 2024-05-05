@@ -4,16 +4,14 @@
 
     {% block body %}
         <h1>Cart index</h1>
- <a href="{{ path('app_generate_pdf') }}"class="btn btn-warning">-download PDF</a>
-                      <div style="margin-top:50px;margin-left:250px">
-                     <a href="{{ path('app_trieascc') }}" class="btn btn-success"><i class="fas fa-sort-alpha-up"></i> Sort Ascending</a>
-<a href="{{ path('app_triedescc') }}" class="btn btn-success"><i class="fas fa-sort-alpha-down"></i> Sort Descending</a>
-
-</div>   
- {# Search Bar #}
- <input id="search-input" type="form-control" placeholder="Search...">
-<title>AJAX Search Example</title>
+   
+ 
+ 
+    <input id="search-input" type="form-control" placeholder="Search...">
+    <title>AJAX Search Example</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   
+   
     <script>
         $(document).ready(function() {
             $("#search-input").on("keyup", function() {
@@ -26,7 +24,6 @@
     </script>
 
     <div id="cartContainer">
-        {# Display the specific cart's UID or a message if not found #}
         <div id="specificCartUid"></div>
         <div id="debugInfo"></div>
     </div>

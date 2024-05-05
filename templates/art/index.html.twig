@@ -3,7 +3,7 @@
 {% block title %}Art Index{% endblock %}
 
 {% block body %}
-    <h1>Art Index</h1>
+    <h1>Art pieces</h1>
 
     <div class="container">
         <div class="row">
@@ -32,15 +32,12 @@
         </div>
     </div>
 
-    <a href="{{ path('app_art_new') }}" class="btn btn-success">Create new</a>
+    
 
     <div class="cart_content">
-        <!-- This is where the selected items will be displayed -->
     </div>
 
-    <form action="{{ path('confirm_order') }}" method="post">
-        <button type="submit" class="btn btn-primary">Confirm Order</button>
-    </form>
+    
 
     <style>
         .add-button {
@@ -122,33 +119,26 @@
                         artHtml += '<strong>Price:</strong> ' + artPrice;
                         artHtml += '<button class="deselect-button">Deselect</button></div>';
 
-                        // Append the art item to the existing content of the shopping cart popup
                         cartContent.innerHTML += artHtml;
                         localStorage.setItem('addedItems', cartContent.innerHTML);
 
-                        // Show the shopping cart popup
                         document.getElementById('cart-popup').style.display = 'block';
                     }
 
-                    // Disable the clicked button
                     this.classList.add('disabled');
                 });
             });
 
-            // Add event listener to deselect arts
             cartContent.addEventListener('click', function(event) {
                 if (event.target && event.target.classList.contains('deselect-button')) {
                     var artItem = event.target.parentNode;
                     var title = artItem.getAttribute('data-art-title');
                     var price = artItem.getAttribute('data-art-price');
 
-                    // Remove the clicked art item from the popup content
                     artItem.remove();
 
-                    // Save updated items to local storage
                     localStorage.setItem('addedItems', cartContent.innerHTML);
 
-                    // Reactivate the corresponding "Add" button
                     addButton.forEach(function(button) {
                         var addButtonTitle = button.parentNode.querySelector('input[name="art_title"]').value;
                         var addButtonPrice = button.parentNode.querySelector('input[name="art_price"]').value;

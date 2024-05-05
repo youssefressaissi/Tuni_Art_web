@@ -39,7 +39,7 @@ public function findByUid(int $uid): array
  public function findAllAscending(): array
     {
         return $this->createQueryBuilder('R')
-            ->orderBy('R.artRef', 'ASC') // Replace 'fieldToSortBy' with the actual field name you want to sort by
+            ->orderBy('R.uid', 'ASC') // Replace 'fieldToSortBy' with the actual field name you want to sort by
             ->getQuery()
             ->getResult();
     }
@@ -47,7 +47,7 @@ public function findByUid(int $uid): array
     public function findAllDescending(): array
     {
         return $this->createQueryBuilder('r')
-            ->orderBy('r.artRef', 'DESC') // Replace 'fieldToSortBy' with the actual field name you want to sort by
+            ->orderBy('r.uid', 'DESC') // Replace 'fieldToSortBy' with the actual field name you want to sort by
             ->getQuery()
             ->getResult();
     }
