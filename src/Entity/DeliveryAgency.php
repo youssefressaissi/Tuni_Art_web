@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * DeliveryAgency
@@ -25,6 +26,8 @@ class DeliveryAgency
      * @var string
      *
      * @ORM\Column(name="agency_name", type="string", length=512, nullable=false)
+     * @Assert\NotBlank
+     * @Assert\Length(max=512)
      */
     private $agencyName;
 
@@ -32,6 +35,8 @@ class DeliveryAgency
      * @var string
      *
      * @ORM\Column(name="agency_address", type="string", length=512, nullable=false)
+     * @Assert\NotBlank
+     * @Assert\Length(max=512)
      */
     private $agencyAddress;
 
@@ -39,6 +44,8 @@ class DeliveryAgency
      * @var int|null
      *
      * @ORM\Column(name="nb_deliveries", type="integer", nullable=true)
+     * @Assert\Type("int")
+     * @Assert\GreaterThanOrEqual(value=0)
      */
     private $nbDeliveries;
 

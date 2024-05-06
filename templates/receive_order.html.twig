@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <a href="{{ path('app_delivery_index') }}" class="btn btn-primary">Return to Delivery</a>
+
+    <h1>Receive Order:</h1>
+
+    <div class="order-details">
+        <p>- Order Price: {{ order.getTotalprice() }}</p>
+        {# Display other order details here #}
+    </div>
+    <div class="button-container">
+        <a href="{{ path('delivery_details') }}" class="btn btn-primary">Deliver it</a>
+        <button class="btn btn-secondary">Pick it up</button>
+    </div>
+
+{% endblock %}

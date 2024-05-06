@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Delivery{% endblock %}
+
+{% block body %}
+    <a href="{{ path('app_delivery_index') }}" class="btn btn-primary">Return to Delivery</a>
+    <div class="wrapper">
+        <div class="outer">
+            <div class="content_page">
+                <h1>Delivery</h1>
+                <div class="row">
+                    <div class="column">
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <th>DeliveryId</th>
+                                    <td>{{ delivery.deliveryId }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <td>{{ delivery.order.orderId }}</td>
+                                </tr>
+                                <tr>
+                                    <th>EstimatedDate</th>
+                                    <td>{{ delivery.estimatedDate ? delivery.estimatedDate|date('Y-m-d') : '' }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="column">
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <th>Agency Name</th>
+                                    <td>{{ delivery.agency.agencyName }}</td>
+                                </tr>
+                                <tr>
+                                    <th>DeliveryFees</th>
+                                    <td>{{ delivery.deliveryFees }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Destination</th>
+                                    <td>{{ delivery.destination }}</td>
+                                </tr>
+                                <tr>
+                                    <th>State</th>
+                                    <td>{{ delivery.state ? 'Yes' : 'No' }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <a class="btn" href="{{ path('app_delivery_index') }}">back to list</a>
+                <a class="btn" href="{{ path('app_delivery_edit', {'deliveryId': delivery.deliveryId}) }}">edit</a>
+                {{ include('delivery/_delete_form.html.twig') }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

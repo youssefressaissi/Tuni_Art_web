@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}DeliveryAgency index{% endblock %}
+
+{% block body %}
+    <h1>DeliveryAgency index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>AgencyId</th>
+                <th>AgencyName</th>
+                <th>AgencyAddress</th>
+                <th>NbDeliveries</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for delivery_agency in delivery_agencies %}
+            <tr>
+                <td>{{ delivery_agency.agencyId }}</td>
+                <td>{{ delivery_agency.agencyName }}</td>
+                <td>{{ delivery_agency.agencyAddress }}</td>
+                <td>{{ delivery_agency.nbDeliveries }}</td>
+                <td>
+                    <a href="{{ path('app_delivery_agency_show', {'agencyId': delivery_agency.agencyId}) }}">show</a>
+                    <a href="{{ path('app_delivery_agency_edit', {'agencyId': delivery_agency.agencyId}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_delivery_agency_new') }}">Create new</a>
+{% endblock %}

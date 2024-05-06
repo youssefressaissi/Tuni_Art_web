@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Delivery
@@ -26,6 +27,8 @@ class Delivery
      * @var \DateTime
      *
      * @ORM\Column(name="estimated_date", type="date", nullable=false)
+     * @Assert\NotBlank
+     * @Assert\Type("\DateTimeInterface")
      */
     private $estimatedDate;
 
@@ -33,6 +36,9 @@ class Delivery
      * @var float
      *
      * @ORM\Column(name="delivery_fees", type="float", precision=10, scale=0, nullable=false)
+     * @Assert\NotBlank
+     * @Assert\Type("float")
+     * @Assert\GreaterThan(value=0)
      */
     private $deliveryFees;
 
@@ -40,6 +46,8 @@ class Delivery
      * @var string
      *
      * @ORM\Column(name="destination", type="string", length=512, nullable=false)
+     * @Assert\NotBlank
+     * @Assert\Length(max=512)
      */
     private $destination;
 

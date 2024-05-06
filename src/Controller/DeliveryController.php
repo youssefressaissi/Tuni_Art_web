@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Delivery;
 use App\Form\DeliveryType;
 use App\Repository\DeliveryRepository;
+use App\Services\QrCodeService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,10 +16,16 @@ use Symfony\Component\Routing\Annotation\Route;
 class DeliveryController extends AbstractController
 {
     #[Route('/', name: 'app_delivery_index', methods: ['GET'])]
-    public function index(DeliveryRepository $deliveryRepository): Response
+    public function index(DeliveryRepository $deliveryRepository, QrCodeService $qrcodeService): Response
     {
+        $qrCode = $qrcodeService->qrcode(null);
+        $delivery = new Delivery();
+
         return $this->render('delivery/index.html.twig', [
             'deliveries' => $deliveryRepository->findAll(),
+            'qrCode' => $qrCode,
+            'delivery' => $delivery,
+
         ]);
     }
 

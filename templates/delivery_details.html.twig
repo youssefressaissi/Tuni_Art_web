@@ -1,0 +1,115 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <a href="{{ path('receive_order') }}" class="btn btn-primary">Return to Receive Order</a>
+
+<div class="wrapper">
+    <div class="outer">
+        <div class="content_page">
+            <h1>Delivery Details:</h1>
+    <div class="row" style="padding-top: 50px;">
+        <div class="column">
+
+            {{ form_start(form, {'attr': {'class': 'row g-3'}}) }}
+
+            {{ form_label(form.destination, 'Destination:', {'label_attr': {'class': 'form-label col-sm-2'}}) }}
+            <div class="col-sm-10">
+                {{ form_widget(form.destination, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.destination) }}
+            </div>
+
+            {{ form_label(form.agency, 'Agency:', {'label_attr': {'class': 'form-label col-sm-2'}}) }}
+            <div class="col-sm-10">
+                {{ form_widget(form.agency, {'attr': {'class': 'form-control'}}) }} 
+                {{ form_errors(form.agency) }}
+            </div>
+
+            <div class="col-sm-10 offset-sm-2">
+                        {# <img src="{{ qrCode }}" alt="qr-code"> #}
+
+                <button type="submit" class="button">Confirm</button>
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+        <div class="column">
+            <div id="viewDiv" style="height: 500px;" class=""></div>
+            <script src="https://js.arcgis.com/4.23/"></script>
+            <script>
+                function viewLocationOnMap(locations) {
+                    require([
+                        "esri/Map",
+                        "esri/views/MapView",
+                        "esri/Graphic",
+                        "esri/symbols/SimpleMarkerSymbol",
+                        "esri/geometry/Point",
+                        "esri/widgets/Popup"
+                    ], function(Map, MapView, Graphic, SimpleMarkerSymbol, Point, Popup) {
+                        const map = new Map({
+                            basemap: "streets"
+                        });
+
+                        const view = new MapView({
+                            map: map,
+                            container: "viewDiv",
+                            center: [10, 34], // Default center
+                            zoom: 6
+                        });
+
+                        // Loop through the locations array
+                        locations.forEach(function(location) {
+                            const locationMarker = new Graphic({
+                                geometry: new Point({
+                                    x: location.longitude,
+                                    y: location.latitude,
+                                }),
+                                symbol: new SimpleMarkerSymbol({
+                                    color: [226, 119, 40],
+                                    outline: {
+                                        color: [255, 255, 255],
+                                        width: 2
+                                    }
+                                }),
+                                attributes: {
+                                    name: location.name,
+                                    agency: location.agency // Include agency name as attribute
+                                }
+                            });
+
+                            view.graphics.add(locationMarker);
+
+                            // Create a popup template for each marker
+                            const popupTemplate = {
+                                title: "Location",
+                                content: "<b>{name}</b><br>Agency: {agency}"
+                            };
+
+                            // Add the popup template to the marker
+                            locationMarker.popupTemplate = popupTemplate;
+                        });
+
+                        // Enable popup
+                        view.popup.defaultPopupTemplateEnabled = true;
+                    });
+                }
+
+                // Example locations array
+                var locations = [
+                    { latitude: 36.8065, longitude: 10.1815, name: "Lac II", agency: "Delivery of LAC" },
+                    { latitude: 35.8252, longitude: 10.6374, name: "Sousse", agency: "Agence Livraison Sousse" },
+                    { latitude: 36.8529, longitude: 10.1540, name: "Tunis", agency: "Agence Livraison Tunis" },
+                    { latitude: 36.1029, longitude: 10.1100, name: "Zaghouane", agency: "Zaghouane Livraison" },
+
+
+                    // Add more locations as needed
+                ];
+
+                // Call the function with the locations array
+                viewLocationOnMap(locations);
+            </script>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+{% endblock %}

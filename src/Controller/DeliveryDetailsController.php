@@ -13,13 +13,20 @@ use Symfony\Component\Routing\Annotation\Route;;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Services\QrCodeService; // Import the service
+use App\Service\WeatherService; // Import the WeatherService
 
 
 class DeliveryDetailsController extends AbstractController
 {
+
     #[Route('/delivery-details', name: 'delivery_details')]
-    public function index(Request $request, EntityManagerInterface $entityManager, SessionInterface $session): Response
+    public function index(QrCodeService $qrcodeService,  Request $request, EntityManagerInterface $entityManager, SessionInterface $session): Response //WeatherService $weatherService,
     {
+
+        $qrCode = null;
+
+
         // Create a new instance of Delivery
         $delivery = new Delivery();
 
@@ -43,12 +50,20 @@ class DeliveryDetailsController extends AbstractController
             $entityManager->persist($delivery);
             $entityManager->flush();
 
+            // Fetch weather information for the destination provided by the user
+            $destination = $delivery->getDestination(); // Assuming destination is a property of Delivery entity
+            // $weatherData = $weatherService->getWeather($destination);
+
+            $qrCode = $qrcodeService->qrcode($delivery->getDeliveryId());
+
             // Redirect to the receive order page
             // return new RedirectResponse($this->generateUrl('receive_order'));
 
             // Render delivery notification template and pass delivery entity
             return $this->render('delivery_notification.html.twig', [
                 'delivery' => $delivery,
+                'qrCode' => $qrCode,
+                // 'weatherData' => $weatherData,
             ]);
 
             //Make notification saying delivery $delivery->getId() has been created successfully and redirect to the receive order page 

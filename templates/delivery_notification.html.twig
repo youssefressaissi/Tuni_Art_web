@@ -1,0 +1,184 @@
+{# templates/delivery_notification.html.twig #}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>New Delivery Notification</title>
+    {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+            
+            {# Additional stylesheets if needed #}
+            <link rel="stylesheet" href="{{ asset("assets/css/styles.css") }}">
+        {% endblock %}
+    <style>
+        /* Body styles */
+        body {
+            background-color: #F0F2F5;
+            font-family: "Arial";
+        }
+
+        /* Notification container styles */
+        .notification {
+            width: 360px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 16px;
+            position: fixed;
+            bottom: 15px;
+            left: 15px;
+            transform: translateY(200%);
+            animation: noti 2s forwards;
+        }
+
+        /* Notification header styles */
+        .notification-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        /* Notification title styles */
+        .notification-title {
+            font-size: 16px;
+            font-weight: 500;
+            text-transform: capitalize;
+        }
+
+        /* Notification close button styles */
+        .notification-close {
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #F0F2F5;
+            font-size: 14px;
+        }
+
+        /* Notification container styles */
+        .notification-container {
+            display: flex;
+            align-items: flex-start;
+        }
+
+        /* Notification content styles */
+        .notification-content {
+            width: calc(100% - 60px);
+            padding-left: 20px;
+            line-height: 1.2;
+        }
+
+        /* Notification text styles */
+        .notification-text {
+            margin-bottom: 5px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding-right: 50px;
+        }
+
+        /* Notification timer styles */
+        .notification-timer {
+            color: #1876F2;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* Notification status styles */
+        .notification-status {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            width: 15px;
+            height: 15px;
+            background-color: #1876F2;
+            border-radius: 50%;
+        }
+
+        /* Animation keyframes for notification */
+        @keyframes noti {
+            0% {
+                transform: translateY(200%);
+            }
+            50% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body style="padding-left : 100px;">
+{% include 'header.html.twig' %}
+    <a href="{{ path('receive_order') }}" class="btn btn-primary">Return to Receive Order</a>
+
+    <div style="text-align: center;">
+        {% if qrCode %}
+            {% if delivery.deliveryId != null %}
+            <img src="{{ qrCode }}" alt="qr-code">
+        {% endif %}
+        {% endif %}
+    </div>
+    {% if delivery.deliveryId != null %}
+    <p>Delivery ID: {{ delivery.deliveryId }}</p>
+    <p>Destination: {{ delivery.destination }}</p>
+    <p>Estimated Date: {{ delivery.estimatedDate|date('Y-m-d') }}</p>
+    <p>Delivery Fees: ${{ delivery.deliveryFees }}</p>
+    <p>State: {{ delivery.state ? 'Delivered' : 'Pending' }}</p>
+        {% endif %}
+
+    {# <h2>Weather Information</h2>
+    {% if weatherData %}
+        <p>Temperature: {{ weatherData.main.temp }}°C</p>
+        <p>Humidity: {{ weatherData.main.humidity }}%</p>
+        <p>Weather: {{ weatherData.weather[0].description }}</p>
+    {% else %}
+        <p>No weather information available.</p>
+    {% endif %} #}
+
+    <div id="notification" class="notification">
+        <div class="notification-header">
+            <h3 class="notification-title">New delivery added</h3>
+            <i class="fa fa-times notification-close"></i>
+        </div>
+    <div class="notification-container">
+    <div class="notification-content">
+        <p class="notification-text">
+                {# <strong>{{ delivery.deliveryId }}</strong> has been added. #}
+        </p>
+        <span class="notification-timer">{{ 'now'|date('d/m/Y H:i:s') }}</span>
+        </div>
+            <span class="notification-status"></span>
+        </div>
+    </div>
+{# // <script>
+//     document.addEventListener('DOMContentLoaded', function() {
+//         var notification = document.getElementById('notification');
+//         setTimeout(function() {
+//             notification.remove();
+                
+//         // Redirect to the receive order page after 4 seconds
+//             window.location.href = "{{ path('app_delivery_index') }}";
+//         }, 4000); // Remove notification after 4 seconds 
+//     });
+// </script> #}
+            {% include 'footer.html.twig' %}
+
+ <script>
+  document.addEventListener('DOMContentLoaded', function() {
+      var notification = document.getElementById('notification');
+      setTimeout(function() {
+          notification.remove();
+      }, 4000); // Remove notification after 4 seconds 
+  });
+  </script>
+
+</body>
+</html>

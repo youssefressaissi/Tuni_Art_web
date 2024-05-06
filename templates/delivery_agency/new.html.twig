@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New DeliveryAgency{% endblock %}
+
+{% block body %}
+    <h1>Create new DeliveryAgency</h1>
+
+    {{ include('delivery_agency/_form.html.twig') }}
+
+    <a href="{{ path('app_delivery_agency_index') }}">back to list</a>
+{% endblock %}
