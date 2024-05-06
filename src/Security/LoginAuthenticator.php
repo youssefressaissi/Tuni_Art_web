@@ -3,6 +3,7 @@
 namespace App\Security;
 
 use App\Entity\User;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -37,14 +38,16 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
     private $csrfTokenManager;
     private $passwordEncoder;
     private $logger;
+    private $userRepository;
 
-    public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder, LoggerInterface $logger)
+    public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder, LoggerInterface $logger, UserRepository $userRepository)
     {
         $this->entityManager = $entityManager;
         $this->urlGenerator = $urlGenerator;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->passwordEncoder = $passwordEncoder;
         $this->logger = $logger;
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -53,7 +56,7 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
      * @param Request $request
      * @return bool|void
      */
-    public function supports(Request $request) : bool
+    public function supports(Request $request): bool
     {
         return self::LOGIN_ROUTE === $request->attributes->get('_route') && $request->isMethod('POST');
     }
@@ -180,6 +183,22 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
         // }
 
         // 3. If not, redirect to homepage
+        $email = $token->getUser()->getUserIdentifier();
+        $user = $this->userRepository->findOneBy(['email' => $email]);
+
+        if ($user->getRole() == 'Admin') {
+            return new RedirectResponse($this->urlGenerator->generate('app_dashboard'));
+        } elseif ($user->getDeactivate() === 'TEMP') {
+            $user->setStatus(1);
+            $user->setDeactivate(null);
+            $this->entityManager->flush();
+            return new RedirectResponse($this->urlGenerator->generate('app_home'));
+        } elseif ($user->getDeactivate() === 'PERM') {
+            // Handle permanent deactivation case
+            // For example, display an error message or redirect to a specific page
+            return new RedirectResponse($this->urlGenerator->generate('app_unauthorized', ['uid' => $user->getUid()]));
+
+        } 
         return new RedirectResponse($this->urlGenerator->generate('app_home'));
     }
 

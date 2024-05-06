@@ -19,17 +19,27 @@
 					<div class="profile-header">
 						{% set defaultImagePath = 'assets/images/profilepics/default.jpg' %}
 						{% set ImagePath = 'assets/images/profilepics/' ~ user.profilePic %}
+						{% set PortfolioPath = 'assets/portfolios/' ~ user.portfolio %}
 
 						{% if user.profilePic is not null %}
 							<img class="profile-avatar" src="{{ asset(ImagePath) }}" alt="{{ user.profilePic }}"/>
 						{% else %}
 							<img class="profile-avatar" src="{{ asset(defaultImagePath) }}" alt="Default Image"/>
 						{% endif %}
-						<h1 class="profile-fullname">{{ user.fname ~ ' ' ~ user.lname }}</h1>
+						<h1 class="profile-fullname">
+							{{ user.fname ~ ' ' ~ user.lname }}
+							<a href="{{ path('app_generate_pdf', {'uid': user.uid}) }}">
+								<img src="{{ asset('assets/images/file-earmark-pdf-fill.svg') }}" alt="PDF Icon" width="15" height="15">
+							</a>
+						</h1>
 						<p class="profile-occupation">{{ user.role }}</p>
 						<p class="profile-location">{{ 'Born on ' ~ user.birthDate|date('F j, Y') }}</p>
 						{% if app.user %}
-							<a href="{{ path('app_home') }}" class="follow-button">Follow</a>
+							{% if not isFollowing %}
+								<a href="{{ path('app_follow', {'uid': user.uid}) }}" class="follow-button">Follow</a>
+							{% else %}
+								<a href="{{ path('app_unfollow', {'uid': user.uid}) }}" class="follow-button-secondary">Unfollow</a>
+							{% endif %}
 						{% else %}
 							<a href="{{ path('app_login') }}" class="follow-button">Follow</a>
 						{% endif %}
@@ -41,73 +51,78 @@
 							{{ user.getProfileViews }}</p>
 						<p class="stat">Appreciations: 93,570</p>
 						<p class="stat">Followers:
-							{{ user.getFollowers }}</p>
+							{{ followersCount }}</p>
 						<p class="stat">Following:
 							{{ followingCount }}</p>
 					</div>
 					<div class="profile-details">
 						<p class="profile-subtitles">CONTACT</p>
-						<p class="profile-email">{{ user.email }}</p>
+						<p class="profile-email" style="margin-bottom:0">
+							<a class="profile-email" href="https://mail.google.com/mail/?view=cm&fs=1&to={{ user.email }}" title="{{ user.email }}" target="_blank">{{ user.email }}</a>
+						</p>
+						<p class="profile-email">Number:
+							{{ user.phoneNb }}</p>
 						{% if user.role == 'Artist' %}
 							<p class="profile-subtitles">ARTIST DETAILS</p>
-							<p class="profile-bio">{{ user.getBiography }}</p>
-							<a href="http://www.macharia.studio" target="_blank" class="profile-website">Portfolio here.</a>
+							<p class="profile-bio">{{ user.biography }}</p>
+							<a href="{{ asset(PortfolioPath) }}" target="_blank" class="profile-website">Portfolio here.</a>
 						{% endif %}
-					</div>
+					</p>
 				</div>
 			</div>
-			<div class="col-800">
-				<div class="profile-sidecontainer">
-					<div class="row-new" style="margin-left: 0 !important; margin-right: 0 !important; margin-bottom: 20px; margin-top: 10px; width: 100%">
-						<div class="col-12">
-							<ul class="nav nav-pills nav-fill d-flex justify-content-between p-0" style="margin-left: 0px;">
-								<li class="nav-item flex-fill">
-									<a class="nav-link active" aria-current="page" onclick="displayContent('art')">Art Pieces</a>
-								</li>
-								<li class="nav-item flex-fill">
-									<a class="nav-link" onclick="displayContent('auctions')">Auctions</a>
-								</li>
-								<li class="nav-item flex-fill">
-									<a class="nav-link" onclick="displayContent('events')">Events</a>
-								</li>
-							</ul>
-						</div>
-					</div>
-					<div class="row-new" style="margin-left: 0 !important; margin-right: 0 !important; width: 100%">
-						<div class="col-12">
-							<div id="content"></div>
-						</div>
-					</div>
-				</div>
-			</div>
-
 		</div>
+		<div class="col-800">
+			<div class="profile-sidecontainer">
+				<div class="row-new" style="margin-left: 0 !important; margin-right: 0 !important; margin-bottom: 20px; margin-top: 10px; width: 100%">
+					<div class="col-12">
+						<ul class="nav nav-pills nav-fill d-flex justify-content-between p-0" style="margin-left: 0px;">
+							<li class="nav-item flex-fill">
+								<a class="nav-link active" aria-current="page" onclick="displayContent('art')">Art Pieces</a>
+							</li>
+							<li class="nav-item flex-fill">
+								<a class="nav-link" onclick="displayContent('auctions')">Auctions</a>
+							</li>
+							<li class="nav-item flex-fill">
+								<a class="nav-link" onclick="displayContent('events')">Events</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="row-new" style="margin-left: 0 !important; margin-right: 0 !important; width: 100%">
+					<div class="col-12">
+						<div id="content"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
 	</div>
+</div>
 
-	<script>
+<script>
 	// Simulate a click on the first nav-link when the page loads
-    document.addEventListener("DOMContentLoaded", function() {
-        const firstNavLink = document.querySelector('.nav-link');
-        if (firstNavLink) {
-            firstNavLink.click();
-        }
-    });
+document.addEventListener("DOMContentLoaded", function () {
+const firstNavLink = document.querySelector('.nav-link');
+if (firstNavLink) {
+firstNavLink.click();
+}
+});
 
-	function displayContent(contentType) {
-	console.log("Displaying content for: ", contentType);
-	// Log to check if function is called
+function displayContent(contentType) {
+console.log("Displaying content for: ", contentType);
+// Log to check if function is called
 
-	// Remove 'active' class from all nav-links
-	const navLinks = document.querySelectorAll('.nav-link');
-	navLinks.forEach(link => link.classList.remove('active'));
+// Remove 'active' class from all nav-links
+const navLinks = document.querySelectorAll('.nav-link');
+navLinks.forEach(link => link.classList.remove('active'));
 
-	// Add 'active' class to the clicked nav-link
-	event.target.classList.add('active');
+// Add 'active' class to the clicked nav-link
+event.target.classList.add('active');
 
-	// Display content based on the clicked nav-item
-	const contentDiv = document.getElementById('content');
-	switch (contentType) {
-	case 'art': contentDiv.innerHTML = `
+// Display content based on the clicked nav-item
+const contentDiv = document.getElementById('content');
+switch (contentType) {
+case 'art': contentDiv.innerHTML = `
 			<div class="article-card" style="margin-bottom: 20px; margin-left: 5px; margin-right: 10px;  height: 300px; width:240px;">
 				<div class="content" style="padding-top: 20px; height: 75%">
 					<div class="row justify-content-center">
@@ -123,8 +138,8 @@
 			</div>
 		`;
 
-	break;
-	case 'auctions': contentDiv.innerHTML = `
+break;
+case 'auctions': contentDiv.innerHTML = `
 			<div class="article-card" style="margin-bottom: 20px; margin-left: 5px; margin-right: 10px;  height: 300px; width:240px;">
 				<div class="content" style="padding-top: 20px; height: 75%">
 					<div class="row justify-content-center">
@@ -139,8 +154,8 @@
 				</div>
 			</div>
 		`;
-	break;
-	case 'events': contentDiv.innerHTML = `
+break;
+case 'events': contentDiv.innerHTML = `
 			<div class="article-card" style="margin-bottom: 20px; margin-left: 5px; margin-right: 10px;  height: 300px; width:240px;">
 				<div class="content" style="padding-top: 20px; height: 75%">
 					<div class="row justify-content-center">
@@ -155,11 +170,9 @@
 				</div>
 			</div>
 		`;
-	break;
-	default:
-	break;
-	}
-	}
-	</script>
-
-{% endblock %}
+break;
+default:
+break;
+}
+}
+</script>{% endblock %}

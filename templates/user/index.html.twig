@@ -4,59 +4,85 @@
 {% endblock %}
 
 {% block body %}
-    <div class="row mb-3">
-        <div class="col-md-12">
-            <h1 class="title">Active Users</h1>
-        </div>
-    </div>
-    <div class="container">
-    
-        {% for chunk in usersWithoutAdmins|batch(3) %}
-            <div class="row">
-                {% set chunkLength = chunk|length %}
-                {% for user in chunk %}
-                    {% set colSize = chunkLength == 2 ? 'col-md-6' : 'col-md-4' %}
-                    <div class="{{ colSize }} mb-4">
-                        {% if app.user and user.uid == app.user.uid %}
-                            <a href="{{ path('app_profile', {'uid': app.user.uid}) }}" style="text-decoration: none;">
-                        {% else %}
-                            <a href="{{ path('app_user_show', {'uid': user.uid}) }}" style="text-decoration: none;">
-                        {% endif %}
-                                <div class="article-card" style="margin-bottom: 20px; margin-left: 10px; margin-right: 10px;">
-                                    <div class="content">
-                                        <h5 class="arttitle">{{ user.fname ~ ' ' ~ user.lname }}</h5>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <p class="arttext" style="margin-left: 40px;">
-                                                    {{ user.role }}</p>
-                                            </div>
+	<div class="row mb-3">
+		<div class="col-md-12">
+			<h1 class="title">Active Users</h1>
+		</div>
+	</div>
+	<div class="container">
 
-                                        </div>
+		<div class="row mb-3">
+			<div class="col-md-6">
+				<form action="{{ path('app_user_sort') }}" method="GET">
+					<select name="sort_by" onchange="this.form.submit()" style="background-color: white; color: black; border-radius: 5px; padding: 15px 20px">
+						<option value="" selected>Sort by</option>
+						<option value="name_desc">Sort by Fullname
+						</option>
+						<option value="role_desc">Sort by Role
+						</option>
+						<option value="views_desc">Sort by Profile Views
+						</option>
+					</select>
+				</form>
+			</div>
+			<div class="col-md-6" style="display: flex; align-items: center; padding: 8px 15px">
+				<form action="{{ path('user_search') }}" method="GET" style="display: flex;">
+					<input type="text" name="search_query" placeholder="Enter search query..." style="background-color: white; color: black; border-radius: 5px; margin-right: 5px;">
+					<select name="criterias" style="background-color: white; color: black; border-radius: 5px; margin-right: 5px;">
+						<option value="fname">First Name</option>
+                        <option value="lname">Last Name</option>
+						<option value="role">Role</option>
+					</select>
+					<button type="submit" style="background-color: #007bff; color: white; border: none; border-radius: 5px; padding: 8px 15px;">Search</button>
+				</form>
+			</div>
+		</div>
+		{% for chunk in usersWithoutAdmins|batch(3) %}
+			<div class="row">
+				{% set chunkLength = chunk|length %}
+				{% for user in chunk %}
+					{% set colSize = chunkLength == 2 ? 'col-md-6' : 'col-md-4' %}
+					<div class="{{ colSize }} mb-4">
+						{% if app.user and user.uid == app.user.uid %}
+							<a href="{{ path('app_profile', {'uid': app.user.uid}) }}" style="text-decoration: none;">
+							{% else %}
+								<a href="{{ path('app_user_show', {'uid': user.uid}) }}" style="text-decoration: none;">
+								{% endif %}
+								<div class="article-card" style="margin-bottom: 20px; margin-left: 10px; margin-right: 10px;">
+									<div class="content">
+										<h5 class="arttitle">{{ user.fname ~ ' ' ~ user.lname }}</h5>
+										<div class="row">
+											<div class="col-md-6">
+												<p class="arttext" style="margin-left: 40px;">
+													{{ user.role }}</p>
+											</div>
 
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <a href="{{ path('app_user_qrcode', {'uid': user.uid}) }}" class="btn btn-success">Generate QR Code</a>
-                                            </div>
-                                        </div>
+										</div>
 
-                                    </div>
-                                    {% set defaultImagePath = 'assets/images/profilepics/default.jpg' %}
-                                    {% set ImagePath = 'assets/images/profilepics/' ~ user.profilePic %}
+										<div class="row">
+											<div class="col-md-6">
+												<a href="{{ path('app_user_qrcode', {'uid': user.uid}) }}" class="btn btn-success">Generate QR Code</a>
+											</div>
+										</div>
 
-                                    {% if user.profilePic is not null %}
-                                        <img src="{{ asset(ImagePath) }}" alt="{{ user.profilePic }}"/>
-                                    {% else %}
-                                        <img src="{{ asset(defaultImagePath) }}" alt="Default Image"/>
-                                    {% endif %}
+									</div>
+									{% set defaultImagePath = 'assets/images/profilepics/default.jpg' %}
+									{% set ImagePath = 'assets/images/profilepics/' ~ user.profilePic %}
 
-                                </div>
-                            </a>
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endfor %}
+									{% if user.profilePic is not null %}
+										<img src="{{ asset(ImagePath) }}" alt="{{ user.profilePic }}"/>
+									{% else %}
+										<img src="{{ asset(defaultImagePath) }}" alt="Default Image"/>
+									{% endif %}
 
-        </div>
-        <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/qrcode.min.js"></script>
+								</div>
+							</a>
+						</div>
+					{% endfor %}
+				</div>
+			{% endfor %}
 
-    {% endblock %}
+		</div>
+		<script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/qrcode.min.js"></script>
+
+	{% endblock %}

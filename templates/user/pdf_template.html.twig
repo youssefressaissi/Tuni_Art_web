@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>User Details</title>
+	</head>
+	<body>
+		<h1>User Details</h1>
+		{% set defaultImagePath = 'assets/images/profilepics/default.jpg' %}
+		{% set ImagePath = 'assets/images/profilepics/' ~ user.profilePic %}
+
+		{% if user.profilePic is not null %}
+			<img src="{{ asset(ImagePath) }}" alt="{{ user.profilePic }}"/>
+		{% else %}
+			<img src="{{ asset(defaultImagePath) }}" alt="Default Image"/>
+		{% endif %}
+		<p>User ID:
+			{{ user.getUid() }}</p>
+		<p>Full Name:
+			{{ user.getFname() }}
+			{{ user.getLname() }}</p>
+		<p>Gender:
+			{{ user.getGender() ? 'Female' : 'Male' }}</p>
+		<p>Role:
+			{{ user.getRole() }}</p>
+		<p>Date of Birth:
+			{{ user.getBirthDate()|date('F j, Y') }}</p>
+		<p>E-mail Address:
+			{{ user.getEmail() }}</p>
+		<p>Phone Number:
+			{{ user.getPhoneNb() }}</p>
+		<p>Profile Views:
+			{{ user.getProfileviews() }}</p>
+		{% if user.getRole() == 'Artist' %}
+			<p>Biography:
+				{{ user.getBiography() }}</p>
+		{% endif %}
+	</body>
+</html>

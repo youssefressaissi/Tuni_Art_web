@@ -27,11 +27,11 @@ class Delivery
     private ?bool $state = null;
 
     #[ORM\ManyToOne(inversedBy: 'deliveries')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name:"agency_id", referencedColumnName:"agency_id")]
     private ?DeliveryAgency $agency = null;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name:"order_id", referencedColumnName:"order_id")]
     private ?Order $order = null;
 
     // #[ORM\ManyToOne(inversedBy: 'deliveries')]

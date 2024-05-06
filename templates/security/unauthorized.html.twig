@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Unauthorized
+{% endblock %}
+
+{% block body %}
+
+	<div class="container" style="max-width: 860px;margin-bottom: 30px;padding: 20px;display: flex;justify-content: center;align-items: center;flex-direction: column;">
+		<h1 class="h3 mb-3 font-weight-normal">Unauthorized Access</h1>
+		<small>
+			You have been permanently banned from Tuni'Art.
+			            In order to appeal, please contact us.
+		</small>
+        <small>
+            <a href="{{ path('app_logout') }}">Logout</a>
+        </small>
+	</div>
+{% endblock %}

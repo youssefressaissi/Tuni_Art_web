@@ -18,7 +18,7 @@ class Cart
     private ?int $cartRef = null;
 
     #[ORM\ManyToOne(inversedBy: 'carts')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name:"uid", referencedColumnName:"uid")]
     private ?User $user = null;
 
     #[ORM\OneToMany(mappedBy: 'cart', targetEntity: Art::class)]
@@ -84,27 +84,27 @@ class Cart
         return $this->art;
     }
 
-    public function addArt(Art $art): static
-    {
-        if (!$this->art->contains($art)) {
-            $this->art->add($art);
-            $art->setCart($this);
-        }
+    // public function addArt(Art $art): static
+    // {
+    //     if (!$this->art->contains($art)) {
+    //         $this->art->add($art);
+    //         $art->setCart($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function removeArt(Art $art): static
-    {
-        if ($this->art->removeElement($art)) {
-            // set the owning side to null (unless already changed)
-            if ($art->getCart() === $this) {
-                $art->setCart(null);
-            }
-        }
+    // public function removeArt(Art $art): static
+    // {
+    //     if ($this->art->removeElement($art)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($art->getCart() === $this) {
+    //             $art->setCart(null);
+    //         }
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
 
 

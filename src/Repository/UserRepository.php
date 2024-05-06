@@ -21,6 +21,41 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
+    public function findByCriteria($criteria,$sortBy = null)
+    {
+        $queryBuilder = $this->createQueryBuilder('u');
+    
+        // Add conditions based on criteria
+        if (isset($criteria['fname'])) {
+            $queryBuilder->andWhere('u.fname LIKE :fname')
+                ->setParameter('fname', '%' . $criteria['fname'] . '%');
+        }
+
+        if (isset($criteria['lname'])) {
+            $queryBuilder->andWhere('u.lname LIKE :lname')
+                ->setParameter('lname', '%' . $criteria['lname'] . '%');
+        }
+    
+        if (isset($criteria['role'])) {
+            $queryBuilder->andWhere('u.role LIKE :role')
+                ->setParameter('role', $criteria['role']);
+        }
+    
+        // Add more conditions if needed for other properties of the Art entity
+        if ($sortBy) {
+            foreach ($sortBy as $field => $direction) {
+                $queryBuilder->addOrderBy('u.' . $field, $direction);
+            }
+        }
+    
+        
+        // Execute the query
+        $query = $queryBuilder->getQuery();
+    
+        // Return the filtered results
+        return $query->getResult();
+    }
+
 //    /**
 //     * @return User[] Returns an array of User objects
 //     */

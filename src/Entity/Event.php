@@ -27,7 +27,7 @@ class Event
     private ?int $duration = null;
 
     #[ORM\ManyToOne(inversedBy: 'events')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name:"uid", referencedColumnName:"uid")]
     private ?User $user = null;
 
     // #[ORM\ManyToOne(inversedBy: 'events')]

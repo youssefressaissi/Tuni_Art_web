@@ -35,6 +35,9 @@ use Symfony\Component\Mime\Email;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+use Symfony\Component\Routing\RouterInterface;
 
 class UserController extends AbstractController
 {
@@ -58,6 +61,18 @@ class UserController extends AbstractController
         return $response;
     }
 
+    public function viewPortfolio(User $user)
+    {
+        $portfolioPath = 'assets/portfolios/' . $user->getPortfolio();
+        $response = new BinaryFileResponse($portfolioPath);
+        $response->setContentDisposition(
+            ResponseHeaderBag::DISPOSITION_INLINE,
+            $user->getPortfolio()
+        );
+
+        return $response;
+    }
+
 
     #[Route('/users', name: 'app_user_index', methods: ['GET'])]
     public function index(UserRepository $userRepository, Security $security): Response
@@ -67,7 +82,7 @@ class UserController extends AbstractController
 
         // Filter out users with the role 'Admin'
         $usersWithoutAdmins = array_filter($users, function ($user) {
-            return $user->getRole() !== 'Admin';
+            return $user->getRole() !== 'Admin' && $user->getStatus() == 1;
         });
 
         return $this->render('user/index.html.twig', [
@@ -112,14 +127,36 @@ class UserController extends AbstractController
     }
 
     #[Route('user/{uid}', name: 'app_user_show', methods: ['GET'])]
-    public function show(User $user, EntityManagerInterface $entityManager): Response
+    public function show(User $user, EntityManagerInterface $entityManager, UserRepository $userRepository, Security $security): Response
     {
+
         // Increment profileViews count
         $profileViews = $user->getProfileViews() + 1;
         $user->setProfileViews($profileViews);
 
         $followersCount = $user->getFollowers()->count();
         $followingCount = $user->getFollowing()->count();
+
+        // Retrieve the chosen user from the database
+        $chosenUser = $userRepository->findOneBy(['uid' => $user->getUid()]);
+
+        $isFollowing = false;
+        if ($security->getUser()) {
+            // Retrieve the logged-in user
+            $email = $this->getUser()->getUserIdentifier();
+            $loggedInUser = $userRepository->findOneBy(['email' => $email]);
+
+            // Check if the logged-in user is following the chosen user
+            if ($loggedInUser) {
+                $followers = $loggedInUser->getFollowing();
+                foreach ($followers as $follower) {
+                    if ($follower->getFollowing() === $chosenUser) {
+                        $isFollowing = true;
+                        break;
+                    }
+                }
+            }
+        }
 
         // Persist changes to the database
         $entityManager->persist($user);
@@ -129,6 +166,7 @@ class UserController extends AbstractController
             'user' => $user,
             'followersCount' => $followersCount,
             'followingCount' => $followingCount,
+            'isFollowing' => $isFollowing,
         ]);
     }
 
@@ -246,7 +284,7 @@ class UserController extends AbstractController
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('deactivate/{uid}', name: 'app_user_deactivate', methods: ['POST'])]
+    #[Route('deactivate/{uid}', name: 'app_user_deactivate', methods: ['GET', 'POST'])]
     public function deactivate(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
 
@@ -254,7 +292,16 @@ class UserController extends AbstractController
         $user->setDeactivate('TEMP');
         $entityManager->flush();
 
-        return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_logout', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('unauthorized/{uid}', name: 'app_unauthorized', methods: ['GET'])]
+    public function unauthorized(Request $request, Security $security): Response
+    {
+        $user = $security->getUser();
+        return $this->render('security/unauthorized.html.twig', [
+            'user' => $user,
+        ]);
     }
 
     #[Route('/{uid}/qr-code', name: 'app_user_qrcode')]
@@ -305,7 +352,7 @@ class UserController extends AbstractController
         $entityManager->flush();
 
         // Redirect or render a response
-        return $this->redirectToRoute('user_profile', ['uid' => $userToFollow->getUid()]);
+        return $this->redirectToRoute('app_user_show', ['uid' => $userToFollow->getUid()]);
     }
 
     #[Route('/unfollow/{uid}', name: 'app_unfollow', methods: ['GET'])]
@@ -322,7 +369,7 @@ class UserController extends AbstractController
         $entityManager->flush();
 
         // Redirect or render a response
-        return $this->redirectToRoute('user_profile', ['uid' => $userToUnfollow->getUid()]);
+        return $this->redirectToRoute('app_user_show', ['uid' => $userToUnfollow->getUid()]);
     }
 
     private function sendUpdateRoleEmail(User $user, MailerInterface $mailer,)
@@ -340,5 +387,130 @@ class UserController extends AbstractController
                 $user->getFname() . ' ' . $user->getLname(), // Adjust this according to your user entity
             ));
         $mailer->send($email);
+    }
+
+    #[Route("/search", name: 'user_search')]
+    public function search(Request $request, UserRepository $userRepository): Response
+    {
+        // Get search query and selected criteria from the request
+        $searchQuery = $request->query->get('search_query');
+        $criteria = $request->query->get('criterias');
+
+        // Initialize criteria array
+        $criteriaArray = [];
+
+        // Add search query to criteria array based on selected criteria
+        if ($criteria === 'fname') {
+            $criteriaArray['fname'] = $searchQuery;
+        } elseif ($criteria === 'lname') {
+            $criteriaArray['lname'] = $searchQuery;
+        } elseif ($criteria === 'role') {
+            $criteriaArray['role'] = $searchQuery;
+        }
+
+        // Retrieve arts based on criteria
+        $user = $userRepository->findByCriteria($criteriaArray);
+        $usersWithoutAdmins = array_filter($user, function ($user) {
+            return $user->getRole() !== 'Admin' && $user->getStatus() == 1;
+        });
+
+        // Optionally, perform additional processing on retrieved arts if needed
+
+        return $this->render('user/index.html.twig', [
+            'usersWithoutAdmins' => $usersWithoutAdmins,
+        ]);
+    }
+
+    #[Route('/sort', name: 'app_user_sort', methods: ['GET'])]
+    public function sortedList(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
+    {
+        $sortBy = $request->query->get('sort_by');
+
+        switch ($sortBy) {
+            case 'role_desc':
+                $sortBy = ['role' => 'DESC'];
+                break;
+            case 'views_desc':
+                $sortBy = ['profileviews' => 'DESC'];
+                break;
+            case 'name_desc':
+                $sortBy = ['fname' => 'ASC'];
+                break;
+            default:
+                $sortBy = ['profileviews' => 'DESC'];
+                break;
+        }
+
+        $user = $userRepository->findByCriteria([], $sortBy);
+        $usersWithoutAdmins = array_filter($user, function ($user) {
+            return $user->getRole() !== 'Admin' && $user->getStatus() == 1;
+        });
+
+        $userViews = [];
+        foreach ($user as $userItem) {
+            $userViews[] = $userItem->getProfileViews();
+        }
+
+        $stats = $this->calculateUserStatistics($userViews);
+
+        return $this->render('user/index.html.twig', [
+            'usersWithoutAdmins' => $usersWithoutAdmins,
+            'stats' => $stats,
+        ]);
+    }
+
+    private function calculateUserStatistics(array $userViews): array
+    {
+        // You can implement the logic to calculate statistics here
+        // For example, calculate average, maximum, minimum, etc.
+        $averageViews = array_sum($userViews) / count($userViews);
+        $maxViews = max($userViews);
+        $minViews = min($userViews);
+
+        return [
+            'average_views' => $averageViews,
+            'max_views' => $maxViews,
+            'min_views' => $minViews,
+        ];
+    }
+
+    #[Route('/generatePDF/{uid}', name: 'app_generate_pdf', methods: ['GET'])]
+    public function generatePDF(User $user, RouterInterface $router): Response
+    {
+        // Construct the filename
+        $filename = 'user' . $user->getUid() . $user->getFname() . $user->getLname() . '_details.pdf';
+        $filename = preg_replace('/\s+/', '', $filename); // Remove any whitespace
+
+        // Create PDF
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $dompdf = new Dompdf($options);
+
+        // HTML content for PDF
+        $html = $this->renderView('user/pdf_template.html.twig', [
+            'user' => $user,
+        ]);
+
+        // Load HTML content into Dompdf
+        $dompdf->loadHtml($html);
+
+        // Set paper size and orientation
+        $dompdf->setPaper('A4', 'portrait');
+
+        // Render the PDF
+        $dompdf->render();
+
+        // Get the PDF content
+        $pdfContent = $dompdf->output();
+
+        // Create the response object
+        $response = new Response($pdfContent);
+
+        // Set headers for PDF file to make it downloadable
+        $response->headers->set('Content-Type', 'application/pdf');
+        $response->headers->set('Content-Disposition', 'attachment; filename="' . $filename . '"');
+
+        // Return the response with the PDF content
+        return $response;
     }
 }

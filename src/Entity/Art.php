@@ -48,7 +48,7 @@ class Art
     private ?bool $isavailable = true;
 
     #[ORM\ManyToOne(inversedBy: 'art')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name:"artist_id", referencedColumnName:"uid")]
     private ?User $artist = null;
 
     #[ORM\OneToMany(mappedBy: 'art', targetEntity: Auction::class)]
@@ -244,17 +244,17 @@ class Art
         return $this;
     }
 
-    public function getCart(): ?Cart
-    {
-        return $this->cart;
-    }
+    // public function getCart(): ?Cart
+    // {
+    //     return $this->cart;
+    // }
 
-    public function setCart(?Cart $cart): static
-    {
-        $this->cart = $cart;
+    // public function setCart(?Cart $cart): static
+    // {
+    //     $this->cart = $cart;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
 
 }

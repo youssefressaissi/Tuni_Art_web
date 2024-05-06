@@ -90,46 +90,42 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $art;
 
     /**
-     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="following")
+     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="followers")
+     */
+    private Collection $following;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="following")
      * @ORM\JoinTable(
      *     name="followers",
      *     joinColumns={@ORM\JoinColumn(name="following_id", referencedColumnName="uid")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="follower_id", referencedColumnName="uid")}
      * )
      */
-    private $followers;
+    private Collection $followers;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="followers")
-     * @ORM\JoinTable(
-     *     name="followers",
-     *     joinColumns={@ORM\JoinColumn(name="follower_id", referencedColumnName="uid")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="following_id", referencedColumnName="uid")}
-     * )
-     */
-    private $following;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Auction::class)]
-    private Collection $auctions;
+    // #[ORM\OneToMany(mappedBy: 'user', targetEntity: Auction::class)]
+    // private Collection $auctions;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Cart::class)]
-    private Collection $carts;
+    // #[ORM\OneToMany(mappedBy: 'user', targetEntity: Cart::class)]
+    // private Collection $carts;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Event::class)]
-    private Collection $events;
+    // #[ORM\OneToMany(mappedBy: 'user', targetEntity: Event::class)]
+    // private Collection $events;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Order::class)]
-    private Collection $orders;
+    // #[ORM\OneToMany(mappedBy: 'user', targetEntity: Order::class)]
+    // private Collection $orders;
 
     public function __construct()
     {
-        $this->art = new ArrayCollection();
         $this->followers = new ArrayCollection();
         $this->following = new ArrayCollection();
-        $this->auctions = new ArrayCollection();
-        $this->carts = new ArrayCollection();
-        $this->events = new ArrayCollection();
-        $this->orders = new ArrayCollection();
+        $this->art = new ArrayCollection();
+        // $this->auctions = new ArrayCollection();
+        // $this->carts = new ArrayCollection();
+        // $this->events = new ArrayCollection();
+        // $this->orders = new ArrayCollection();
     }
 
 
@@ -343,7 +339,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getFollowers(): Collection
     {
-        return $this->followers ?? new ArrayCollection();    
+        return $this->followers ?? new ArrayCollection();
     }
 
     public function addFollower(User $follower): self
@@ -367,7 +363,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getFollowing(): Collection
     {
-        return $this->following ?? new ArrayCollection();    
+        return $this->following ?? new ArrayCollection();
     }
 
     public function addFollowing(User $following): self
@@ -388,125 +384,125 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-    /**
-     * @return Collection<int, Auction>
-     */
-    public function getAuctions(): Collection
-    {
-        return $this->auctions;
-    }
+    // /**
+    //  * @return Collection<int, Auction>
+    //  */
+    // public function getAuctions(): Collection
+    // {
+    //     return $this->auctions;
+    // }
 
-    public function addAuction(Auction $auction): static
-    {
-        if (!$this->auctions->contains($auction)) {
-            $this->auctions->add($auction);
-            $auction->setUser($this);
-        }
+    // public function addAuction(Auction $auction): static
+    // {
+    //     if (!$this->auctions->contains($auction)) {
+    //         $this->auctions->add($auction);
+    //         $auction->setUser($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function removeAuction(Auction $auction): static
-    {
-        if ($this->auctions->removeElement($auction)) {
-            // set the owning side to null (unless already changed)
-            if ($auction->getUser() === $this) {
-                $auction->setUser(null);
-            }
-        }
+    // public function removeAuction(Auction $auction): static
+    // {
+    //     if ($this->auctions->removeElement($auction)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($auction->getUser() === $this) {
+    //             $auction->setUser(null);
+    //         }
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    /**
-     * @return Collection<int, Cart>
-     */
-    public function getCartss(): Collection
-    {
-        return $this->carts;
-    }
+    // /**
+    //  * @return Collection<int, Cart>
+    //  */
+    // public function getCartss(): Collection
+    // {
+    //     return $this->carts;
+    // }
 
-    public function addCartss(Cart $cartss): static
-    {
-        if (!$this->carts->contains($cartss)) {
-            $this->carts->add($cartss);
-            $cartss->setUser($this);
-        }
+    // public function addCartss(Cart $cartss): static
+    // {
+    //     if (!$this->carts->contains($cartss)) {
+    //         $this->carts->add($cartss);
+    //         $cartss->setUser($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function removeCartss(Cart $cartss): static
-    {
-        if ($this->carts->removeElement($cartss)) {
-            // set the owning side to null (unless already changed)
-            if ($cartss->getUser() === $this) {
-                $cartss->setUser(null);
-            }
-        }
+    // public function removeCartss(Cart $cartss): static
+    // {
+    //     if ($this->carts->removeElement($cartss)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($cartss->getUser() === $this) {
+    //             $cartss->setUser(null);
+    //         }
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    /**
-     * @return Collection<int, Event>
-     */
-    public function getEvents(): Collection
-    {
-        return $this->events;
-    }
+    // /**
+    //  * @return Collection<int, Event>
+    //  */
+    // public function getEvents(): Collection
+    // {
+    //     return $this->events;
+    // }
 
-    public function addEvent(Event $event): static
-    {
-        if (!$this->events->contains($event)) {
-            $this->events->add($event);
-            $event->setUser($this);
-        }
+    // public function addEvent(Event $event): static
+    // {
+    //     if (!$this->events->contains($event)) {
+    //         $this->events->add($event);
+    //         $event->setUser($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function removeEvent(Event $event): static
-    {
-        if ($this->events->removeElement($event)) {
-            // set the owning side to null (unless already changed)
-            if ($event->getUser() === $this) {
-                $event->setUser(null);
-            }
-        }
+    // public function removeEvent(Event $event): static
+    // {
+    //     if ($this->events->removeElement($event)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($event->getUser() === $this) {
+    //             $event->setUser(null);
+    //         }
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    /**
-     * @return Collection<int, Order>
-     */
-    public function getOrders(): Collection
-    {
-        return $this->orders;
-    }
+    // /**
+    //  * @return Collection<int, Order>
+    //  */
+    // public function getOrders(): Collection
+    // {
+    //     return $this->orders;
+    // }
 
-    public function addOrder(Order $order): static
-    {
-        if (!$this->orders->contains($order)) {
-            $this->orders->add($order);
-            $order->setUser($this);
-        }
+    // public function addOrder(Order $order): static
+    // {
+    //     if (!$this->orders->contains($order)) {
+    //         $this->orders->add($order);
+    //         $order->setUser($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function removeOrder(Order $order): static
-    {
-        if ($this->orders->removeElement($order)) {
-            // set the owning side to null (unless already changed)
-            if ($order->getUser() === $this) {
-                $order->setUser(null);
-            }
-        }
+    // public function removeOrder(Order $order): static
+    // {
+    //     if ($this->orders->removeElement($order)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($order->getUser() === $this) {
+    //             $order->setUser(null);
+    //         }
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     /**
      * A visual identifier that represents this user.
@@ -573,5 +569,4 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-
 }

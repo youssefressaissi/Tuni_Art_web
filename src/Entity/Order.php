@@ -24,7 +24,7 @@ class Order
 	private ?bool $status = null;
 
     #[ORM\ManyToOne(inversedBy: 'orders')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name:"uid", referencedColumnName:"uid")]
     private ?User $user = null;
 
     // #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'orders')]

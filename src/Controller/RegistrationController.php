@@ -43,7 +43,7 @@ class RegistrationController extends AbstractController
             if (!$recaptchaResult->isSuccess()) {
                 // reCAPTCHA verification failed
                 $this->addFlash('error', 'reCAPTCHA verification failed. Please try again.');
-                return $this->redirectToRoute('registration');
+                return $this->redirectToRoute('app_register');
             }
 
             // Proceed with registration process

@@ -1,0 +1,32 @@
+/* Ban button */
+.ban-button {
+    background-color: #ff0000; /* Red color */
+    color: #ffffff; /* White text */
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.ban-button:hover {
+    background-color: #cc0000; /* Darker red on hover */
+}
+
+/* Unban button */
+.unban-button {
+    background-color: #00ff00; /* Green color */
+    color: #ffffff; /* White text */
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.unban-button:hover {
+    background-color: #00cc00; /* Darker green on hover */
+}
+
+.image {
+    width: 60px;
+    border-radius: 50%;
+    margin-bottom: 0;
+    margin-right: 15px;
+  }

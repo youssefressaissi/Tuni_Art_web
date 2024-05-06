@@ -39,11 +39,11 @@ class Auction
     private ?int $interactions = 0;
 
     #[ORM\ManyToOne(inversedBy: 'auctions')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name:"art_ref", referencedColumnName:"art_ref")]
     private ?Art $art = null;
 
     #[ORM\ManyToOne(inversedBy: 'auctions')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name:"uid", referencedColumnName:"uid")]
     private ?User $user = null;
 
     // #[ORM\ManyToOne(inversedBy: 'auctions')]
