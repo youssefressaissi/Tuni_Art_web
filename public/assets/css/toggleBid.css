@@ -1,0 +1,116 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: "Poppins", sans-serif;
+    box-sizing: border-box;
+}
+
+.hero {
+    width: 100%;
+    min-height: 100vh;
+    background: #eceaff;
+    color: #525252;
+}
+
+.logo {
+    width: 120px;
+}
+
+.user-pic {
+    width: 22px;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-left: 30px;
+    margin-top: 30px;
+}
+
+.sub-menu-wrap-bid {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 500px; /* Adjust maximum width as needed */
+    z-index: 9999; /* Ensure the submenu is above other elements */
+    background: rgba(0, 0, 0, 0.6); /* Semi-transparent background for overlay */
+    overflow-y: auto; /* Enable vertical scrolling if submenu height exceeds viewport */
+    transition: opacity 0.3s ease-in-out; /* Smooth transition for visibility */
+    opacity: 0; /* Initially hidden */
+    pointer-events: none; /* Disable pointer events to prevent interaction */
+}
+
+.sub-menu-wrap-bid.open-menu {
+    opacity: 1; /* Make the submenu visible */
+    pointer-events: auto; /* Enable pointer events for interaction */
+}
+
+.sub-menu-bid {
+    background: #fff;
+    padding: 20px;
+    margin: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add shadow */
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+}
+
+.user-info h3 {
+    font-weight: 500;
+    margin: 0;
+}
+
+.user-info img {
+    width: 60px;
+    border-radius: 50%;
+    margin-bottom: 0;
+    margin-right: 15px;
+}
+
+.sub-menu hr {
+    border: 0;
+    height: 1px;
+    width: 100%;
+    background: #ccc;
+    margin: 15px 0 10px;
+}
+
+.sub-menu-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #525252;
+    margin: 12px 0;
+}
+
+.sub-menu-link p {
+    width: 100%;
+    margin-bottom: 0;
+}
+
+.sub-menu-link img {
+    width: 40px;
+    background: #e5e5e5;
+    border-radius: 50%;
+    padding: 8px;
+    margin-right: 15px;
+    margin-bottom: 0;
+}
+
+.sub-menu-link span {
+    font-size: 22px;
+    transition: transform 0.5s;
+    margin-bottom: 0;
+}
+
+.sub-menu-link:hover span {
+    transform: translateX(5px);
+}
+
+/* Adjustments for small screens */
+@media screen and (max-width: 600px) {
+    .sub-menu-wrap {
+        width: 90%;
+    }
+}
